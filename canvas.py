@@ -23,7 +23,7 @@ for n in range(num_of_boids):
 
 # move boids
 for boid in boids:
-    boid.move_boid()
+    # boid.move_boid()
     canvas.after(30, boid.move_boid)
 
 window.update()

@@ -47,11 +47,13 @@ class Boid:
             self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
             self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
 
+        print(self.velocity)
+
 
     def move_boid(self):
-        self.calc_velocity
+        self.calc_velocity()
 
-        self.canvas.move(self, self.velocity[0], self.velocity[1])
+        self.canvas.move(self.drawing, self.velocity[0], self.velocity[1])
 
         (leftpos, toppos, rightpos, bottompos)=self.canvas.coords(self.drawing)
    
