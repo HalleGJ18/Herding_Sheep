@@ -20,7 +20,7 @@ class Boid:
         self.canvas = c
         self.c_width = c.winfo_width()
         self.c_height = c.winfo_height()
-        print(self.c_width, self.c_height)
+        # print(self.c_width, self.c_height)
 
         self.start_pos(self.c_width, self.c_height)
         self.draw_boid(self.pos, self.boid_radius)
@@ -30,7 +30,7 @@ class Boid:
     # xMax, yMax bounds of start area
     def start_pos(self, xMax, yMax):
         self.pos = np.array([random.rand()*xMax, random.rand()*yMax])
-        print(self.pos)
+        # print(self.pos)
 
     def draw_boid(self, pos, rad):
         self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill="black")
@@ -47,7 +47,7 @@ class Boid:
             self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
             self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
 
-        print(self.velocity)
+        # print(self.velocity)
 
 
     def move_boid(self):
