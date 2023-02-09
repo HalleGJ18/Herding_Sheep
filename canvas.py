@@ -26,7 +26,7 @@ for boid in boids:
     # boid.move_boid()
     canvas.after(30, boid.move_boid)
 
-window.update()
+# window.update()
 
 # draw circle
 # ball = canvas.create_oval(100,100,150,150, fill="red")
