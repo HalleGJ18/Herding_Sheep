@@ -1,6 +1,7 @@
 import tkinter as tk
 import numpy as np
 from numpy import random
+import math
 
 # basic boid class
 class Boid:
@@ -14,7 +15,10 @@ class Boid:
     speed = np.linalg.norm(velocity)
     max_speed = 25
 
-    boid_radius = 25
+    vision_range = 50
+    # if refactoring, could create data structure that calcs distance between every agent and all others as 2D array
+
+    shape_radius = 25
 
     def __init__(self, c) -> None:
         self.canvas = c
@@ -23,7 +27,7 @@ class Boid:
         # print(self.c_width, self.c_height)
 
         self.start_pos(self.c_width, self.c_height)
-        self.draw_boid(self.pos, self.boid_radius)
+        self.draw_boid(self.pos, self.shape_radius)
 
 
     # random start position within starting area
@@ -35,7 +39,35 @@ class Boid:
     def draw_boid(self, pos, rad):
         self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill="black")
 
+    
+    def separation(self, boids):
+        # don't get too close to other boids nearby
+        # find the average vector of the other boid to the current boid each multiplied by the inverse of the distance
+        personal_space = 30
+        cumulative_vector = np.array([0,0])
+        nearby_boids = 0
+        for b in boids:
+            dist = math.dist(self.pos, b.pos)
+            if dist < personal_space and (b is not self):
+                v = (1/dist)*(self.pos - b.pos)
+                cumulative_vector += v
+                nearby_boids += 1
+        # sep_vector = 
+        
+
+    def alignment(self, boids):
+        # steer towards average heading
+        # heading = pos + vel ??? make this a class var??
+
+        pass
+
+    def cohesion(self, boids):
+        # steer towards average position
+        pass
+
+
     def calc_acceleration(self):
+        
         pass
     # call the flocking funcs???
 
@@ -51,6 +83,8 @@ class Boid:
 
 
     def move_boid(self):
+        # calc acceleration
+        # self.calc_acceleration()
         self.calc_velocity()
 
         self.canvas.move(self.drawing, self.velocity[0], self.velocity[1])
