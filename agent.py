@@ -7,10 +7,13 @@ import math
 class Agent:
     # position x,y
     pos = np.array([0,0])
+    
     # acceleration x,y
     acceleration = np.array([0,0])
+    
     # velocity x,y
     velocity = np.array([10,10])
+    
     # speed = magnitude of velocity
     speed = np.linalg.norm(velocity)
     max_speed = 25
@@ -18,7 +21,6 @@ class Agent:
     fill_colour = "black"
 
     vision_range = 50
-    # if refactoring, could create data structure that calcs distance between every agent and all others as 2D array
 
     shape_radius = 25
 
@@ -27,16 +29,20 @@ class Agent:
         self.canvas = c
         self.c_width = c.winfo_width()
         self.c_height = c.winfo_height()
-        # print(self.c_width, self.c_height)
 
-        self.start_pos(self.c_width, self.c_height)
+        self.start_pos(25, 25, self.c_width-25, self.c_height-25)
+        # create changable vars for start pos range
+        # will need to be different for sheep vs sheepdogs
+
         self.draw_agent(self.pos, self.shape_radius)
 
 
     # random start position within starting area
-    # xMax, yMax bounds of start area
-    def start_pos(self, xMax, yMax):
-        self.pos = np.array([random.rand()*xMax, random.rand()*yMax])
+    # xMin, yMin, xMax, yMax bounds of start area
+    def start_pos(self, xMin, yMin, xMax, yMax):
+        xDiff = xMax-xMin
+        yDiff = yMax-yMin
+        self.pos = np.array([random.rand()*xDiff + xMin, random.rand()*yDiff + yMin])
         # print(self.pos)
 
     def draw_agent(self, pos, rad):
@@ -63,6 +69,7 @@ class Agent:
         self.calc_velocity()
 
         self.canvas.move(self.drawing, self.velocity[0], self.velocity[1])
+        self.pos = self.pos + self.velocity
 
         (leftpos, toppos, rightpos, bottompos)=self.canvas.coords(self.drawing)
    
@@ -72,7 +79,7 @@ class Agent:
         if toppos <=0 or bottompos >=self.c_height:
             self.velocity[1]=-self.velocity[1]
         
-        self.canvas.after(30, self.move_agent)
+        # self.canvas.after(30, self.move_agent)
 
 
 

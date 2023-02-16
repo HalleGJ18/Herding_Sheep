@@ -23,4 +23,8 @@ clowns = [obj1, obj2]
 
 obj1.check_identity(clowns)
 
+testArr = np.array([1,2,None,0])
+print(testArr)
+
+
 

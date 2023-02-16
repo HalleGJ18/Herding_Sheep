@@ -19,7 +19,8 @@ num_of_sheep = 5
 sheep_flock = Flock(num_of_sheep, canvas)
 
 # move sheep
-sheep_flock.move_flock()
+canvas.after(30, sheep_flock.move_flock)
+# sheep_flock.move_flock()
 
 # main loop
 window.mainloop()
