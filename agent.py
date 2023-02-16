@@ -3,8 +3,8 @@ import numpy as np
 from numpy import random
 import math
 
-# basic boid class
-class Boid:
+# basic agent class
+class Agent:
     # position x,y
     pos = np.array([0,0])
     # acceleration x,y
@@ -27,7 +27,7 @@ class Boid:
         # print(self.c_width, self.c_height)
 
         self.start_pos(self.c_width, self.c_height)
-        self.draw_boid(self.pos, self.shape_radius)
+        self.draw_agent(self.pos, self.shape_radius)
 
 
     # random start position within starting area
@@ -36,32 +36,32 @@ class Boid:
         self.pos = np.array([random.rand()*xMax, random.rand()*yMax])
         # print(self.pos)
 
-    def draw_boid(self, pos, rad):
+    def draw_agent(self, pos, rad):
         self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill="black")
 
     
-    def separation(self, boids):
-        # don't get too close to other boids nearby
-        # find the average vector of the other boid to the current boid each multiplied by the inverse of the distance
+    def separation(self, agents):
+        # don't get too close to other agents nearby
+        # find the average vector of the other agent to the current agent each multiplied by the inverse of the distance
         personal_space = 30
         cumulative_vector = np.array([0,0])
-        nearby_boids = 0
-        for b in boids:
+        nearby_agents = 0
+        for b in agents:
             dist = math.dist(self.pos, b.pos)
             if dist < personal_space and (b is not self):
                 v = (1/dist)*(self.pos - b.pos)
                 cumulative_vector += v
-                nearby_boids += 1
+                nearby_agents += 1
         # sep_vector = 
         
 
-    def alignment(self, boids):
+    def alignment(self, agents):
         # steer towards average heading
         # heading = pos + vel ??? make this a class var??
 
         pass
 
-    def cohesion(self, boids):
+    def cohesion(self, agents):
         # steer towards average position
         pass
 
@@ -82,7 +82,7 @@ class Boid:
         # print(self.velocity)
 
 
-    def move_boid(self):
+    def move_agent(self):
         # calc acceleration
         # self.calc_acceleration()
         self.calc_velocity()
@@ -97,7 +97,7 @@ class Boid:
         if toppos <=0 or bottompos >=self.c_height:
             self.velocity[1]=-self.velocity[1]
         
-        self.canvas.after(30, self.move_boid)
+        self.canvas.after(30, self.move_agent)
 
 
 

@@ -1,6 +1,6 @@
 import tkinter as tk
 import numpy as np
-from boid import Boid
+from agent import Agent
 
 # init window and canvas
 window = tk.Tk()
@@ -14,17 +14,17 @@ canvas = tk.Canvas(window, bg="white", height=str(canvas_height), width=str(canv
 canvas.pack(pady=20)
 window.update()
 
-# draw boids
-num_of_boids = 5
-boids = []
-for n in range(num_of_boids):
+# draw sheep
+num_of_sheep = 5
+sheep_herd = []
+for n in range(num_of_sheep):
     # print(b)
-    boids.append(Boid(canvas))
+    sheep_herd.append(Agent(canvas))
 
-# move boids
-for boid in boids:
-    # boid.move_boid()
-    canvas.after(30, boid.move_boid)
+# move sheep
+for sheep in sheep_herd:
+    # sheep.move_agent()
+    canvas.after(30, sheep.move_agent)
 
 # window.update()
 
