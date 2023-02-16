@@ -18,11 +18,12 @@ class Agent:
     speed = np.linalg.norm(velocity)
     max_speed = 25
 
-    fill_colour = "black"
-
+    #
     vision_range = 50
 
+    # drawing vars
     shape_radius = 25
+    fill_colour = "black"
 
     def __init__(self, id, c) -> None:
         self.id = id

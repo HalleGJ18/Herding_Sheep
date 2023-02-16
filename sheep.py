@@ -27,7 +27,8 @@ class Sheep(Agent):
                 v = (1/dist)*(self.pos - a.pos)
                 cumulative_vector += v
                 nearby_agents += 1
-        # sep_vector = 
+        sep_vector = cumulative_vector/nearby_agents
+        return sep_vector
         
 
     def alignment(self, agents):
