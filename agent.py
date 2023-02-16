@@ -15,12 +15,15 @@ class Agent:
     speed = np.linalg.norm(velocity)
     max_speed = 25
 
+    fill_colour = "black"
+
     vision_range = 50
     # if refactoring, could create data structure that calcs distance between every agent and all others as 2D array
 
     shape_radius = 25
 
-    def __init__(self, c) -> None:
+    def __init__(self, id, c) -> None:
+        self.id = id
         self.canvas = c
         self.c_width = c.winfo_width()
         self.c_height = c.winfo_height()
@@ -37,37 +40,9 @@ class Agent:
         # print(self.pos)
 
     def draw_agent(self, pos, rad):
-        self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill="black")
-
-    
-    def separation(self, agents):
-        # don't get too close to other agents nearby
-        # find the average vector of the other agent to the current agent each multiplied by the inverse of the distance
-        personal_space = 30
-        cumulative_vector = np.array([0,0])
-        nearby_agents = 0
-        for b in agents:
-            dist = math.dist(self.pos, b.pos)
-            if dist < personal_space and (b is not self):
-                v = (1/dist)*(self.pos - b.pos)
-                cumulative_vector += v
-                nearby_agents += 1
-        # sep_vector = 
-        
-
-    def alignment(self, agents):
-        # steer towards average heading
-        # heading = pos + vel ??? make this a class var??
-
-        pass
-
-    def cohesion(self, agents):
-        # steer towards average position
-        pass
-
+        self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill=self.fill_colour)
 
     def calc_acceleration(self):
-        
         pass
     # call the flocking funcs???
 
