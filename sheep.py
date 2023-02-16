@@ -6,17 +6,25 @@ import math
 from agent import Agent
 
 class Sheep(Agent):
+
+    personal_space = 30
     
     def separation(self, agents):
+        # find nearby agents
+        nearby = []
+
+        # use filter function to find agents closer than personal space ??
+        # pass in dist matrix ???
+
+
         # don't get too close to other agents nearby
         # find the average vector of the other agent to the current agent each multiplied by the inverse of the distance
-        personal_space = 30
         cumulative_vector = np.array([0,0])
         nearby_agents = 0
-        for b in agents:
-            dist = math.dist(self.pos, b.pos)
-            if dist < personal_space and (b is not self):
-                v = (1/dist)*(self.pos - b.pos)
+        for a in agents:
+            dist = math.dist(self.pos, a.pos)
+            if dist < self.personal_space and (a is not self):
+                v = (1/dist)*(self.pos - a.pos)
                 cumulative_vector += v
                 nearby_agents += 1
         # sep_vector = 
@@ -32,6 +40,7 @@ class Sheep(Agent):
         # steer towards average position
         pass
 
-    def calc_acceleration(self):
+    def calc_acceleration(self, agents):
+        self.separation(agents)
         pass
         # call the flocking funcs???

@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from sheep import Sheep
 
 class Flock:
@@ -31,20 +32,16 @@ class Flock:
         # create matrix fo distances from sheepdogs
         pass
 
-    def calc_separations(self):
+    def compare_nearby(agent):
         pass
-        # loop through flock and call separation calc
-        # feed in nearest neighbours
 
-    def calc_alignments(self):
+    def calc_flocking(self):
         pass
-        # loop over flock, call calc
-        # feed in nearest neighbours
-
-    def calc_cohesions(self):
-        pass
-        # loop over flock
-        # feed in nearest neighbours
+        # loop through flock
+        for sheep in self.flock:
+            # call separation, alignment & cohesion calcs
+            # feed in nearest neighbours
+            sheep.calc_acceleration(self.flock)
 
     def move_flock(self):
         self.calc_distances_sheep()
