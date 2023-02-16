@@ -24,7 +24,7 @@ class Flock:
                     self.dists[sheep.id][other.id] = None
                 else:
                     self.dists[sheep.id][other.id] = np.linalg.norm(other.pos - sheep.pos)
-        print(self.dists)
+        # print(self.dists)
 
 
     def calc_distances_sheepdogs(self):
