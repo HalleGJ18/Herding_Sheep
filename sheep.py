@@ -34,7 +34,7 @@ class Sheep(Agent):
     def alignment(self, agents):
         # steer towards average heading
         # heading = pos + vel ??? make this a class var??
-
+        
         pass
 
     def cohesion(self, agents):

@@ -19,10 +19,11 @@ class Flock:
 
     def calc_distances_sheep(self):
         # create matrix of distances between sheep
+        # this is a 2D array of floats, and None value if same agent
         for sheep in self.flock:
             for other in self.flock:
                 if sheep.id == other.id:
-                    self.dists[sheep.id][other.id] = None
+                    self.dists[sheep.id][other.id] = 0  # zero distance from self, remember to account for this later
                 else:
                     self.dists[sheep.id][other.id] = np.linalg.norm(other.pos - sheep.pos)
         # print(self.dists)
@@ -36,6 +37,7 @@ class Flock:
         pass
 
     def calc_flocking(self):
+        # init boids flocking algorithm
         pass
         # loop through flock
         for sheep in self.flock:

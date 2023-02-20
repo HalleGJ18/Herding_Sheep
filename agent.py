@@ -49,6 +49,19 @@ class Agent:
     def draw_agent(self, pos, rad):
         self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill=self.fill_colour)
 
+    def find_nearby(self, agents, dists):
+        # read in distance matrix and array of agents
+        # use agent ID to pull correct row from dist matrix
+        relevant_dists = dists[self.id]
+        # apply filter to check for distances in vision_range
+        nearby = relevant_dists <= self.vision_range
+        nearby[self.id] = False
+        print(nearby)
+        # match indexes to IDs of other agents
+        nearby_agents = agents[nearby]
+        # return array of nearby agents
+        return nearby_agents
+
     def calc_acceleration(self):
         pass
     # call the flocking funcs???
