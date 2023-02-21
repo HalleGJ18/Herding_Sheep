@@ -58,7 +58,7 @@ class Agent:
         nearby[self.id] = False
         print(nearby)
         # match indexes to IDs of other agents
-        nearby_agents = agents[nearby]
+        nearby_agents = agents[nearby]          # check this!!!!!
         # return array of nearby agents
         return nearby_agents
 

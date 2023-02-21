@@ -9,39 +9,35 @@ class Sheep(Agent):
 
     personal_space = 30
     
-    def separation(self, agents):
+    def separation(self, agents, dists):
         # find nearby agents
-        nearby = []
-
-        # use filter function to find agents closer than personal space ??
-        # pass in dist matrix ???
-
+        nearby = self.find_nearby(agents, dists)
 
         # don't get too close to other agents nearby
-        # find the average vector of the other agent to the current agent each multiplied by the inverse of the distance
         cumulative_vector = np.array([0,0])
-        nearby_agents = 0
+        num_of_nearby = len(nearby)
+        
         for a in agents:
+            # find the average vector of the other agent to the current agent each multiplied by the inverse of the distance
             dist = math.dist(self.pos, a.pos)
-            if dist < self.personal_space and (a is not self):
-                v = (1/dist)*(self.pos - a.pos)
-                cumulative_vector += v
-                nearby_agents += 1
-        sep_vector = cumulative_vector/nearby_agents
+            v = (1/dist)*(self.pos - a.pos)
+            cumulative_vector += v
+
+        sep_vector = cumulative_vector/num_of_nearby
         return sep_vector
         
 
-    def alignment(self, agents):
+    def alignment(self, agents, dists):
         # steer towards average heading
         # heading = pos + vel ??? make this a class var??
         
         pass
 
-    def cohesion(self, agents):
+    def cohesion(self, agents, dists):
         # steer towards average position
         pass
 
-    def calc_acceleration(self, agents):
+    def calc_acceleration(self, agents, dists):
         self.separation(agents)
         pass
         # call the flocking funcs???

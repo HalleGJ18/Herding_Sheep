@@ -4,17 +4,21 @@ from sheep import Sheep
 
 class Flock:
 
-    flock = []
+    # flock = []
 
     def __init__(self, n, c) -> None:
         self.num_of_sheep = n    
         self.canvas = c
+        # self.flock = np.array([self.num_of_sheep])
 
         self.dists = np.zeros([self.num_of_sheep, self.num_of_sheep])
         
         # get flock of n sheep on init
+        sheep = []
         for s in range(self.num_of_sheep):
-            self.flock.append(Sheep(s, self.canvas))
+            sheep.append(Sheep(s, self.canvas))
+
+        self.flock = np.array(sheep)
 
 
     def calc_distances_sheep(self):
@@ -30,7 +34,7 @@ class Flock:
 
 
     def calc_distances_sheepdogs(self):
-        # create matrix fo distances from sheepdogs
+        # create matrix of distances from sheepdogs
         pass
 
     def compare_nearby(agent):
