@@ -27,6 +27,7 @@ clowns = np.array([obj1, obj2])
 # print(testArr)
 
 # arr = np.array([100, 150, 72, 0, 102, 97])
+
 arr = np.array([101, 75])
 filtered = arr <= 100
 print(filtered)
@@ -38,6 +39,11 @@ print(new_arr)
 filtered_clowns = clowns[filtered]
 print(len(filtered_clowns))
 print(filtered_clowns[0].size)
+
+a1 = np.array([1,2])
+a2 = np.array([10,10])
+heading = a1 + a2
+print(heading)
 
 
 
