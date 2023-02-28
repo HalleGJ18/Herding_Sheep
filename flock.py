@@ -6,6 +6,10 @@ class Flock:
 
     # flock = []
 
+    separation_weight = 0.33
+    alignment_weight = 0.33
+    cohesion_weight = 0.34
+
     def __init__(self, n, c) -> None:
         self.num_of_sheep = n    
         self.canvas = c
@@ -37,21 +41,18 @@ class Flock:
         # create matrix of distances from sheepdogs
         pass
 
-    def compare_nearby(agent):
-        pass
 
-    def calc_flocking(self):
-        # init boids flocking algorithm
-        pass
+    def calc_flocking(self):        
         # loop through flock
         for sheep in self.flock:
             # call separation, alignment & cohesion calcs
-            # feed in nearest neighbours
-            sheep.calc_acceleration(self.flock)
+            sheep.apply_flocking(self.flock, self.dists, self.separation_weight, self.alignment_weight, self.cohesion_weight)
 
     def move_flock(self):
         self.calc_distances_sheep()
+        self.calc_flocking()
         for sheep in self.flock:
+            # sheep.apply_flocking(self.flock, self.dists, self.separation_weight, self.alignment_weight, self.cohesion_weight)
             sheep.move_agent()
             # self.canvas.after(30, sheep.move_agent)
         self.canvas.after(30, self.move_flock)

@@ -15,7 +15,7 @@ canvas.pack(pady=20)
 window.update()
 
 # generate sheep
-num_of_sheep = 5
+num_of_sheep = 15
 sheep_flock = Flock(num_of_sheep, canvas)
 
 # move sheep
