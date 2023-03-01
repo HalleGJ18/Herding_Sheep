@@ -44,7 +44,6 @@ class Agent:
         xDiff = xMax-xMin
         yDiff = yMax-yMin
         self.pos = np.array([random.rand()*xDiff + xMin, random.rand()*yDiff + yMin])
-        # print(self.pos)
 
     def draw_agent(self, pos, rad):
         self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill=self.fill_colour)
@@ -56,7 +55,6 @@ class Agent:
         # apply filter to check for distances in vision_range
         nearby = relevant_dists <= self.vision_range
         nearby[self.id] = False
-        # print(nearby)
         # match indexes to IDs of other agents
         nearby_agents = agents[nearby]          # check this!!!!!
         # return array of nearby agents
@@ -94,7 +92,6 @@ class Agent:
         if toppos <=0 or bottompos >=self.c_height:
             self.velocity[1]=-self.velocity[1]
         
-        # self.canvas.after(30, self.move_agent)
 
 
 
