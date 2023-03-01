@@ -12,11 +12,11 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import IPython
 
-IPython.display.YouTubeVideo('V4f_1_r80RY', width=600, height=350)
+# IPython.display.YouTubeVideo('V4f_1_r80RY', width=600, height=350)
 
 # tkinter defs
-root = tk.Tk()
-root.wm_title("Embedding in Tk")
+# root = tk.Tk()
+# root.wm_title("Embedding in Tk")
 
 
 # model definition
@@ -168,8 +168,11 @@ fig = plt.figure(figsize=(7,7))
 ax = fig.add_subplot(111, projection=projection)
 animation = ap.animate(BoidsModel(parameters2D), fig, ax, animation_plot_single)
 
-canvas = FigureCanvasTkAgg(fig, master=root)
-canvas.draw()
+# canvas = FigureCanvasTkAgg(animation, master=root)
+# canvas.draw()
+
+# plt.show()
+# animation.show()
 
 
-tk.mainloop()
+# tk.mainloop()

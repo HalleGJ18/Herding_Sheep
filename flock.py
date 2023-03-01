@@ -56,3 +56,6 @@ class Flock:
             sheep.move_agent()
             # self.canvas.after(30, sheep.move_agent)
         self.canvas.after(30, self.move_flock)
+
+    def plot_flock(self):
+        pass

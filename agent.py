@@ -22,7 +22,7 @@ class Agent:
     vision_range = 50
 
     # drawing vars
-    shape_radius = 25
+    shape_radius = 5
     fill_colour = "black"
 
     def __init__(self, id, c) -> None:
