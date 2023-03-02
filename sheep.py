@@ -85,8 +85,10 @@ class Sheep(Agent):
         # call the flocking funcs???
         if len(nearby_sheep) > 0:
             separation, alignment, cohesion =  self.flocking_algo(nearby_sheep)
-            self.velocity = sep_weight*separation + align_weight*alignment + cohes_weight*cohesion
+            self.velocity = 5*random.uniform(-1,2,(2)) + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion
             # self.velocity = self.velocity + separation + alignment + cohesion
+        else:
+            self.velocity = 0.7*self.velocity + 5*random.uniform(-1,2,(2))
 
         self.calc_velocity()
 

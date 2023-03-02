@@ -80,6 +80,34 @@ class Agent:
         if toppos <=0 or bottompos >=self.c_height:
             self.velocity[1]=-self.velocity[1]
         
+    def update_agent(self):
+        # self.calc_acceleration()
+        self.calc_velocity()
+
+        # check if next pos is valid
+
+        xMin = 25
+        yMin = 25
+        xMax = self.area_width - 25
+        yMax = self.area_height - 25
+
+        edge_avoid_factor = 5
+
+        if self.pos[0] < xMin:
+            self.velocity[0] += edge_avoid_factor
+        elif self.pos[0] > xMax:
+            self.velocity[0] -= edge_avoid_factor
+
+        if self.pos[1] < yMin:
+            self.velocity[1] += edge_avoid_factor
+        elif self.pos[1] > yMax:
+            self.velocity[1] -= edge_avoid_factor
+
+        # update pos
+        self.pos = self.pos + self.velocity
+
+
+
 
 
 

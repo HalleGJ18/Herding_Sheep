@@ -8,9 +8,9 @@ class Flock:
     # flock = []
     # flock_positions = [[]]
 
-    separation_weight = 0.33
-    alignment_weight = 0.33
-    cohesion_weight = 0.34
+    separation_weight = 1
+    alignment_weight = 1
+    cohesion_weight = 1
 
     def __init__(self, n, e):
         self.num_of_sheep = n    
@@ -75,8 +75,14 @@ class Flock:
         self.canvas.after(30, self.move_flock)
 
     def update_flock(self):
-        pass
         self.calc_distances_sheep()
         self.calc_flocking()
-        # for sheep in flock
+        for sheep in self.flock:
             # update pos
+            sheep.update_agent()
+            # log position change
+            np.put(self.flock_positionsX, sheep.id, sheep.pos[0])
+            np.put(self.flock_positionsY, sheep.id, sheep.pos[1])
+            # self.flock_positionsX[sheep.id] = sheep.pos[0]
+            # self.flock_positionsY[sheep.id] = sheep.pos[1]
+            
