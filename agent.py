@@ -62,23 +62,6 @@ class Agent:
             self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
 
         # print(self.velocity)
-
-
-    def move_agent(self):
-        # calc acceleration
-        # self.calc_acceleration()
-        self.calc_velocity()
-
-        self.canvas.move(self.drawing, self.velocity[0], self.velocity[1])
-        self.pos = self.pos + self.velocity
-
-        (leftpos, toppos, rightpos, bottompos)=self.canvas.coords(self.drawing)
-   
-        if leftpos <=0 or rightpos>=self.c_width:
-            self.velocity[0]=-self.velocity[0]
-
-        if toppos <=0 or bottompos >=self.c_height:
-            self.velocity[1]=-self.velocity[1]
         
     def update_agent(self):
         # self.calc_acceleration()
@@ -102,6 +85,9 @@ class Agent:
             self.velocity[1] += edge_avoid_factor
         elif self.pos[1] > yMax:
             self.velocity[1] -= edge_avoid_factor
+
+    
+        # print(self.id, self.velocity)
 
         # update pos
         self.pos = self.pos + self.velocity

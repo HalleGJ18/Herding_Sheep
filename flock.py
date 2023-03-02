@@ -65,15 +65,6 @@ class Flock:
             # call separation, alignment & cohesion calcs
             sheep.apply_flocking(self.flock, self.dists, self.separation_weight, self.alignment_weight, self.cohesion_weight)
 
-    def move_flock(self):
-        self.calc_distances_sheep()
-        self.calc_flocking()
-        for sheep in self.flock:
-            # sheep.apply_flocking(self.flock, self.dists, self.separation_weight, self.alignment_weight, self.cohesion_weight)
-            sheep.move_agent()
-            # self.canvas.after(30, sheep.move_agent)
-        self.canvas.after(30, self.move_flock)
-
     def update_flock(self):
         self.calc_distances_sheep()
         self.calc_flocking()

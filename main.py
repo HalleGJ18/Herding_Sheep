@@ -19,8 +19,8 @@ data = pd.DataFrame(columns=['X_Positions', 'Y_Positions'])
 log = []
 
 # instantiate environment
-ENV_HEIGHT = 700
-ENV_WIDTH = 700
+ENV_HEIGHT = 750
+ENV_WIDTH = 750
 env = Environment(ENV_HEIGHT, ENV_WIDTH)
 
 # generate sheep
