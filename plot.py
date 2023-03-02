@@ -22,7 +22,7 @@ ax.set_title('Interest Rate Vs. Index Price')
 
 def animate(i):
     scat.set_offsets((x[i], 0))
-    return scat,
+    return scat
 
 ani = animation.FuncAnimation(fig, animate, repeat=True, frames=len(x) - 1, interval=50)
 

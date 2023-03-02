@@ -6,7 +6,7 @@ import math
 # basic agent class
 class Agent:
     # position x,y
-    # pos = np.array([0,0])
+    pos = np.array([0,0])
     
     # acceleration x,y
     acceleration = np.array([0.0,0.0])  # use for obstacle avoid??
@@ -25,25 +25,13 @@ class Agent:
     shape_radius = 5
     fill_colour = "black"
 
-    def __init__(self, id, c) -> None:
+    def __init__(self, id, h, w):
         self.id = id
-        self.canvas = c
-        self.c_width = c.winfo_width()
-        self.c_height = c.winfo_height()
+        self.area_height = h
+        self.area_width = w
 
-        self.start_pos(25, 25, self.c_width-25, self.c_height-25)
-        # create changable vars for start pos range
-        # will need to be different for sheep vs sheepdogs
-
-        self.draw_agent(self.pos, self.shape_radius)
-
-
-    # random start position within starting area
-    # xMin, yMin, xMax, yMax bounds of start area
-    def start_pos(self, xMin, yMin, xMax, yMax):
-        xDiff = xMax-xMin
-        yDiff = yMax-yMin
-        self.pos = np.array([random.rand()*xDiff + xMin, random.rand()*yDiff + yMin])
+    def set_pos(self, p):
+        self.pos = p
 
     def draw_agent(self, pos, rad):
         self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill=self.fill_colour)
