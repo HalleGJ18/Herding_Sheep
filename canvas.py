@@ -16,7 +16,8 @@ window.update()
 
 # generate sheep
 num_of_sheep = 15
-sheep_flock = Flock(num_of_sheep, canvas)
+sheep_flock = Flock(num_of_sheep)
+sheep_flock.set_canvas(canvas)
 
 # move sheep
 canvas.after(30, sheep_flock.move_flock)

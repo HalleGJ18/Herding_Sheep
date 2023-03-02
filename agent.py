@@ -6,7 +6,7 @@ import math
 # basic agent class
 class Agent:
     # position x,y
-    # pos = np.array([0,0])
+    pos = np.array([0,0])
     
     # acceleration x,y
     acceleration = np.array([0.0,0.0])  # use for obstacle avoid??
@@ -16,7 +16,8 @@ class Agent:
     
     # speed = magnitude of velocity
     speed = np.linalg.norm(velocity)
-    max_speed = math.sqrt(200)
+    # max_speed = math.sqrt(200)
+    max_speed = 25
 
     #
     vision_range = 50
@@ -25,25 +26,13 @@ class Agent:
     shape_radius = 5
     fill_colour = "black"
 
-    def __init__(self, id, c) -> None:
+    def __init__(self, id, h, w):
         self.id = id
-        self.canvas = c
-        self.c_width = c.winfo_width()
-        self.c_height = c.winfo_height()
+        self.area_height = h
+        self.area_width = w
 
-        self.start_pos(25, 25, self.c_width-25, self.c_height-25)
-        # create changable vars for start pos range
-        # will need to be different for sheep vs sheepdogs
-
-        self.draw_agent(self.pos, self.shape_radius)
-
-
-    # random start position within starting area
-    # xMin, yMin, xMax, yMax bounds of start area
-    def start_pos(self, xMin, yMin, xMax, yMax):
-        xDiff = xMax-xMin
-        yDiff = yMax-yMin
-        self.pos = np.array([random.rand()*xDiff + xMin, random.rand()*yDiff + yMin])
+    def set_pos(self, p):
+        self.pos = p
 
     def draw_agent(self, pos, rad):
         self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill=self.fill_colour)
@@ -68,30 +57,51 @@ class Agent:
         # keep new v under max spd
         self.velocity = np.add(self.velocity, self.acceleration)  # why does this line make everything work???
         self.speed = self.speed = np.linalg.norm(self.velocity)
-        if self.speed > self.max_speed:
+        # if self.speed > self.max_speed:
             # print("yup")
-            self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
-            self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
+        self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
+        self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
 
         # print(self.velocity)
 
-
-    def move_agent(self):
-        # calc acceleration
+    def normalise_velocity(self):
+        pass
+        
+    def update_agent(self):
         # self.calc_acceleration()
         self.calc_velocity()
 
-        self.canvas.move(self.drawing, self.velocity[0], self.velocity[1])
+        # check if next pos is valid
+        bound_inset = 30
+        xMin = bound_inset
+        yMin = bound_inset
+        xMax = self.area_width - bound_inset
+        yMax = self.area_height - bound_inset
+
+        edge_avoid_factor = 25
+
+        if self.pos[0] < xMin:
+            self.velocity[0] += edge_avoid_factor
+            # self.velocity[0] = -self.velocity[0]
+        elif self.pos[0] > xMax:
+            self.velocity[0] -= edge_avoid_factor
+            # self.velocity[0] = -self.velocity[0]
+
+        if self.pos[1] < yMin:
+            self.velocity[1] += edge_avoid_factor
+            # self.velocity[1] = -self.velocity[1]
+        elif self.pos[1] > yMax:
+            self.velocity[1] -= edge_avoid_factor
+            # self.velocity[1] = -self.velocity[1]
+
+    
+        # print(self.id, self.velocity)
+
+        # update pos
         self.pos = self.pos + self.velocity
 
-        (leftpos, toppos, rightpos, bottompos)=self.canvas.coords(self.drawing)
-   
-        if leftpos <=0 or rightpos>=self.c_width:
-            self.velocity[0]=-self.velocity[0]
 
-        if toppos <=0 or bottompos >=self.c_height:
-            self.velocity[1]=-self.velocity[1]
-        
+
 
 
 

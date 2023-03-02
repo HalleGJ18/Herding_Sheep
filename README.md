@@ -1,4 +1,4 @@
 # Herding Sheep
 
 ## Run
-python canvas.py
+python main.py

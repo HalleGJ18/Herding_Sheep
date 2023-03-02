@@ -50,12 +50,12 @@ class Sheep(Agent):
         return cohes_vector
     
 
-    def flocking_algo(self, sheep):
+    def flocking_algo(self, nearby):
         total_separation = np.array([0.0,0.0])
         total_alignment = np.array([0.0,0.0])
         total_cohesion = np.array([0.0,0.0])
 
-        for s in sheep:
+        for s in nearby:
             # separation
             # don't get too close to neighbours
             dist = math.dist(self.pos, s.pos)
@@ -72,9 +72,15 @@ class Sheep(Agent):
             # steer towards average position
             total_cohesion += s.pos
 
-        sep_vector = (total_separation/len(sheep)) - self.pos
-        align_vector = (total_alignment/len(sheep)) - self.velocity
-        cohes_vector = (total_cohesion/len(sheep)) - self.pos
+        if np.linalg.norm(total_separation) > 0:
+            sep_vector = (total_separation/len(nearby))
+        else:
+            sep_vector = total_separation
+
+        align_vector = (total_alignment/len(nearby)) - self.velocity
+        cohes_vector = (total_cohesion/len(nearby)) - self.pos
+
+        # print(self.id, sep_vector, align_vector, cohes_vector)
 
         return sep_vector, align_vector, cohes_vector
 
@@ -85,8 +91,11 @@ class Sheep(Agent):
         # call the flocking funcs???
         if len(nearby_sheep) > 0:
             separation, alignment, cohesion =  self.flocking_algo(nearby_sheep)
-            self.velocity = sep_weight*separation + align_weight*alignment + cohes_weight*cohesion
-            # self.velocity = self.velocity + separation + alignment + cohesion
+            # self.velocity = 5*random.uniform(-1,2,(2)) + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion
+            self.velocity = self.velocity + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion
+            # self.velocity = self.velocity + separation + alignment + cohesion 
+        else:
+            self.velocity = 0.7*self.velocity + 5*random.uniform(-1,2,(2))
 
         self.calc_velocity()
 
