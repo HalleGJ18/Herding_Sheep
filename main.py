@@ -24,7 +24,7 @@ ENV_WIDTH = 750
 env = Environment(ENV_HEIGHT, ENV_WIDTH)
 
 # generate sheep
-n = 5 # num of sheep
+n = 100 # num of sheep
 flock = Flock(n, env)
 
 # store intial positions at t=0 in dataframe
@@ -41,7 +41,7 @@ data.loc[0] = [np.copy(flock.flock_positionsX), np.copy(flock.flock_positionsY)]
 
 
 # plot sheep moving
-t_limit = 100 # num of time steps
+t_limit = 200 # num of time steps
 for t in range(1, t_limit+1): # does this need to be +1?
     # update sheep
     flock.update_flock()
@@ -55,7 +55,7 @@ for t in range(1, t_limit+1): # does this need to be +1?
 # log = np.array(log)
 # print(log)
 
-# print(data)
+print(data)
 # print(data.to_string())
 
 # generate animated plot

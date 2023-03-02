@@ -16,7 +16,8 @@ class Agent:
     
     # speed = magnitude of velocity
     speed = np.linalg.norm(velocity)
-    max_speed = math.sqrt(200)
+    # max_speed = math.sqrt(200)
+    max_speed = 25
 
     #
     vision_range = 50
@@ -56,35 +57,42 @@ class Agent:
         # keep new v under max spd
         self.velocity = np.add(self.velocity, self.acceleration)  # why does this line make everything work???
         self.speed = self.speed = np.linalg.norm(self.velocity)
-        if self.speed > self.max_speed:
+        # if self.speed > self.max_speed:
             # print("yup")
-            self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
-            self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
+        self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
+        self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
 
         # print(self.velocity)
+
+    def normalise_velocity(self):
+        pass
         
     def update_agent(self):
         # self.calc_acceleration()
         self.calc_velocity()
 
         # check if next pos is valid
+        bound_inset = 30
+        xMin = bound_inset
+        yMin = bound_inset
+        xMax = self.area_width - bound_inset
+        yMax = self.area_height - bound_inset
 
-        xMin = 25
-        yMin = 25
-        xMax = self.area_width - 25
-        yMax = self.area_height - 25
-
-        edge_avoid_factor = 5
+        edge_avoid_factor = 25
 
         if self.pos[0] < xMin:
             self.velocity[0] += edge_avoid_factor
+            # self.velocity[0] = -self.velocity[0]
         elif self.pos[0] > xMax:
             self.velocity[0] -= edge_avoid_factor
+            # self.velocity[0] = -self.velocity[0]
 
         if self.pos[1] < yMin:
             self.velocity[1] += edge_avoid_factor
+            # self.velocity[1] = -self.velocity[1]
         elif self.pos[1] > yMax:
             self.velocity[1] -= edge_avoid_factor
+            # self.velocity[1] = -self.velocity[1]
 
     
         # print(self.id, self.velocity)

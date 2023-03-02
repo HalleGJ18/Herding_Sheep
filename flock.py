@@ -8,9 +8,9 @@ class Flock:
     # flock = []
     # flock_positions = [[]]
 
-    separation_weight = 1
-    alignment_weight = 1
-    cohesion_weight = 1
+    separation_weight = 0.7
+    alignment_weight = 0.5
+    cohesion_weight = 0.5
 
     def __init__(self, n, e):
         self.num_of_sheep = n    

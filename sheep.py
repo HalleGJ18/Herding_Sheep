@@ -73,14 +73,14 @@ class Sheep(Agent):
             total_cohesion += s.pos
 
         if np.linalg.norm(total_separation) > 0:
-            sep_vector = (total_separation/len(nearby)) - self.pos
+            sep_vector = (total_separation/len(nearby))
         else:
             sep_vector = total_separation
 
         align_vector = (total_alignment/len(nearby)) - self.velocity
         cohes_vector = (total_cohesion/len(nearby)) - self.pos
 
-        print(self.id, sep_vector, align_vector, cohes_vector)
+        # print(self.id, sep_vector, align_vector, cohes_vector)
 
         return sep_vector, align_vector, cohes_vector
 
@@ -92,7 +92,8 @@ class Sheep(Agent):
         if len(nearby_sheep) > 0:
             separation, alignment, cohesion =  self.flocking_algo(nearby_sheep)
             # self.velocity = 5*random.uniform(-1,2,(2)) + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion
-            self.velocity = self.velocity + separation + alignment + cohesion
+            self.velocity = self.velocity + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion
+            # self.velocity = self.velocity + separation + alignment + cohesion 
         else:
             self.velocity = 0.7*self.velocity + 5*random.uniform(-1,2,(2))
 
