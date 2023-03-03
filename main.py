@@ -16,7 +16,6 @@ window.configure(background="grey")
 # define data structure
 # index is time t
 data = pd.DataFrame(columns=['X_Positions', 'Y_Positions'])
-log = []
 
 # instantiate environment
 ENV_HEIGHT = 750
@@ -29,34 +28,19 @@ flock = Flock(n, env)
 
 # store intial positions at t=0 in dataframe
 data.loc[0] = [np.copy(flock.flock_positionsX), np.copy(flock.flock_positionsY)]
-# log.append([np.copy(flock.flock_positionsX), np.copy(flock.flock_positionsY)])
-# print(data)
-# print(data.to_string())
-# print(np.array(log))
-
-# temp print to verify positions are set
-# print(flock.flock_positionsX)
-# print(flock.flock_positionsY)
 
 
+T_LIMIT = 300 # num of time steps
 
 # plot sheep moving
-t_limit = 200 # num of time steps
-for t in range(1, t_limit+1): # does this need to be +1?
+for t in range(1, T_LIMIT+1): # does this need to be +1?
     # update sheep
     flock.update_flock()
-    # print(flock.flock_positionsX)
-    # log positions
+    # store positions
     data.loc[t] = [np.copy(flock.flock_positionsX), np.copy(flock.flock_positionsY)]
-    # log.append([np.copy(flock.flock_positionsX), np.copy(flock.flock_positionsY)])
 
-
-# print("break")
-# log = np.array(log)
-# print(log)
 
 print(data)
-# print(data.to_string())
 
 # generate animated plot
 time = 0
@@ -66,17 +50,14 @@ ax = fig.add_subplot(111)
 ax.set_xlim([0, ENV_WIDTH])
 ax.set_ylim([0, ENV_HEIGHT])
 scat = ax.scatter(data.loc[0]["X_Positions"], data.loc[0]["Y_Positions"])
-# scat = ax.scatter(log[0][0], log[0][1])
 scatter = FigureCanvasTkAgg(fig, window)
 scatter.get_tk_widget().pack()
 
 
 def animate(time):
     time += 1
-    if time == 100:
+    if time == T_LIMIT:
         time = 0
-    # print(time)
-    # print(data.loc[time])
     ax.clear()
     ax.set_xlim([0, ENV_WIDTH])
     ax.set_ylim([0, ENV_HEIGHT])
