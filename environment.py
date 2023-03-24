@@ -4,14 +4,14 @@ import math
 
 class Environment:
 
-    height = 0
-    width = 0
+    height : int = 0
+    width : int = 0
 
-    def __init__(self, h, w):
+    def __init__(self, h:int, w:int):
         self.height = h
         self.width = w
 
-    def check_valid_position(self, p):
+    def check_valid_position(self, p): # p : np.array
         if (p[0] in range(self.width)) and (p[1] in range(self.height)):
             return True
         else:

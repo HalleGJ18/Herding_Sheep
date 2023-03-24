@@ -1,7 +1,6 @@
 import tkinter as tk
 import numpy as np
 from numpy import random
-import math
 
 # basic agent class
 class Agent:
@@ -13,6 +12,8 @@ class Agent:
     
     # velocity x,y
     velocity = np.array([10.0,10.0])
+
+    next_velocity = np.array([10.0,10.0])
     
     # speed = magnitude of velocity
     speed = np.linalg.norm(velocity)
@@ -26,18 +27,21 @@ class Agent:
     shape_radius = 5
     fill_colour = "black"
 
-    def __init__(self, id, h, w):
+    def __init__(self, id:int, h, w):
         self.id = id
         self.area_height = h
         self.area_width = w
 
-    def set_pos(self, p):
+    def set_pos(self, p): # p:np.array
         self.pos = p
 
-    def draw_agent(self, pos, rad):
-        self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill=self.fill_colour)
+    def get_pos(self): # -> np.array
+        return self.pos
 
-    def find_nearby(self, agents, dists):
+    # def draw_agent(self, pos, rad):
+    #     self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill=self.fill_colour)
+
+    def find_nearby(self, agents, dists): # dists : np.array[[]]
         # read in distance matrix and array of agents
         # use agent ID to pull correct row from dist matrix
         relevant_dists = dists[self.id]
@@ -66,6 +70,9 @@ class Agent:
 
     def normalise_velocity(self):
         pass
+
+    def update_velocity(self):
+        self.velocity = self.next_velocity.copy()
         
     def update_agent(self):
         # self.calc_acceleration()

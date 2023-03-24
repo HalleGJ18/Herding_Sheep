@@ -1,14 +1,24 @@
 import numpy as np
 from numpy import random
-import math
+
 from agent import Agent
 
 class Sheepdog(Agent):
 
-    target = np.array([600.0, 600.0])
-
     vision_range = 300 # increase?
 
-    # calc line from target to flock com
 
-    # calc most direct vector to line
+    def set_target(self, t):
+        # ingest np array
+        # set target
+        self.target = t
+
+    def get_target(self):
+        # return np array
+        return self.target
+
+    # calc line from target to flock centre of mass
+    # find point on line where all sheep are closer to target than it
+    # or, maintaining some distance from flock
+    # calc most direct vector to point
+    # average position of all sheepdogs should be this point

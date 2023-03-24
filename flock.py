@@ -1,7 +1,8 @@
 import numpy as np
-import math
-from sheep import Sheep
 from numpy import random
+
+from sheep import Sheep
+from environment import Environment
 
 class Flock:
 
@@ -12,7 +13,7 @@ class Flock:
     alignment_weight = 0.5
     cohesion_weight = 0.5
 
-    def __init__(self, n, e):
+    def __init__(self, n:int, e:Environment):
         self.num_of_sheep = n    
         self.env = e
 
@@ -67,10 +68,30 @@ class Flock:
         return np.array([flock_avg_x, flock_avg_y])
 
     # calc flock density
-    def calc_flock_density(self, threshold):
-        # if all distances between sheep are below threshold
-        # apply np.all() to flock dist matrix
-        pass
+    def calc_flock_density(self) -> float:
+        # calc density for whole flock
+        return self.calc_density(self.flock_positionsX, self.flock_positionsY)
+
+    def calc_density(self, x_positions, y_positions) -> float:
+        # pop density = num of people / land area
+        # find min and max of x and y to find the area taken up by sheep
+        # do num of sheep / area
+
+        # take arrays of x positions and y positions
+        # get bottom left and top right coords
+        x_min = min(x_positions)
+        y_min = min(y_positions)
+        x_max = max(x_positions)
+        y_max = max(y_positions)
+        
+        # find the size of the square that contains all sheep
+        area_height = y_max - y_min
+        area_width = x_max - x_min
+        area = area_height * area_width
+        
+        # calculate population density
+        density = len(x_positions)/area
+        return density
 
     def calc_flocking(self):        
         # loop through flock
@@ -79,9 +100,10 @@ class Flock:
             sheep.apply_flocking(self.flock, self.dists, self.separation_weight, self.alignment_weight, self.cohesion_weight)
 
     def update_flock(self):
-        self.calc_distances_sheep()
-        self.calc_flocking()
         for sheep in self.flock:
+            # update velocity 
+
+
             # update pos
             sheep.update_agent()
             # log position change
