@@ -58,6 +58,19 @@ class Flock:
         # create matrix of distances from sheepdogs
         pass
 
+    # calc flock centre of mass
+    def calc_flock_centre(self):
+        # avg x pos
+        flock_avg_x = np.average(self.flock_positionsX)
+        # avg y pos
+        flock_avg_y = np.average(self.flock_positionsY)
+        return np.array([flock_avg_x, flock_avg_y])
+
+    # calc flock density
+    def calc_flock_density(self, threshold):
+        # if all distances between sheep are below threshold
+        # apply np.all() to flock dist matrix
+        pass
 
     def calc_flocking(self):        
         # loop through flock
