@@ -2,6 +2,7 @@ import tkinter as tk
 import numpy as np
 from flock import Flock
 from environment import Environment
+from sheepdog import Sheepdog
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -30,7 +31,12 @@ flock = Flock(n, env)
 data.loc[0] = [np.copy(flock.flock_positionsX), np.copy(flock.flock_positionsY)]
 
 
-T_LIMIT = 300 # num of time steps
+# generate sheepdog(s)
+n_dogs = 1
+dog  = Sheepdog(0, ENV_HEIGHT, ENV_WIDTH)
+dog.set_pos(np.array([ENV_WIDTH/2,ENV_HEIGHT/2]))
+
+T_LIMIT = 200 # num of time steps
 
 # plot sheep moving
 for t in range(1, T_LIMIT+1): # does this need to be +1?
@@ -49,7 +55,8 @@ fig = plt.Figure(figsize=(5, 5), dpi=150)
 ax = fig.add_subplot(111)
 ax.set_xlim([0, ENV_WIDTH])
 ax.set_ylim([0, ENV_HEIGHT])
-scat = ax.scatter(data.loc[0]["X_Positions"], data.loc[0]["Y_Positions"])
+scat = ax.scatter(data.loc[0]["X_Positions"], data.loc[0]["Y_Positions"], c='k')
+scat = ax.scatter(dog.pos[0], dog.pos[1], c='r')
 scatter = FigureCanvasTkAgg(fig, window)
 scatter.get_tk_widget().pack()
 
@@ -61,7 +68,8 @@ def animate(time):
     ax.clear()
     ax.set_xlim([0, ENV_WIDTH])
     ax.set_ylim([0, ENV_HEIGHT])
-    scat = ax.scatter(data.loc[time]["X_Positions"], data.loc[time]["Y_Positions"])
+    scat = ax.scatter(data.loc[time]["X_Positions"], data.loc[time]["Y_Positions"], c='k')
+    scat = ax.scatter(dog.pos[0], dog.pos[1], c='r')
     # scat.set_offsets(data.loc[time])
     return scat
 
