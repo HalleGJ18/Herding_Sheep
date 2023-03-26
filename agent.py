@@ -18,7 +18,7 @@ class Agent:
     # speed = magnitude of velocity
     speed = np.linalg.norm(velocity)
     # max_speed = math.sqrt(200)
-    max_speed = 25
+    max_speed = 20
 
     #
     vision_range = 50

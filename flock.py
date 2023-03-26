@@ -54,10 +54,26 @@ class Flock:
                     self.dists[sheep.id][other.id] = np.linalg.norm(other.pos - sheep.pos)
         # print(self.dists)
 
-
     def calc_distances_sheepdogs(self):
         # create matrix of distances from sheepdogs
         pass
+
+    # calc sheep closest to a given point
+    def calc_closest_sheep(self, p):
+        # p is point
+        pass
+
+    # calc sheep within given radius
+    def get_sheep_in_area(self, p, r):
+        # p is centre of area
+        # r is radius
+        found_sheep = []
+        for s in self.flock:
+            if np.linalg.norm(s.pos - p) <= r:
+                found_sheep.append(s)
+        return np.array(found_sheep)
+        
+
 
     # calc flock centre of mass
     def calc_flock_centre(self):
@@ -66,13 +82,22 @@ class Flock:
         # avg y pos
         flock_avg_y = np.average(self.flock_positionsY)
         return np.array([flock_avg_x, flock_avg_y])
+    
+
+    # calc centre of mass for an array of sheep
+    def calc_sheep_centre(self, sheep):
+        total_pos = np.array([0.0,0.0])
+        for s in sheep:
+            total_pos += s.pos
+        avg_pos = total_pos / len(sheep)
+        return avg_pos
 
     # calc flock density
-    def calc_flock_density(self) -> float:
+    def calc_flock_density(self): # -> float
         # calc density for whole flock
         return self.calc_density(self.flock_positionsX, self.flock_positionsY)
 
-    def calc_density(self, x_positions, y_positions) -> float:
+    def calc_density(self, x_positions, y_positions):
         # pop density = num of people / land area
         # find min and max of x and y to find the area taken up by sheep
         # do num of sheep / area
@@ -90,7 +115,7 @@ class Flock:
         area = area_height * area_width
         
         # calculate population density
-        density = len(x_positions)/area
+        density:float = len(x_positions)/area
         return density
 
     def calc_flocking(self):        

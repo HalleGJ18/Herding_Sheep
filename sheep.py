@@ -97,5 +97,5 @@ class Sheep(Agent):
         else:
             self.velocity = 0.7*self.velocity + 5*random.uniform(-1,2,(2))
 
-        self.calc_velocity()
+        # self.calc_velocity()      # what is this doing here?
 
