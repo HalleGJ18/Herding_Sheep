@@ -1,6 +1,7 @@
 import tkinter as tk
 import numpy as np
 from numpy import random
+import math
 
 # basic agent class
 class Agent:
@@ -52,6 +53,13 @@ class Agent:
         nearby_agents = agents[nearby]          # check this!!!!!
         # return array of nearby agents
         return nearby_agents
+
+    def can_see(self, pos):
+        # include env checks
+        if math.dist(self.pos, pos) <= self.vision_range:
+            return True
+        else:
+            return False
 
     def calc_acceleration(self):
         pass

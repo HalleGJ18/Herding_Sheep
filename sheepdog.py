@@ -48,7 +48,7 @@ class Sheepdog(Agent):
         v = v * self.maintain_dist
         move = v - self.pos
         move = move/np.linalg.norm(move)
-        print(move)
+        # print(move)
         return move
 
 
@@ -58,7 +58,7 @@ class Sheepdog(Agent):
             v += (self.pos - dog.pos)
         # v = v / len(nearby_dogs)
         v = v / np.linalg.norm(v)
-        print(v)
+        # print(v)
         return v
          
 

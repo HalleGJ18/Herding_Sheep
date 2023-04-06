@@ -63,6 +63,29 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
             dog.sheep_in_range = False
 
 
+    # update flock with pack info
+    # sheep need to know if dog in range
+    for sheep in flock.flock:
+        seen_dogs_avg = np.array([0.0, 0.0])
+        seen_dogs_count = 0
+        for dog in pack.sheepdogs:
+            if sheep.can_see(dog.pos):
+                seen_dogs_avg += dog.pos
+                seen_dogs_count += 1
+        
+        # if there are dogs seen, set avg pos of dogs
+        if seen_dogs_count > 0:
+            seen_dogs_avg /= seen_dogs_count
+            sheep.dog_in_range = True
+            # sheep.set_dog_avg_pos()
+            sheep.set_avg_dog_pos(seen_dogs_avg)
+
+        else:
+            sheep.dog_in_range = False
+            
+
+
+
     # calc sheepdogs moves
     pack.calc_distances_dogs()
     
@@ -84,10 +107,10 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
     dog_data.loc[t] = [np.copy(pack.sheepdogs_positionsX), np.copy(pack.sheepdogs_positionsY)]
 
 
-print("sheep data:")
-print(sheep_data)
-print("dog data:")
-print(dog_data)
+# print("sheep data:")
+# print(sheep_data)
+# print("dog data:")
+# print(dog_data)
 
 
 # generate animated plot

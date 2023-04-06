@@ -12,6 +12,7 @@ class Flock:
     separation_weight = 0.7
     alignment_weight = 0.5
     cohesion_weight = 0.5
+    dog_push_weight = 50
 
     def __init__(self, n:int, e:Environment):
         self.num_of_sheep = n    
@@ -122,7 +123,7 @@ class Flock:
         # loop through flock
         for sheep in self.flock:
             # call separation, alignment & cohesion calcs
-            sheep.apply_flocking(self.flock, self.dists, self.separation_weight, self.alignment_weight, self.cohesion_weight)
+            sheep.apply_flocking(self.flock, self.dists, self.separation_weight, self.alignment_weight, self.cohesion_weight, self.dog_push_weight)
 
     def update_flock(self):
         for sheep in self.flock:
