@@ -9,7 +9,7 @@ class Flock:
     # flock = []
     # flock_positions = [[]]
 
-    separation_weight = 0.7
+    separation_weight = 0.9
     alignment_weight = 0.5
     cohesion_weight = 0.5
     dog_push_weight = 50

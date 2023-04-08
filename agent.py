@@ -12,7 +12,7 @@ class Agent:
     acceleration = np.array([0.0,0.0])  # use for obstacle avoid??
     
     # velocity x,y
-    velocity = np.array([10.0,10.0])
+    velocity = np.array([0.0,0.0])
 
     next_velocity = np.array([10.0,10.0])
     

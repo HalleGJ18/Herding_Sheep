@@ -32,7 +32,7 @@ n = 100 # num of sheep
 flock = Flock(n, env)
 
 # generate sheepdog(s)
-n_dogs = 1 # num of dogs
+n_dogs = 2 # num of dogs
 pack = Pack(n_dogs, env)
 
 
@@ -108,10 +108,17 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
     dog_data.loc[t] = [np.copy(pack.sheepdogs_positionsX), np.copy(pack.sheepdogs_positionsY)]
 
 
-# print("sheep data:")
-# print(sheep_data)
-# print("dog data:")
-# print(dog_data)
+print("sheep data:")
+print(sheep_data)
+print("dog data:")
+print(dog_data)
+
+print(type(flock.flock_positionsX))
+print(type(pack.sheepdogs_positionsX))
+
+# output to csv
+sheep_data.to_csv("sheep_data.csv", encoding='utf-8', sep="|")
+dog_data.to_csv("dog_data.csv", encoding='utf-8', sep="|")
 
 
 # generate animated plot

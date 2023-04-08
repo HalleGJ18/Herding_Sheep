@@ -6,6 +6,8 @@ from agent import Agent
 
 class Sheepdog(Agent):
 
+    velocity = np.array([10.0,10.0])
+
     vision_range = 750 # increase?
 
     maintain_dist = 1
@@ -98,9 +100,9 @@ class Sheepdog(Agent):
             movement += to_push
         
         if np.linalg.norm(movement) > 0:
-            print("movement change")
+            # print("movement change")
             self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
 
-        print(self.velocity)
+        # print(self.velocity)
 
 
