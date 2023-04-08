@@ -6,7 +6,7 @@ from agent import Agent
 
 class Sheepdog(Agent):
 
-    vision_range = 300 # increase?
+    vision_range = 750 # increase?
 
     maintain_dist = 1
 
@@ -43,11 +43,14 @@ class Sheepdog(Agent):
         self.sheep_centre = p
 
     def calc_movement_to_push_point(self):  #TODO: check the numbers this returns are what we want
-        v = self.sheep_centre - self.target
+        # v = self.sheep_centre - self.target
+        v = self.target - self.sheep_centre
         v = v/np.linalg.norm(v)
-        v = v * self.maintain_dist
+        v = self.sheep_centre + (v * self.maintain_dist)
+        # print("v: {}".format(v))
         move = v - self.pos
         move = move/np.linalg.norm(move)
+        # print("move towards push point")
         # print(move)
         return move
 
@@ -93,6 +96,11 @@ class Sheepdog(Agent):
 
             # put it all together
             movement += to_push
+        
+        if np.linalg.norm(movement) > 0:
+            print("movement change")
             self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
+
+        print(self.velocity)
 
 

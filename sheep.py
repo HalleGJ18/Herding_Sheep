@@ -102,8 +102,8 @@ class Sheep(Agent):
 
             velocity_changes += (away*dog_push_weight)
 
-            print("dog near")
-            print(away*dog_push_weight)
+            # print("dog near")
+            # print(away*dog_push_weight)
 
         # else:
         #     velocity_changes = np.array([0.0, 0.0])
