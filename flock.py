@@ -9,7 +9,7 @@ class Flock:
     # flock = []
     # flock_positions = [[]]
 
-    separation_weight = 0.9
+    separation_weight = 0.6
     alignment_weight = 0.5
     cohesion_weight = 0.5
     dog_push_weight = 50
@@ -30,6 +30,7 @@ class Flock:
             sheep[s].set_pos(self.random_start_pos(25, 25, self.env.width-25, self.env.height-25))
             sheep_posX.append(sheep[s].pos[0])
             sheep_posY.append(sheep[s].pos[1])
+            sheep[s].velocity = sheep[s].rand_velocity()
 
         self.flock = np.array(sheep)
         self.flock_positionsX = np.array(sheep_posX)

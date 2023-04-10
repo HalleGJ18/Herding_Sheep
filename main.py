@@ -45,7 +45,7 @@ dog_data.loc[0] = [np.copy(pack.sheepdogs_positionsX), np.copy(pack.sheepdogs_po
 # print(pack.sheepdogs[1].pos)
 
 
-T_LIMIT = 250 # num of time steps
+T_LIMIT = 500 # num of time steps
 
 # MAIN LOOP
 for t in range(1, T_LIMIT+1): # does this need to be +1?
@@ -70,7 +70,7 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
         seen_dogs_avg = np.array([0.0, 0.0])
         seen_dogs_count = 0
         for dog in pack.sheepdogs:
-            if sheep.can_see(dog.pos):
+            if sheep.can_see(dog.pos, sheep.threat_range):
                 seen_dogs_avg += dog.pos
                 seen_dogs_count += 1
         
@@ -113,8 +113,8 @@ print(sheep_data)
 print("dog data:")
 print(dog_data)
 
-print(type(flock.flock_positionsX))
-print(type(pack.sheepdogs_positionsX))
+# print(type(flock.flock_positionsX))
+# print(type(pack.sheepdogs_positionsX))
 
 # output to csv
 sheep_data.to_csv("sheep_data.csv", encoding='utf-8', sep="|")
@@ -128,10 +128,11 @@ fig = plt.Figure(figsize=(5, 5), dpi=150)
 ax = fig.add_subplot(111)
 ax.set_xlim([0, ENV_WIDTH])
 ax.set_ylim([0, ENV_HEIGHT])
+scat = ax.grid()
 scat = ax.scatter(sheep_data.loc[0]["X_Positions"], sheep_data.loc[0]["Y_Positions"], c='k')
 scat = ax.scatter(dog_data.loc[0]["X_Positions"], dog_data.loc[0]["Y_Positions"], c='r')
 scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
-scat = ax.text(0, 750, "time=0")
+scat = ax.text(0, ENV_HEIGHT, "time=0")
 scatter = FigureCanvasTkAgg(fig, window)
 scatter.get_tk_widget().pack()
 
@@ -143,10 +144,11 @@ def animate(time):
     ax.clear()
     ax.set_xlim([0, ENV_WIDTH])
     ax.set_ylim([0, ENV_HEIGHT])
+    scat = ax.grid()
     scat = ax.scatter(sheep_data.loc[time]["X_Positions"], sheep_data.loc[time]["Y_Positions"], c='k')
     scat = ax.scatter(dog_data.loc[time]["X_Positions"], dog_data.loc[time]["Y_Positions"], c='r')
     scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
-    scat = ax.text(0, 750, "time="+str(time))
+    scat = ax.text(0, ENV_HEIGHT, "time="+str(time))
     return scat
 
 ani = animation.FuncAnimation(fig, animate, repeat=True, frames=T_LIMIT, interval=50)

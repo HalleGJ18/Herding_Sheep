@@ -8,13 +8,15 @@ class Sheepdog(Agent):
 
     velocity = np.array([10.0,10.0])
 
-    vision_range = 750 # increase?
+    vision_range = 350 # 750?
 
-    maintain_dist = 1
+    maintain_dist = 10
 
     flock_centre = 0
 
     sheep_in_range = False
+
+    # max_speed = 16
 
     def set_target(self, t):
         # ingest np array
@@ -62,6 +64,7 @@ class Sheepdog(Agent):
         for dog in nearby_dogs:
             v += (self.pos - dog.pos)
         # v = v / len(nearby_dogs)
+        v = v / len(nearby_dogs)
         v = v / np.linalg.norm(v)
         # print(v)
         return v
@@ -90,7 +93,7 @@ class Sheepdog(Agent):
 
             # if drive
                 # move to make avg pos closer to push point
-            to_push = self.calc_movement_to_push_point()
+            to_push = self.calc_movement_to_push_point() * 2
             
 
             # if collect

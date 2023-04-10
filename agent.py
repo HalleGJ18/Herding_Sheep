@@ -19,7 +19,7 @@ class Agent:
     # speed = magnitude of velocity
     speed = np.linalg.norm(velocity)
     # max_speed = math.sqrt(200)
-    max_speed = 20
+    max_speed = 15
 
     #
     vision_range = 50
@@ -54,12 +54,20 @@ class Agent:
         # return array of nearby agents
         return nearby_agents
 
-    def can_see(self, pos):
+    def can_see(self, pos, range):
         # include env checks
-        if math.dist(self.pos, pos) <= self.vision_range:
+        if math.dist(self.pos, pos) <= range:
             return True
         else:
             return False
+
+    def rand_velocity(self):
+        lim = 9
+        half = (lim+1)/2
+        x = random.randint(0,lim) - half + random.rand()
+        y = random.randint(0,lim) - half + random.rand()
+        # print("x: {}, y: {}".format(x,y))
+        return np.array([x,y])
 
     def calc_acceleration(self):
         pass
@@ -68,11 +76,12 @@ class Agent:
         # v + a
         # keep new v under max spd
         self.velocity = np.add(self.velocity, self.acceleration)  # why does this line make everything work???
-        self.speed = self.speed = np.linalg.norm(self.velocity)
+        self.speed = np.linalg.norm(self.velocity)
         # if self.speed > self.max_speed:
             # print("yup")
-        self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
-        self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
+        if self.speed > 0:
+            self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
+            self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
 
         # print(self.velocity)
 
@@ -114,6 +123,8 @@ class Agent:
 
         # update pos
         self.pos = self.pos + self.velocity
+
+        # print(self.pos)
 
 
 
