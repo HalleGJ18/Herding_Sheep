@@ -7,15 +7,15 @@ from agent import Agent
 
 class Sheep(Agent):
 
-    personal_space = 30
+    personal_space = 2
 
     dog_in_range = False
 
     velocity = np.array([0.1, 0.1])
 
-    threat_range = 100
+    threat_range = 65
 
-    # max_speed = 5
+    max_speed = 2
     
     # def separation(self, sheep):
     #     # don't get too close to other agents nearby
@@ -100,23 +100,18 @@ class Sheep(Agent):
 
         velocity_changes = np.array([0.0, 0.0])
         
+        """avoid sheepdogs"""
         # nearby sheepdogs
         if self.dog_in_range:
-            # run faster bc threatened
-            self.max_speed = 15
 
             # get unit vector away from dog avg pos
             away = self.dog_in_range_avg / np.linalg.norm(self.dog_in_range_avg)
-            # away = self.dog_in_range_avg
 
             velocity_changes += (away*dog_push_weight)
 
             # print("dog near")
             # print(away*dog_push_weight)
         
-        # else:
-        #     # run slower
-        #     self.max_speed = 5
 
 
         """flocking"""
@@ -126,27 +121,22 @@ class Sheep(Agent):
         # call the flocking funcs???
         if len(nearby_sheep) > 0:
             separation, alignment, cohesion =  self.flocking_algo(nearby_sheep)
-            # self.velocity = 5*random.uniform(-1,2,(2)) + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion
-            velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
-            # self.velocity = self.velocity + separation + alignment + cohesion 
-
-        # else:
-        #     self.velocity = 0.7*self.velocity + 5*random.uniform(-1,2,(2)) + velocity_changes
+            
+            # velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
+            
+            if self.dog_in_range:
+                velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
+                # velocity_changes = velocity_changes + sep_weight*separation + cohes_weight*cohesion 
+            else:
+                velocity_changes += sep_weight*separation 
 
         # self.calc_velocity()      # what is this doing here?
 
+
         if (self.dog_in_range == False) and (len(nearby_sheep) == 0):
-        # else:
-            x = random.randint(10)
-            if x > 3:
-                self.velocity = 0.7*self.velocity + 5*random.uniform(-1,2,(2))
-            else:
-                if self.speed < 0.5:
-                    self.velocity = np.array([0.0, 0.0])
-                else:
-                    self.velocity = self.velocity * 0.5
-
-
-        self.velocity += velocity_changes
+            self.velocity = np.array([0.0, 0.0])
+        else:
+            self.velocity = self.velocity*0.2 + velocity_changes
+            # self.velocity += velocity_changes
 
         # print("vel: {}".format(self.velocity))

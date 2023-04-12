@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
+import math
 
 from flock import Flock
 from environment import Environment
@@ -23,16 +24,16 @@ sheep_data = pd.DataFrame(columns=['X_Positions', 'Y_Positions'])
 dog_data = pd.DataFrame(columns=['X_Positions', 'Y_Positions'])
 
 # instantiate environment
-ENV_HEIGHT = 750
-ENV_WIDTH = 750
+ENV_HEIGHT = 150
+ENV_WIDTH = 150
 env = Environment(ENV_HEIGHT, ENV_WIDTH)
 
 # generate sheep
-n = 100 # num of sheep
-flock = Flock(n, env)
+n_sheep = 50 # num of sheep
+flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
-n_dogs = 2 # num of dogs
+n_dogs = 1 # num of dogs
 pack = Pack(n_dogs, env)
 
 
@@ -44,17 +45,25 @@ dog_data.loc[0] = [np.copy(pack.sheepdogs_positionsX), np.copy(pack.sheepdogs_po
 # print(pack.sheepdogs[0].pos)
 # print(pack.sheepdogs[1].pos)
 
+# dog-sheep dist matrix
+dog_sheep_dists = np.zeros([n_dogs, n_sheep])
 
-T_LIMIT = 500 # num of time steps
+
+T_LIMIT = 200 # num of time steps
 
 # MAIN LOOP
 for t in range(1, T_LIMIT+1): # does this need to be +1?
+
+    for d in pack.sheepdogs:
+        for s in flock.flock:
+            dog_sheep_dists[d.id][s.id] = math.dist(d.pos, s.pos)
 
     # update pack with flock info
     # pack.set_flock_pos()
     # pack.set_flock_centre(flock.calc_flock_centre(flock.))
     for dog in pack.sheepdogs:
-        sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range)
+        sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
+        # sheep_in_range = flock.get_n_closest_sheep(dog.pos, 20)
         if len(sheep_in_range) > 0:
             dog.set_seen_sheep_centre(flock.calc_sheep_centre(sheep_in_range))
             dog.sheep_in_range = True
@@ -151,7 +160,7 @@ def animate(time):
     scat = ax.text(0, ENV_HEIGHT, "time="+str(time))
     return scat
 
-ani = animation.FuncAnimation(fig, animate, repeat=True, frames=T_LIMIT, interval=50)
+ani = animation.FuncAnimation(fig, animate, repeat=True, frames=T_LIMIT, interval=60)
 
 # main loop
 window.mainloop()

@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from numpy import random
 
@@ -61,9 +62,16 @@ class Flock:
         pass
 
     # calc sheep closest to a given point
-    def calc_closest_sheep(self, p):
-        # p is point
-        pass
+    def calc_n_closest_sheep(self, p, n, id=None):
+        # p is pos of target
+        # n is the number of sheep wanted
+        # is_sheep is true if sheep is checking for nearby sheep, and is false for dog checking for nearby sheep
+        sorted_by_dist = sorted(self.flock, key= lambda sheep: math.dist(sheep.pos, p))
+        if id != None:
+            sorted_by_dist = [i for i in sorted_by_dist if i.id != id]
+        if len(sorted_by_dist) > n:
+            sorted_by_dist = sorted_by_dist[0:n]
+        return sorted_by_dist
 
     # calc sheep within given radius
     def get_sheep_in_area(self, p, r):
@@ -75,6 +83,10 @@ class Flock:
                 found_sheep.append(s)
         return np.array(found_sheep)
         
+
+    # find n closest sheep to given point
+    def get_n_closest_sheep(self, p):
+        pass
 
 
     # calc flock centre of mass

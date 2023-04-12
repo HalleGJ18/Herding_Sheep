@@ -19,7 +19,7 @@ class Agent:
     # speed = magnitude of velocity
     speed = np.linalg.norm(velocity)
     # max_speed = math.sqrt(200)
-    max_speed = 15
+    max_speed = 5
 
     #
     vision_range = 50
@@ -96,13 +96,14 @@ class Agent:
         self.calc_velocity()
 
         # check if next pos is valid
-        bound_inset = 30
+        bound_inset = 5 #30 #! scale with env size
+
         xMin = bound_inset
         yMin = bound_inset
         xMax = self.area_width - bound_inset
         yMax = self.area_height - bound_inset
 
-        edge_avoid_factor = 25
+        edge_avoid_factor = 25 #! scale with env size
 
         if self.pos[0] < xMin:
             self.velocity[0] += edge_avoid_factor

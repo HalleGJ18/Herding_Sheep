@@ -8,7 +8,7 @@ class Sheepdog(Agent):
 
     velocity = np.array([10.0,10.0])
 
-    vision_range = 350 # 750?
+    vision_range = 150 # 750?
 
     maintain_dist = 10
 

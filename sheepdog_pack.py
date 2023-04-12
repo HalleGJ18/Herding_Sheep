@@ -8,7 +8,7 @@ from environment import Environment
 
 class Pack:
 
-    target = np.array([600.0, 600.0])
+    target = np.array([125.0, 125.0])
 
     # dogs_average position = []
 
@@ -47,7 +47,7 @@ class Pack:
         dogs_posY = []
         for d in range(n):
             dogs.append(Sheepdog(d, e.height, e.width))
-            dogs[d].set_pos(self.random_start_pos(50,50,150,150))
+            dogs[d].set_pos(self.random_start_pos(10,10,50,50))
             dogs[d].set_target(self.target)
             dogs_posX.append(dogs[d].pos[0])
             dogs_posY.append(dogs[d].pos[1])
