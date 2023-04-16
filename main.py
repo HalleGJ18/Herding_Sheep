@@ -14,7 +14,7 @@ from sheepdog_pack import Pack
 # init window
 window = tk.Tk()
 window.title("Herding Sheep")
-window.geometry("1400x788-50-100")
+window.geometry("1600x950+160+20")
 window.configure(background="grey")
 
 # define data structure
@@ -24,12 +24,12 @@ sheep_data = pd.DataFrame(columns=['X_Positions', 'Y_Positions'])
 dog_data = pd.DataFrame(columns=['X_Positions', 'Y_Positions'])
 
 # instantiate environment
-ENV_HEIGHT = 150
-ENV_WIDTH = 150
+ENV_HEIGHT = 750 # 150
+ENV_WIDTH = 750
 env = Environment(ENV_HEIGHT, ENV_WIDTH)
 
 # generate sheep
-n_sheep = 50 # num of sheep
+n_sheep = 100 # num of sheep
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
@@ -49,7 +49,7 @@ dog_data.loc[0] = [np.copy(pack.sheepdogs_positionsX), np.copy(pack.sheepdogs_po
 dog_sheep_dists = np.zeros([n_dogs, n_sheep])
 
 
-T_LIMIT = 200 # num of time steps
+T_LIMIT = 400 # num of time steps
 
 # MAIN LOOP
 for t in range(1, T_LIMIT+1): # does this need to be +1?
@@ -62,8 +62,9 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
     # pack.set_flock_pos()
     # pack.set_flock_centre(flock.calc_flock_centre(flock.))
     for dog in pack.sheepdogs:
-        sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
-        # sheep_in_range = flock.get_n_closest_sheep(dog.pos, 20)
+        # sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
+        sheep_in_range = flock.calc_n_closest_sheep(dog.pos, 20)
+        # print([i.id for i in sheep_in_range])
         if len(sheep_in_range) > 0:
             dog.set_seen_sheep_centre(flock.calc_sheep_centre(sheep_in_range))
             dog.sheep_in_range = True
@@ -133,8 +134,8 @@ dog_data.to_csv("dog_data.csv", encoding='utf-8', sep="|")
 # generate animated plot
 time = 0
 
-fig = plt.Figure(figsize=(5, 5), dpi=150)
-ax = fig.add_subplot(111)
+fig = plt.Figure(figsize=(6, 6), dpi=150)
+ax = fig.add_subplot()
 ax.set_xlim([0, ENV_WIDTH])
 ax.set_ylim([0, ENV_HEIGHT])
 scat = ax.grid()

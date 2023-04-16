@@ -10,10 +10,10 @@ class Flock:
     # flock = []
     # flock_positions = [[]]
 
-    separation_weight = 0.6
-    alignment_weight = 0.5
-    cohesion_weight = 0.5
-    dog_push_weight = 50
+    separation_weight = 2
+    alignment_weight = 0 #0.5
+    cohesion_weight = 1.5 #0.5
+    dog_push_weight = 1
 
     def __init__(self, n:int, e:Environment):
         self.num_of_sheep = n    
@@ -82,12 +82,6 @@ class Flock:
             if np.linalg.norm(s.pos - p) <= r:
                 found_sheep.append(s)
         return np.array(found_sheep)
-        
-
-    # find n closest sheep to given point
-    def get_n_closest_sheep(self, p):
-        pass
-
 
     # calc flock centre of mass
     def calc_flock_centre(self):

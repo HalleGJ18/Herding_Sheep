@@ -51,6 +51,9 @@ class Agent:
         nearby[self.id] = False
         # match indexes to IDs of other agents
         nearby_agents = agents[nearby]          # check this!!!!!
+        # check nearby agents
+        nearby_ids = [i.id for i in nearby_agents]
+        # print("self.id: {}, nearby: {}".format(self.id, nearby_ids))
         # return array of nearby agents
         return nearby_agents
 
@@ -62,7 +65,8 @@ class Agent:
             return False
 
     def rand_velocity(self):
-        lim = 9
+        # lim = self.max_speed
+        lim = 2
         half = (lim+1)/2
         x = random.randint(0,lim) - half + random.rand()
         y = random.randint(0,lim) - half + random.rand()
@@ -96,7 +100,7 @@ class Agent:
         self.calc_velocity()
 
         # check if next pos is valid
-        bound_inset = 5 #30 #! scale with env size
+        bound_inset = 15 #5 #! scale with env size
 
         xMin = bound_inset
         yMin = bound_inset

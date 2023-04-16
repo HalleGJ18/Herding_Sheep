@@ -8,7 +8,8 @@ from environment import Environment
 
 class Pack:
 
-    target = np.array([125.0, 125.0])
+    # target = np.array([125.0, 125.0])
+    target = np.array([600.0, 600.0])
 
     # dogs_average position = []
 
