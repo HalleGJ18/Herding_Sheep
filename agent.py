@@ -67,11 +67,13 @@ class Agent:
     def rand_velocity(self):
         # lim = self.max_speed
         lim = 2
-        half = (lim+1)/2
+        half = 1
         x = random.randint(0,lim) - half + random.rand()
         y = random.randint(0,lim) - half + random.rand()
         # print("x: {}, y: {}".format(x,y))
-        return np.array([x,y])
+        v = np.array([x,y])
+        v = v / np.linalg.norm(v)
+        return v
 
     def calc_acceleration(self):
         pass

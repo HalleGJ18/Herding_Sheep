@@ -147,8 +147,8 @@ class Sheep(Agent):
         if (self.dog_in_range == False) and (len(nearby_sheep) == 0):
             rand_chance = np.random.rand()
             if rand_chance <= 0.05: # random chance of slight movement
-                print("rand move, {}".format(self.id))
-                print(noise)
+                # print("rand move, {}".format(self.id))
+                # print(noise)
                 self.velocity = noise
             else:
                 self.velocity = np.array([0.0, 0.0])
