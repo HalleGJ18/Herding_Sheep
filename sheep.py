@@ -91,13 +91,33 @@ class Sheep(Agent):
         else:
             sep_vector = total_separation
         
-        # sep_vector = sep_vector/np.linalg.norm(sep_vector)
-        # print(np.linalg.norm(sep_vector))
+        if np.linalg.norm(sep_vector) != 0:
+            sep_vector = sep_vector/np.linalg.norm(sep_vector)
+
 
         align_vector = (total_alignment/len(nearby)) - self.velocity
+        if np.linalg.norm(align_vector) != 0:
+            align_vector = align_vector/np.linalg.norm(align_vector)
+
+
         cohes_vector = (total_cohesion/len(nearby)) - self.pos
+        if np.linalg.norm(cohes_vector) != 0:
+            cohes_vector = cohes_vector/np.linalg.norm(cohes_vector)
 
         # print(self.id, sep_vector, align_vector, cohes_vector)
+
+        # check vector lengths
+
+        # print(np.linalg.norm(sep_vector), np.linalg.norm(align_vector), np.linalg.norm(cohes_vector))
+        # p = ""
+        # if np.linalg.norm(sep_vector) != 0:
+        #     p = p + "sep: {}".format(np.linalg.norm(sep_vector))
+        # if np.linalg.norm(align_vector) != 0:
+        #     p = p + " ali: {}".format(np.linalg.norm(align_vector))
+        # if np.linalg.norm(cohes_vector) != 0:
+        #     p = p + " coh: {}".format(np.linalg.norm(cohes_vector))
+        # if p != "":
+        #     print(p)
 
         return sep_vector, align_vector, cohes_vector
 
@@ -158,7 +178,7 @@ class Sheep(Agent):
         else:
             
             velocity_changes = velocity_changes + (noise_weight * noise)
-            self.velocity = self.velocity*0.5 + velocity_changes
+            self.velocity = self.velocity*prev_vel_weight + velocity_changes
             # self.velocity += velocity_changes
 
         # print("vel: {}".format(self.velocity))

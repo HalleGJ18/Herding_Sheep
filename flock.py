@@ -11,7 +11,7 @@ class Flock:
     # flock_positions = [[]]
 
     separation_weight = 2
-    alignment_weight = 0 #0.5
+    alignment_weight = 1 #0
     cohesion_weight = 1.5 #0.5
     dog_push_weight = 1
 
@@ -139,6 +139,10 @@ class Flock:
 
             # update pos
             sheep.update_agent()
+
+            # if sheep.speed != 0:
+            #     print(sheep.speed)
+
             # log position change
             np.put(self.flock_positionsX, sheep.id, sheep.pos[0])
             np.put(self.flock_positionsY, sheep.id, sheep.pos[1])

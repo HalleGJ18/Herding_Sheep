@@ -33,7 +33,7 @@ n_sheep = 100 # num of sheep
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
-n_dogs = 1 # num of dogs
+n_dogs = 2 # num of dogs
 pack = Pack(n_dogs, env)
 
 

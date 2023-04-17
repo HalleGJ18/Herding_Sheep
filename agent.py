@@ -85,9 +85,11 @@ class Agent:
         self.speed = np.linalg.norm(self.velocity)
         # if self.speed > self.max_speed:
             # print("yup")
-        if self.speed > 0:
-            self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
-            self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
+        if self.speed != 0: # > max_speed, cap it
+            self.velocity = self.velocity / self.speed * self.max_speed
+            self.speed = np.linalg.norm(self.velocity)
+            # self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
+            # self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
 
         # print(self.velocity)
 

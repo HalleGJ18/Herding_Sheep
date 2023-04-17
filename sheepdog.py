@@ -16,7 +16,9 @@ class Sheepdog(Agent):
 
     sheep_in_range = False
 
-    # max_speed = 16
+    # max_speed = 1.5
+
+    # blind_angle = pi/2    # sheepdog can't see behind itself
 
     def set_target(self, t):
         # ingest np array
