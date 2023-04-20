@@ -27,7 +27,7 @@ class Flock:
         sheep_posX = []
         sheep_posY = []
         for s in range(self.num_of_sheep):
-            sheep.append(Sheep(s, self.env.height, self.env.width))
+            sheep.append(Sheep(s, self.env))
             sheep[s].set_pos(self.random_start_pos(25, 25, self.env.width-25, self.env.height-25))
             sheep_posX.append(sheep[s].pos[0])
             sheep_posY.append(sheep[s].pos[1])

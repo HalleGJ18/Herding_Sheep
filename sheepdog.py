@@ -16,7 +16,7 @@ class Sheepdog(Agent):
 
     sheep_in_range = False
 
-    # max_speed = 1.5
+    max_speed = 1.5
 
     # blind_angle = pi/2    # sheepdog can't see behind itself
 

@@ -24,7 +24,7 @@ sheep_data = pd.DataFrame(columns=['X_Positions', 'Y_Positions'])
 dog_data = pd.DataFrame(columns=['X_Positions', 'Y_Positions'])
 
 # instantiate environment
-ENV_HEIGHT = 750 # 150
+ENV_HEIGHT = 750 # 150 # 750
 ENV_WIDTH = 750
 env = Environment(ENV_HEIGHT, ENV_WIDTH)
 
@@ -33,7 +33,7 @@ n_sheep = 100 # num of sheep
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
-n_dogs = 2 # num of dogs
+n_dogs = 1 # num of dogs
 pack = Pack(n_dogs, env)
 
 
@@ -63,7 +63,7 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
     # pack.set_flock_centre(flock.calc_flock_centre(flock.))
     for dog in pack.sheepdogs:
         # sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
-        sheep_in_range = flock.calc_n_closest_sheep(dog.pos, 20)
+        sheep_in_range = flock.calc_n_closest_sheep(dog.pos, 50) #20
         # print([i.id for i in sheep_in_range])
         if len(sheep_in_range) > 0:
             dog.set_seen_sheep_centre(flock.calc_sheep_centre(sheep_in_range))

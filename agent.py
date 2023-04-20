@@ -18,8 +18,9 @@ class Agent:
     
     # speed = magnitude of velocity
     speed = np.linalg.norm(velocity)
-    # max_speed = math.sqrt(200)
-    max_speed = 5
+
+    #
+    max_speed = 1 #5
 
     #
     vision_range = 50
@@ -28,10 +29,11 @@ class Agent:
     shape_radius = 5
     fill_colour = "black"
 
-    def __init__(self, id:int, h, w):
+    def __init__(self, id:int, e):
         self.id = id
-        self.area_height = h
-        self.area_width = w
+        self.env = e
+        self.area_height = e.height
+        self.area_width = e.width
 
     def set_pos(self, p): # p:np.array
         self.pos = p
@@ -104,7 +106,7 @@ class Agent:
         self.calc_velocity()
 
         # check if next pos is valid
-        bound_inset = 15 #5 #! scale with env size
+        bound_inset = 5 #15 #! scale with env size
 
         xMin = bound_inset
         yMin = bound_inset
