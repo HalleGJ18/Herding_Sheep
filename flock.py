@@ -1,18 +1,21 @@
-import numpy as np
 import math
-from sheep import Sheep
+import numpy as np
 from numpy import random
+
+from sheep import Sheep
+from environment import Environment
 
 class Flock:
 
     # flock = []
     # flock_positions = [[]]
 
-    separation_weight = 0.7
-    alignment_weight = 0.5
-    cohesion_weight = 0.5
+    separation_weight = 2
+    alignment_weight = 1 #0
+    cohesion_weight = 1.5 #0.5
+    dog_push_weight = 1
 
-    def __init__(self, n, e):
+    def __init__(self, n:int, e:Environment):
         self.num_of_sheep = n    
         self.env = e
 
@@ -24,10 +27,11 @@ class Flock:
         sheep_posX = []
         sheep_posY = []
         for s in range(self.num_of_sheep):
-            sheep.append(Sheep(s, self.env.height, self.env.width))
+            sheep.append(Sheep(s, self.env))
             sheep[s].set_pos(self.random_start_pos(25, 25, self.env.width-25, self.env.height-25))
             sheep_posX.append(sheep[s].pos[0])
             sheep_posY.append(sheep[s].pos[1])
+            sheep[s].velocity = sheep[s].rand_velocity()
 
         self.flock = np.array(sheep)
         self.flock_positionsX = np.array(sheep_posX)
@@ -53,24 +57,92 @@ class Flock:
                     self.dists[sheep.id][other.id] = np.linalg.norm(other.pos - sheep.pos)
         # print(self.dists)
 
-
     def calc_distances_sheepdogs(self):
         # create matrix of distances from sheepdogs
         pass
 
+    # calc sheep closest to a given point
+    def calc_n_closest_sheep(self, p, n, id=None):
+        # p is pos of target
+        # n is the number of sheep wanted
+        # is_sheep is true if sheep is checking for nearby sheep, and is false for dog checking for nearby sheep
+        sorted_by_dist = sorted(self.flock, key= lambda sheep: math.dist(sheep.pos, p))
+        if id != None:
+            sorted_by_dist = [i for i in sorted_by_dist if i.id != id]
+        if len(sorted_by_dist) > n:
+            sorted_by_dist = sorted_by_dist[0:n]
+        return sorted_by_dist
+
+    # calc sheep within given radius
+    def get_sheep_in_area(self, p, r):
+        # p is centre of area
+        # r is radius
+        found_sheep = []
+        for s in self.flock:
+            if np.linalg.norm(s.pos - p) <= r:
+                found_sheep.append(s)
+        return np.array(found_sheep)
+
+    # calc flock centre of mass
+    def calc_flock_centre(self):
+        # avg x pos
+        flock_avg_x = np.average(self.flock_positionsX)
+        # avg y pos
+        flock_avg_y = np.average(self.flock_positionsY)
+        return np.array([flock_avg_x, flock_avg_y])
+    
+
+    # calc centre of mass for an array of sheep
+    def calc_sheep_centre(self, sheep):
+        total_pos = np.array([0.0,0.0])
+        for s in sheep:
+            total_pos += s.pos
+        avg_pos = total_pos / len(sheep)
+        return avg_pos
+
+    # calc flock density
+    def calc_flock_density(self): # -> float
+        # calc density for whole flock
+        return self.calc_density(self.flock_positionsX, self.flock_positionsY)
+
+    def calc_density(self, x_positions, y_positions):
+        # pop density = num of people / land area
+        # find min and max of x and y to find the area taken up by sheep
+        # do num of sheep / area
+
+        # take arrays of x positions and y positions
+        # get bottom left and top right coords
+        x_min = min(x_positions)
+        y_min = min(y_positions)
+        x_max = max(x_positions)
+        y_max = max(y_positions)
+        
+        # find the size of the square that contains all sheep
+        area_height = y_max - y_min
+        area_width = x_max - x_min
+        area = area_height * area_width
+        
+        # calculate population density
+        density:float = len(x_positions)/area
+        return density
 
     def calc_flocking(self):        
         # loop through flock
         for sheep in self.flock:
             # call separation, alignment & cohesion calcs
-            sheep.apply_flocking(self.flock, self.dists, self.separation_weight, self.alignment_weight, self.cohesion_weight)
+            sheep.apply_flocking(self.flock, self.dists, self.separation_weight, self.alignment_weight, self.cohesion_weight, self.dog_push_weight)
 
     def update_flock(self):
-        self.calc_distances_sheep()
-        self.calc_flocking()
         for sheep in self.flock:
+            # update velocity 
+
+
             # update pos
             sheep.update_agent()
+
+            # if sheep.speed != 0:
+            #     print(sheep.speed)
+
             # log position change
             np.put(self.flock_positionsX, sheep.id, sheep.pos[0])
             np.put(self.flock_positionsY, sheep.id, sheep.pos[1])

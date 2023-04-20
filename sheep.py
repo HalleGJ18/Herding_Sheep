@@ -1,53 +1,64 @@
 import tkinter as tk
-import tkinter as tk
 import numpy as np
 from numpy import random
 import math
+
 from agent import Agent
 
 class Sheep(Agent):
 
-    personal_space = 30
+    personal_space = 5 #2
+
+    dog_in_range = False
+
+    velocity = np.array([0.1, 0.1])
+
+    threat_range = 65
+
+    max_speed = 1 #2 #5
     
-    def separation(self, sheep):
-        # don't get too close to other agents nearby
-        cumulative_vector = np.array([0.0,0.0])
+    # def separation(self, sheep):
+    #     # don't get too close to other agents nearby
+    #     cumulative_vector = np.array([0.0,0.0])
         
-        for a in sheep:
-            # find the average vector of the other agent to the current agent each multiplied by the inverse of the distance
-            dist = math.dist(self.pos, a.pos)
-            v = (1/dist)*(self.pos - a.pos)
-            cumulative_vector += v
+    #     for a in sheep:
+    #         # find the average vector of the other agent to the current agent each multiplied by the inverse of the distance
+    #         dist = math.dist(self.pos, a.pos)
+    #         v = (1/dist)*(self.pos - a.pos)
+    #         cumulative_vector += v
 
-        sep_vector = cumulative_vector/len(sheep)
+    #     sep_vector = cumulative_vector/len(sheep)
         
-        return sep_vector
+    #     return sep_vector
         
 
-    def alignment(self, sheep):
-        # match velocity
-        cumulative_vector = np.array([0.0,0.0])
+    # def alignment(self, sheep):
+    #     # match velocity
+    #     cumulative_vector = np.array([0.0,0.0])
 
-        for s in sheep:
-            cumulative_vector += s.velocity
+    #     for s in sheep:
+    #         cumulative_vector += s.velocity
 
-        # how far from avg velocity are we?
-        align_vector = (cumulative_vector/len(sheep)) - self.velocity
+    #     # how far from avg velocity are we?
+    #     align_vector = (cumulative_vector/len(sheep)) - self.velocity
         
-        return align_vector
+    #     return align_vector
             
 
-    def cohesion(self, sheep):
-        # steer towards average position
+    # def cohesion(self, sheep):
+    #     # steer towards average position
 
-        cumulative_vector = np.array([0.0,0.0])
+    #     cumulative_vector = np.array([0.0,0.0])
         
-        for s in sheep:
-            cumulative_vector += s.pos
+    #     for s in sheep:
+    #         cumulative_vector += s.pos
 
-        cohes_vector = (cumulative_vector/len(sheep)) - self.pos
+    #     cohes_vector = (cumulative_vector/len(sheep)) - self.pos
 
-        return cohes_vector
+    #     return cohes_vector
+
+    def set_avg_dog_pos(self, p):
+        self.dog_in_range_avg = p
     
 
     def flocking_algo(self, nearby):
@@ -60,9 +71,12 @@ class Sheep(Agent):
             # don't get too close to neighbours
             dist = math.dist(self.pos, s.pos)
             # d = (1/dist)*(self.pos - s.pos)  # moderated by inverse of distance
-            if dist < self.personal_space:
+            too_close = 0
+            if dist <= self.personal_space:
                 d = self.pos - s.pos
+                d = d/np.linalg.norm(d)
                 total_separation += d
+                too_close += 1
 
             # alignment
             # match velocity of neighbours
@@ -72,30 +86,99 @@ class Sheep(Agent):
             # steer towards average position
             total_cohesion += s.pos
 
-        if np.linalg.norm(total_separation) > 0:
-            sep_vector = (total_separation/len(nearby))
+        if too_close > 0:
+            sep_vector = (total_separation/too_close)
         else:
             sep_vector = total_separation
+        
+        if np.linalg.norm(sep_vector) != 0:
+            sep_vector = sep_vector/np.linalg.norm(sep_vector)
+
 
         align_vector = (total_alignment/len(nearby)) - self.velocity
+        if np.linalg.norm(align_vector) != 0:
+            align_vector = align_vector/np.linalg.norm(align_vector)
+
+
         cohes_vector = (total_cohesion/len(nearby)) - self.pos
+        if np.linalg.norm(cohes_vector) != 0:
+            cohes_vector = cohes_vector/np.linalg.norm(cohes_vector)
 
         # print(self.id, sep_vector, align_vector, cohes_vector)
+
+        # check vector lengths
+
+        # print(np.linalg.norm(sep_vector), np.linalg.norm(align_vector), np.linalg.norm(cohes_vector))
+        # p = ""
+        # if np.linalg.norm(sep_vector) != 0:
+        #     p = p + "sep: {}".format(np.linalg.norm(sep_vector))
+        # if np.linalg.norm(align_vector) != 0:
+        #     p = p + " ali: {}".format(np.linalg.norm(align_vector))
+        # if np.linalg.norm(cohes_vector) != 0:
+        #     p = p + " coh: {}".format(np.linalg.norm(cohes_vector))
+        # if p != "":
+        #     print(p)
 
         return sep_vector, align_vector, cohes_vector
 
 
-    def apply_flocking(self, agents, dists, sep_weight, align_weight, cohes_weight):
+    def apply_flocking(self, agents, dists, sep_weight, align_weight, cohes_weight, dog_push_weight):
+
+        noise_weight = 0.3
+        prev_vel_weight = 0.5
+
+        velocity_changes = np.array([0.0, 0.0])
+        
+        """avoid sheepdogs"""
+        # nearby sheepdogs
+        if self.dog_in_range:
+
+            # get unit vector away from dog avg pos
+            away = self.dog_in_range_avg / np.linalg.norm(self.dog_in_range_avg)
+
+            velocity_changes += (away*dog_push_weight)
+
+            # print("dog near")
+            # print(away*dog_push_weight)
+        
+
+
+        """flocking"""
+
         nearby_sheep = self.find_nearby(agents, dists)
         
         # call the flocking funcs???
         if len(nearby_sheep) > 0:
             separation, alignment, cohesion =  self.flocking_algo(nearby_sheep)
-            # self.velocity = 5*random.uniform(-1,2,(2)) + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion
-            self.velocity = self.velocity + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion
-            # self.velocity = self.velocity + separation + alignment + cohesion 
+            
+            # velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
+            
+            if self.dog_in_range:
+                velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
+                # velocity_changes = velocity_changes + sep_weight*separation + cohes_weight*cohesion 
+            else:
+                # print("sep: {}".format(separation*sep_weight))
+                velocity_changes = velocity_changes + (sep_weight*separation)
+
+        # self.calc_velocity()      # what is this doing here?
+
+        noise = self.rand_velocity()
+
+        if (self.dog_in_range == False) and (len(nearby_sheep) == 0):
+            rand_chance = np.random.rand()
+            if rand_chance <= 0.05: # random chance of slight movement
+                # print("rand move, {}".format(self.id))
+                # print(noise)
+                self.velocity = noise
+            else:
+                self.velocity = np.array([0.0, 0.0])
+        elif (self.dog_in_range == False) and (len(nearby_sheep) > 0):
+            self.velocity = velocity_changes
+            # print(velocity_changes)
         else:
-            self.velocity = 0.7*self.velocity + 5*random.uniform(-1,2,(2))
+            
+            velocity_changes = velocity_changes + (noise_weight * noise)
+            self.velocity = self.velocity*prev_vel_weight + velocity_changes
+            # self.velocity += velocity_changes
 
-        self.calc_velocity()
-
+        # print("vel: {}".format(self.velocity))
