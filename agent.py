@@ -2,6 +2,7 @@ import tkinter as tk
 import numpy as np
 from numpy import random
 import math
+from environment import Environment 
 
 # basic agent class
 class Agent:
@@ -29,7 +30,7 @@ class Agent:
     shape_radius = 5
     fill_colour = "black"
 
-    def __init__(self, id:int, e):
+    def __init__(self, id:int, e:Environment):
         self.id = id
         self.env = e
         self.area_height = e.height
@@ -106,29 +107,34 @@ class Agent:
         self.calc_velocity()
 
         # check if next pos is valid
-        bound_inset = 5 #15 #! scale with env size
 
-        xMin = bound_inset
-        yMin = bound_inset
-        xMax = self.area_width - bound_inset
-        yMax = self.area_height - bound_inset
+        # bound_inset = 5 #15 #! scale with env size
 
-        edge_avoid_factor = 25 #! scale with env size
+        # xMin = bound_inset
+        # yMin = bound_inset
+        # xMax = self.area_width - bound_inset
+        # yMax = self.area_height - bound_inset
 
-        if self.pos[0] < xMin:
-            self.velocity[0] += edge_avoid_factor
-            # self.velocity[0] = -self.velocity[0]
-        elif self.pos[0] > xMax:
-            self.velocity[0] -= edge_avoid_factor
-            # self.velocity[0] = -self.velocity[0]
+        # edge_avoid_factor = 25 #! scale with env size
 
-        if self.pos[1] < yMin:
-            self.velocity[1] += edge_avoid_factor
-            # self.velocity[1] = -self.velocity[1]
-        elif self.pos[1] > yMax:
-            self.velocity[1] -= edge_avoid_factor
-            # self.velocity[1] = -self.velocity[1]
+        # if self.pos[0] < xMin:
+        #     self.velocity[0] += edge_avoid_factor
+        #     # self.velocity[0] = -self.velocity[0]
+        # elif self.pos[0] > xMax:
+        #     self.velocity[0] -= edge_avoid_factor
+        #     # self.velocity[0] = -self.velocity[0]
 
+        # if self.pos[1] < yMin:
+        #     self.velocity[1] += edge_avoid_factor
+        #     # self.velocity[1] = -self.velocity[1]
+        # elif self.pos[1] > yMax:
+        #     self.velocity[1] -= edge_avoid_factor
+        #     # self.velocity[1] = -self.velocity[1]
+
+        if self.env.check_valid_position(self.pos)[0] != 0.0 or self.env.check_valid_position(self.pos)[1] != 0.0:
+            print(self.id)
+
+        self.velocity += self.env.check_valid_position(self.pos)
     
         # print(self.id, self.velocity)
 

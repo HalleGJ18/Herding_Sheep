@@ -2,6 +2,7 @@ import tkinter as tk
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.patches as patches
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import math
@@ -62,8 +63,8 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
     # pack.set_flock_pos()
     # pack.set_flock_centre(flock.calc_flock_centre(flock.))
     for dog in pack.sheepdogs:
-        # sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
-        sheep_in_range = flock.calc_n_closest_sheep(dog.pos, 50) #20
+        sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
+        # sheep_in_range = flock.calc_n_closest_sheep(dog.pos, n_sheep) #20
         # print([i.id for i in sheep_in_range])
         if len(sheep_in_range) > 0:
             dog.set_seen_sheep_centre(flock.calc_sheep_centre(sheep_in_range))
@@ -143,6 +144,8 @@ scat = ax.scatter(sheep_data.loc[0]["X_Positions"], sheep_data.loc[0]["Y_Positio
 scat = ax.scatter(dog_data.loc[0]["X_Positions"], dog_data.loc[0]["Y_Positions"], c='r')
 scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
 scat = ax.text(0, ENV_HEIGHT, "time=0")
+# rect = patches.Rectangle((50, 100), 40, 30, linewidth=1, edgecolor='r', facecolor='none')
+# scat = ax.add_patch(rect)
 scatter = FigureCanvasTkAgg(fig, window)
 scatter.get_tk_widget().pack()
 
@@ -159,6 +162,8 @@ def animate(time):
     scat = ax.scatter(dog_data.loc[time]["X_Positions"], dog_data.loc[time]["Y_Positions"], c='r')
     scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
     scat = ax.text(0, ENV_HEIGHT, "time="+str(time))
+    # rect = patches.Rectangle((50, 100), 40, 30, linewidth=1, edgecolor='r', facecolor='none')
+    # scat = ax.add_patch(rect)
     return scat
 
 ani = animation.FuncAnimation(fig, animate, repeat=True, frames=T_LIMIT, interval=60)

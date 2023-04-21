@@ -15,7 +15,7 @@ class Sheep(Agent):
 
     threat_range = 65
 
-    max_speed = 1 #2 #5
+    max_speed = 5 #1
     
     # def separation(self, sheep):
     #     # don't get too close to other agents nearby

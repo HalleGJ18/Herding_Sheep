@@ -8,15 +8,15 @@ class Sheepdog(Agent):
 
     velocity = np.array([10.0,10.0])
 
-    vision_range = 150 # 750?
+    vision_range = 750 # 150?
 
-    maintain_dist = 10
+    maintain_dist = 0 #10
 
     flock_centre = 0
 
     sheep_in_range = False
 
-    max_speed = 1.5
+    max_speed = 5 #1.5
 
     # blind_angle = pi/2    # sheepdog can't see behind itself
 
