@@ -2,6 +2,7 @@ import numpy as np
 from numpy import random
 import math
 from math import sin, cos, tan, pi
+from matplotlib import patches
 
 class Obstacle:
     
@@ -56,6 +57,9 @@ class Obstacle:
             t = "Hedge"
         s = "Obs id: {}, type: {}, pos: {}, size: {}x{}".format(self.id, t, self.pos, self.width, self.height)
         return s
+    
+    def draw(self):
+        return patches.Rectangle((self.pos[0], self.pos[1]), self.width, self.height, linewidth=1, color=self.colour)
 
     def is_inside(self, p):
         if (p[0]>=self.pos[0] and p[0]<=self.pos[0]+self.width) and (p[1]>=self.pos[1] and p[1]<=self.pos[1]+self.height):
@@ -84,7 +88,7 @@ class Obstacle:
         
         steer_away = np.array([0.0, 0.0])
         
-        # TODO: use trig here to do these rotations, scale theta inv prop to dist from edge ranging 15(?) deg to 90 deg
+        # use trig here to do these rotations, scale theta inv prop to dist from edge ranging 15(?) deg to 90 deg
         # ! should this ALSO be inversely proportional to the angle the agent is??
         # ! if an agent is close, but barely going to collide, does it really need to turn so sharply?
         theta = 15

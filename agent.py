@@ -131,10 +131,10 @@ class Agent:
         #     self.velocity[1] -= edge_avoid_factor
         #     # self.velocity[1] = -self.velocity[1]
 
-        if self.env.check_valid_position(self.pos)[0] != 0.0 or self.env.check_valid_position(self.pos)[1] != 0.0:
+        if self.env.check_valid_position(self.pos, self.velocity)[0] != 0.0 or self.env.check_valid_position(self.pos, self.velocity)[1] != 0.0:
             print(self.id)
 
-        self.velocity += self.env.check_valid_position(self.pos)
+        self.velocity += self.env.check_valid_position(self.pos, self.velocity)
     
         # print(self.id, self.velocity)
 
