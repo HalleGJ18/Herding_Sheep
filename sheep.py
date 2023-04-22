@@ -7,15 +7,18 @@ from agent import Agent
 
 class Sheep(Agent):
 
+    default_personal_space = 5
     personal_space = 5 #2
 
     dog_in_range = False
 
     velocity = np.array([0.1, 0.1])
 
+    default_threat_range = 65
     threat_range = 65
 
-    max_speed = 1 #2 #5
+    default_max_speed = 3
+    max_speed = 3 #1
     
     # def separation(self, sheep):
     #     # don't get too close to other agents nearby
@@ -106,19 +109,6 @@ class Sheep(Agent):
 
         # print(self.id, sep_vector, align_vector, cohes_vector)
 
-        # check vector lengths
-
-        # print(np.linalg.norm(sep_vector), np.linalg.norm(align_vector), np.linalg.norm(cohes_vector))
-        # p = ""
-        # if np.linalg.norm(sep_vector) != 0:
-        #     p = p + "sep: {}".format(np.linalg.norm(sep_vector))
-        # if np.linalg.norm(align_vector) != 0:
-        #     p = p + " ali: {}".format(np.linalg.norm(align_vector))
-        # if np.linalg.norm(cohes_vector) != 0:
-        #     p = p + " coh: {}".format(np.linalg.norm(cohes_vector))
-        # if p != "":
-        #     print(p)
-
         return sep_vector, align_vector, cohes_vector
 
 
@@ -142,7 +132,6 @@ class Sheep(Agent):
             # print(away*dog_push_weight)
         
 
-
         """flocking"""
 
         nearby_sheep = self.find_nearby(agents, dists)
@@ -151,16 +140,17 @@ class Sheep(Agent):
         if len(nearby_sheep) > 0:
             separation, alignment, cohesion =  self.flocking_algo(nearby_sheep)
             
-            # velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
-            
             if self.dog_in_range:
-                velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
-                # velocity_changes = velocity_changes + sep_weight*separation + cohes_weight*cohesion 
+                # velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
+                velocity_changes = velocity_changes + sep_weight*separation + cohes_weight*cohesion 
             else:
                 # print("sep: {}".format(separation*sep_weight))
                 velocity_changes = velocity_changes + (sep_weight*separation)
 
         # self.calc_velocity()      # what is this doing here?
+        
+        """avoid impassable obstacles"""
+        velocity_changes += (20*self.env.avoid_impassable_obstacles(self.pos, self.velocity))
 
         noise = self.rand_velocity()
 

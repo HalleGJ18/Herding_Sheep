@@ -2,6 +2,7 @@ import tkinter as tk
 import numpy as np
 from numpy import random
 import math
+from environment import Environment 
 
 # basic agent class
 class Agent:
@@ -20,16 +21,18 @@ class Agent:
     speed = np.linalg.norm(velocity)
 
     #
+    default_max_speed = 1
     max_speed = 1 #5
 
     #
+    default_vision_range = 50
     vision_range = 50
 
     # drawing vars
     shape_radius = 5
     fill_colour = "black"
 
-    def __init__(self, id:int, e):
+    def __init__(self, id:int, e:Environment):
         self.id = id
         self.env = e
         self.area_height = e.height
@@ -53,8 +56,14 @@ class Agent:
         nearby[self.id] = False
         # match indexes to IDs of other agents
         nearby_agents = agents[nearby]          # check this!!!!!
+        # check if blocked by obstacle
+        before = len(nearby_agents)
+        nearby_agents = [a for a in nearby_agents if self.env.is_obstacle_blocking_vision(self.pos, a.pos) == False]
+        after = len(nearby_agents)
+        if before != after:
+            print(f"before: {before}, after: {after}")
         # check nearby agents
-        nearby_ids = [i.id for i in nearby_agents]
+        # nearby_ids = [i.id for i in nearby_agents]
         # print("self.id: {}, nearby: {}".format(self.id, nearby_ids))
         # return array of nearby agents
         return nearby_agents
@@ -106,29 +115,11 @@ class Agent:
         self.calc_velocity()
 
         # check if next pos is valid
-        bound_inset = 5 #15 #! scale with env size
+        av_am = self.env.check_valid_position(self.pos, self.velocity)
+        if av_am[0] != 0.0 or av_am[1] != 0.0:
+            print(f"id: {self.id}, avoid amount: {av_am}")
 
-        xMin = bound_inset
-        yMin = bound_inset
-        xMax = self.area_width - bound_inset
-        yMax = self.area_height - bound_inset
-
-        edge_avoid_factor = 25 #! scale with env size
-
-        if self.pos[0] < xMin:
-            self.velocity[0] += edge_avoid_factor
-            # self.velocity[0] = -self.velocity[0]
-        elif self.pos[0] > xMax:
-            self.velocity[0] -= edge_avoid_factor
-            # self.velocity[0] = -self.velocity[0]
-
-        if self.pos[1] < yMin:
-            self.velocity[1] += edge_avoid_factor
-            # self.velocity[1] = -self.velocity[1]
-        elif self.pos[1] > yMax:
-            self.velocity[1] -= edge_avoid_factor
-            # self.velocity[1] = -self.velocity[1]
-
+        self.velocity += self.env.check_valid_position(self.pos, self.velocity)
     
         # print(self.id, self.velocity)
 

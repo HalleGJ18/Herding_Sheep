@@ -2,6 +2,7 @@ import tkinter as tk
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.patches as patches
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import math
@@ -29,7 +30,7 @@ ENV_WIDTH = 750
 env = Environment(ENV_HEIGHT, ENV_WIDTH)
 
 # generate sheep
-n_sheep = 100 # num of sheep
+n_sheep = 150 # num of sheep
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
@@ -49,11 +50,16 @@ dog_data.loc[0] = [np.copy(pack.sheepdogs_positionsX), np.copy(pack.sheepdogs_po
 dog_sheep_dists = np.zeros([n_dogs, n_sheep])
 
 
-T_LIMIT = 400 # num of time steps
+T_LIMIT = 500 # num of time steps
 
 # MAIN LOOP
 for t in range(1, T_LIMIT+1): # does this need to be +1?
+    
+    """apply obstacle effects"""
+    pack.apply_obstacle_effects()
+    flock.apply_obstacle_effects()
 
+    # update dog-sheep dists
     for d in pack.sheepdogs:
         for s in flock.flock:
             dog_sheep_dists[d.id][s.id] = math.dist(d.pos, s.pos)
@@ -63,7 +69,7 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
     # pack.set_flock_centre(flock.calc_flock_centre(flock.))
     for dog in pack.sheepdogs:
         # sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
-        sheep_in_range = flock.calc_n_closest_sheep(dog.pos, 50) #20
+        sheep_in_range = flock.calc_n_closest_sheep(dog.pos, 20) #20
         # print([i.id for i in sheep_in_range])
         if len(sheep_in_range) > 0:
             dog.set_seen_sheep_centre(flock.calc_sheep_centre(sheep_in_range))
@@ -138,7 +144,12 @@ fig = plt.Figure(figsize=(6, 6), dpi=150)
 ax = fig.add_subplot()
 ax.set_xlim([0, ENV_WIDTH])
 ax.set_ylim([0, ENV_HEIGHT])
+scat = ax.set_axisbelow(True)
 scat = ax.grid()
+if len(env.obstacles) > 0:
+    for obstacle in env.obstacles:
+        rect = obstacle.draw()
+        scat = ax.add_patch(rect)
 scat = ax.scatter(sheep_data.loc[0]["X_Positions"], sheep_data.loc[0]["Y_Positions"], c='k')
 scat = ax.scatter(dog_data.loc[0]["X_Positions"], dog_data.loc[0]["Y_Positions"], c='r')
 scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
@@ -154,7 +165,12 @@ def animate(time):
     ax.clear()
     ax.set_xlim([0, ENV_WIDTH])
     ax.set_ylim([0, ENV_HEIGHT])
+    scat = ax.set_axisbelow(True)
     scat = ax.grid()
+    if len(env.obstacles) > 0:
+        for obstacle in env.obstacles:
+            rect = obstacle.draw()
+            scat = ax.add_patch(rect)
     scat = ax.scatter(sheep_data.loc[time]["X_Positions"], sheep_data.loc[time]["Y_Positions"], c='k')
     scat = ax.scatter(dog_data.loc[time]["X_Positions"], dog_data.loc[time]["Y_Positions"], c='r')
     scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")

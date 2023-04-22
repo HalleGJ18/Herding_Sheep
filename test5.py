@@ -1,22 +1,3 @@
-import numpy as np
-
-# get magnitude of a given vector
-def vector_magnitude(v):
-    return np.linalg.norm(v)
-
-# get the unit vector version of a given vector
-def unit_vector(v):
-    return v/vector_magnitude(v)
-
-# get n closest agents
-def get_n_closest(self, target, dists):
-    # target is agent you are measuring from
-    # dists is matrix of distances between agents
-    # dists[target] gets array of other agents
-    #TODO: does this need a check for dog x sheep or sheep x sheep matrix to account for same agent being 0 distance?
-    pass
-
-
 def line_rect_intersect(line, rect):
     """
     Checks if a line intersects with a rectangle.
@@ -75,3 +56,16 @@ def line_rect_intersect(line, rect):
             return True
 
     return False
+
+
+line1 = [[2,1],[6,10]] # Yes
+line2 = [[2,1],[10,6]] # Yes
+line3 = [[2,1],[18,1]] # No
+line4 = [[2,1],[0.5,6]] # Yes
+
+rect = [[1,4],8,4]
+
+print(line_rect_intersect(line1, rect))
+print(line_rect_intersect(line2, rect))
+print(line_rect_intersect(line3, rect))
+print(line_rect_intersect(line4, rect))
