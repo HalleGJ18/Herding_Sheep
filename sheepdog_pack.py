@@ -96,6 +96,22 @@ class Pack:
     # calculate sheepdogs' next moves
     def calc_next_moves(self):
         pass
+    
+    def apply_obstacle_effects(self):
+        dog:Sheepdog
+        for dog in self.sheepdogs:
+            """apply obstacle effects"""
+            if self.env.is_obstacle_reducing_movement(dog.pos):
+                # print("mud")
+                dog.max_speed = dog.default_max_speed * self.env.speed_reduction_factor
+            else:
+                dog.max_speed = dog.default_max_speed
+                
+            if self.env.is_obstacle_reducing_vision(dog.pos):
+                # print("fog")
+                dog.vision_range = dog.default_vision_range * self.env.vision_reduction_factor
+            else:
+                dog.vision_range = dog.default_vision_range
 
     def drive(self):
         # position dogs such that flock is directly between them and target

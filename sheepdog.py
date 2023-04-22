@@ -6,17 +6,19 @@ from agent import Agent
 
 class Sheepdog(Agent):
 
-    velocity = np.array([10.0,10.0])
+    velocity = np.array([20.0,10.0])
 
+    default_vision_range = 750
     vision_range = 750 # 150?
 
-    maintain_dist = 0 #10
+    maintain_dist = 10 #10
 
     flock_centre = 0
 
     sheep_in_range = False
 
-    max_speed = 5 #1.5
+    default_max_speed = 3
+    max_speed = 3 #1.5
 
     # blind_angle = pi/2    # sheepdog can't see behind itself
 
@@ -83,13 +85,13 @@ class Sheepdog(Agent):
     def apply_herding(self, dogs, dog_dists):
         movement = np.array([0.0, 0.0])
 
-        # keep away from other dogs
+        """keep away from other dogs"""
         nearby_dogs = self.find_nearby(dogs, dog_dists)
         if len(nearby_dogs) > 0:
             away_from_other_dogs = self.move_away_from_other_dogs(nearby_dogs)
             movement += away_from_other_dogs
 
-        # determine if drive or collect
+        """determine if drive or collect"""
 
         if self.sheep_in_range:
 
@@ -103,6 +105,9 @@ class Sheepdog(Agent):
 
             # put it all together
             movement += to_push
+            
+        """avoid impassable obstacles"""
+        movement += (20*self.env.avoid_impassable_obstacles(self.pos, self.velocity))
         
         if np.linalg.norm(movement) > 0:
             # print("movement change")

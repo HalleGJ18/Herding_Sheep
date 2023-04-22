@@ -44,6 +44,9 @@ class Flock:
         yDiff = yMax-yMin
         p = np.array([random.rand()*xDiff + xMin, random.rand()*yDiff + yMin])
         # check if p is valid when obstacles added
+        if self.env.check_all_obstacles(p) == False:
+            p = self.random_start_pos(xMin, yMin, xMax, yMax)
+            print("reroll start pos")
         return p
 
     def calc_distances_sheep(self):
@@ -65,10 +68,15 @@ class Flock:
     def calc_n_closest_sheep(self, p, n, id=None):
         # p is pos of target
         # n is the number of sheep wanted
-        # is_sheep is true if sheep is checking for nearby sheep, and is false for dog checking for nearby sheep
+        # id is given if a sheep is looking for other sheep, to remove itself from list
         sorted_by_dist = sorted(self.flock, key= lambda sheep: math.dist(sheep.pos, p))
         if id != None:
             sorted_by_dist = [i for i in sorted_by_dist if i.id != id]
+        # check not blocked by obstacle
+        # print(f"before removing can't see: {len(sorted_by_dist)}")
+        if len(self.env.obstacles) > 0:
+            sorted_by_dist = [j for j in sorted_by_dist if self.env.is_obstacle_blocking_vision(p,j.pos) == False]
+            # print(f"after removing can't see: {len(sorted_by_dist)}")
         if len(sorted_by_dist) > n:
             sorted_by_dist = sorted_by_dist[0:n]
         return sorted_by_dist
@@ -99,6 +107,26 @@ class Flock:
             total_pos += s.pos
         avg_pos = total_pos / len(sheep)
         return avg_pos
+    
+    def apply_obstacle_effects(self):
+        sheep:Sheep
+        for sheep in self.flock:
+            """apply obstacle effects"""
+            if self.env.is_obstacle_reducing_movement(sheep.pos):
+                # print("mud")
+                sheep.max_speed = sheep.default_max_speed * self.env.speed_reduction_factor
+            else:
+                sheep.max_speed = sheep.default_max_speed
+                
+            if self.env.is_obstacle_reducing_vision(sheep.pos):
+                # print("fog")
+                sheep.vision_range = sheep.default_vision_range * self.env.vision_reduction_factor
+                sheep.threat_range = sheep.default_threat_range * self.env.vision_reduction_factor
+                sheep.personal_space = sheep.default_personal_space * self.env.vision_reduction_factor
+            else:
+                sheep.vision_range = sheep.default_vision_range
+                sheep.threat_range = sheep.default_threat_range 
+                sheep.personal_space = sheep.default_personal_space 
 
     # calc flock density
     def calc_flock_density(self): # -> float
