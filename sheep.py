@@ -13,7 +13,7 @@ class Sheep(Agent):
 
     velocity = np.array([0.1, 0.1])
 
-    threat_range = 45
+    threat_range = 35
 
     max_speed = 1 #1
     
@@ -166,7 +166,7 @@ class Sheep(Agent):
 
         noise = self.rand_velocity()
 
-        if (self.dog_in_range == False) and (len(nearby_sheep) == 0):
+        if (self.dog_in_range == False) : # and (len(nearby_sheep) == 0) 
             rand_chance = np.random.rand()
             if rand_chance <= 0.05: # random chance of slight movement
                 # print("rand move, {}".format(self.id))
@@ -174,8 +174,8 @@ class Sheep(Agent):
                 self.velocity = noise
             else:
                 self.velocity = np.array([0.0, 0.0])
-        elif (self.dog_in_range == False) and (len(nearby_sheep) > 0):
-            self.velocity = velocity_changes
+        # elif (self.dog_in_range == True) and (len(nearby_sheep) > 0):
+        #     self.velocity = velocity_changes
             # print(velocity_changes)
         else:
             

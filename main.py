@@ -30,7 +30,7 @@ ENV_WIDTH = 250
 env = Environment(ENV_HEIGHT, ENV_WIDTH)
 
 # generate sheep
-n_sheep = 100 # num of sheep
+n_sheep = 75 # num of sheep # 100
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
@@ -59,7 +59,7 @@ T_LIMIT = 4000 # num of time steps
 # MAIN LOOP
 for t in range(1, T_LIMIT+1): # does this need to be +1?
     
-    # print(f"t: {t}")
+    print(f"t: {t}")
     
     """apply obstacle effects"""
     pack.apply_obstacle_effects()

@@ -23,8 +23,10 @@ dog_data = pd.read_csv(DOG_CSV, sep="|", index_col=0)
 # init window
 window = tk.Tk()
 window.title("Herding Sheep")
-window.geometry("1600x950+160+20")
+window.geometry("1400x900-1+0")
 window.configure(background="grey")
+
+# window.attributes('-fullscreen', True)
 
 ENV_HEIGHT = 250 # 150 # 750
 ENV_WIDTH = 250
