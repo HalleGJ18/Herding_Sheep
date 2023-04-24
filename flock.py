@@ -16,8 +16,10 @@ class Flock:
     dog_push_weight = 1
     
     default_personal_space = 2
-    default_threat_range = 35 #65
+    default_threat_range = 45 #65
     default_max_speed = 1
+    
+    success = False
 
     def __init__(self, n:int, e:Environment):
         self.num_of_sheep = n    
@@ -171,6 +173,14 @@ class Flock:
         # calculate population density
         density:float = len(x_positions)/area
         return density
+    
+    # check for success
+    def check_success(self):
+        # if gcm within 10 of target
+        gcm = self.calc_flock_centre()
+        if (gcm[0] >= self.env.target[0]-self.env.target_range) and (gcm[0] <= self.env.target[0]+self.env.target_range):
+            if (gcm[1] >= self.env.target[1]-self.env.target_range) and (gcm[1] <= self.env.target[1]+self.env.target_range):
+                self.success = True   
 
     def calc_flocking(self):        
         # loop through flock

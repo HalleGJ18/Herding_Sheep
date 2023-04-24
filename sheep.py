@@ -13,7 +13,7 @@ class Sheep(Agent):
 
     velocity = np.array([0.1, 0.1])
 
-    threat_range = 35
+    threat_range = 45
 
     max_speed = 1 #1
     
@@ -21,6 +21,8 @@ class Sheep(Agent):
     
     default_vision_range = 20
     vision_range = 20
+    
+    too_close = False
     
     # def separation(self, sheep):
     #     # don't get too close to other agents nearby
@@ -82,6 +84,10 @@ class Sheep(Agent):
                 d = d/np.linalg.norm(d)
                 total_separation += d
                 too_close += 1
+            if too_close > 0:
+                self.too_close = True
+            else:
+                self.too_close = False
 
             # alignment
             # match velocity of neighbours
@@ -167,13 +173,18 @@ class Sheep(Agent):
         noise = self.rand_velocity()
 
         if (self.dog_in_range == False) : # and (len(nearby_sheep) == 0) 
-            rand_chance = np.random.rand()
-            if rand_chance <= 0.05: # random chance of slight movement
-                # print("rand move, {}".format(self.id))
-                # print(noise)
-                self.velocity = noise
+            if self.too_close:
+                # seperation regardless of sheepdog vicinity
+                # velocity_changes = velocity_changes + (noise_weight * noise)
+                self.velocity = self.velocity*prev_vel_weight + velocity_changes
             else:
-                self.velocity = np.array([0.0, 0.0])
+                rand_chance = np.random.rand()
+                if rand_chance <= 0.05: # random chance of slight movement
+                    # print("rand move, {}".format(self.id))
+                    # print(noise)
+                    self.velocity = noise
+                else:
+                    self.velocity = np.array([0.0, 0.0])
         # elif (self.dog_in_range == True) and (len(nearby_sheep) > 0):
         #     self.velocity = velocity_changes
             # print(velocity_changes)

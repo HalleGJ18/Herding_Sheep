@@ -8,7 +8,7 @@ from environment import Environment
 
 class Pack:
 
-    target = np.array([25.0, 25.0])
+    # target = np.array([25.0, 25.0])
     # target = np.array([600.0, 600.0])
 
     # dogs_average position = []
@@ -25,6 +25,8 @@ class Pack:
     def __init__(self, n:int, e:Environment):
         self.num_of_sheepdogs = n
         self.env = e
+        
+        self.target = self.env.target
 
         # empty dists matrix
         self.dists = np.zeros([self.num_of_sheepdogs, self.num_of_sheepdogs])

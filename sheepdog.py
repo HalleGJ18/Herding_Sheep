@@ -61,7 +61,7 @@ class Sheepdog(Agent):
         # v = self.sheep_centre - self.target
         v = self.target - self.sheep_centre
         v = v/np.linalg.norm(v)
-        v = self.sheep_centre + (v * self.maintain_dist)
+        v = self.sheep_centre - (v * self.maintain_dist)
         # print("v: {}".format(v))
         move = v - self.pos
         move = move/np.linalg.norm(move)
@@ -140,15 +140,15 @@ class Sheepdog(Agent):
                 if self.furthest_sheep_too_far:
                     # push in furthest sheep
                     to_push = self.collect_furthest_sheep()
-                    print("collect")
-                    # print(f"collect: {to_push}")
+                    # print("collect")
+                    print(f"collect: {to_push}")
                 
                 # else drive
                 else:      
                     # move to make avg pos closer to push point
                     to_push = self.calc_movement_to_drive_point()
-                    print("drive")
-                    # print(f"drive: {to_push}")
+                    # print("drive")
+                    print(f"drive: {to_push}")
                 
                 
                 # put it all together

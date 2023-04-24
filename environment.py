@@ -7,6 +7,9 @@ class Environment:
 
     height : int = 0
     width : int = 0
+    
+    target = np.array([25.0, 25.0])
+    target_range = 10
 
     obstacles = []
     
