@@ -7,18 +7,20 @@ from agent import Agent
 
 class Sheep(Agent):
 
-    default_personal_space = 5
-    personal_space = 5 #2
+    personal_space = 2 #2
 
     dog_in_range = False
 
     velocity = np.array([0.1, 0.1])
 
-    default_threat_range = 65
-    threat_range = 65
+    threat_range = 45
 
-    default_max_speed = 3
-    max_speed = 3 #1
+    max_speed = 1 #1
+    
+    n_closest = 100
+    
+    default_vision_range = 20
+    vision_range = 20
     
     # def separation(self, sheep):
     #     # don't get too close to other agents nearby
@@ -124,8 +126,10 @@ class Sheep(Agent):
         if self.dog_in_range:
 
             # get unit vector away from dog avg pos
-            away = self.dog_in_range_avg / np.linalg.norm(self.dog_in_range_avg)
-
+            # away = self.dog_in_range_avg / np.linalg.norm(self.dog_in_range_avg) # TODO: scale this by dogs_in_range/n_dogs
+            away = self.pos - self.dog_in_range_avg
+            away = away/np.linalg.norm(away)
+            # print(f"away: {away}")
             velocity_changes += (away*dog_push_weight)
 
             # print("dog near")
@@ -135,6 +139,14 @@ class Sheep(Agent):
         """flocking"""
 
         nearby_sheep = self.find_nearby(agents, dists)
+        
+        # n nearest neighbours
+        # sort by dist and keep n closest
+        sorted_by_dist = sorted(nearby_sheep, key= lambda sheep: math.dist(sheep.pos, self.pos))
+        if len(sorted_by_dist) > self.n_closest:
+            nearby_sheep = sorted_by_dist[:self.n_closest]
+        else:
+            nearby_sheep = sorted_by_dist
         
         # call the flocking funcs???
         if len(nearby_sheep) > 0:
@@ -150,7 +162,7 @@ class Sheep(Agent):
         # self.calc_velocity()      # what is this doing here?
         
         """avoid impassable obstacles"""
-        velocity_changes += (20*self.env.avoid_impassable_obstacles(self.pos, self.velocity))
+        velocity_changes += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 20)
 
         noise = self.rand_velocity()
 

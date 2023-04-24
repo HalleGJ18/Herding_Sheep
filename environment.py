@@ -14,8 +14,8 @@ class Environment:
     vision_reduction_factor = 0.75
     
 
-    bound_inset = 15 #! scale with env size
-    edge_avoid_factor = bound_inset + 5 #! scale with env size
+    bound_inset = 5 #! scale with env size
+    edge_avoid_factor = 1 #! scale with env size
 
     def __init__(self, h:int, w:int):
         self.height = h

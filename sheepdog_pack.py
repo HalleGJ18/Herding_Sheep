@@ -8,8 +8,8 @@ from environment import Environment
 
 class Pack:
 
-    # target = np.array([125.0, 125.0])
-    target = np.array([600.0, 600.0])
+    target = np.array([25.0, 25.0])
+    # target = np.array([600.0, 600.0])
 
     # dogs_average position = []
 
@@ -39,6 +39,9 @@ class Pack:
         yDiff = yMax-yMin
         p = np.array([random.rand()*xDiff + xMin, random.rand()*yDiff + yMin])
         # check if p is valid when obstacles added
+        if self.env.check_all_obstacles(p) == False:
+            p = self.random_start_pos(xMin, yMin, xMax, yMax)
+            print("reroll start pos")
         return p
 
     # generate sheepdogs
@@ -48,7 +51,7 @@ class Pack:
         dogs_posY = []
         for d in range(n):
             dogs.append(Sheepdog(d, e))
-            dogs[d].set_pos(self.random_start_pos(10,10,50,50))
+            dogs[d].set_pos(self.random_start_pos(13,175,27,180))
             dogs[d].set_target(self.target)
             dogs_posX.append(dogs[d].pos[0])
             dogs_posY.append(dogs[d].pos[1])
@@ -66,10 +69,6 @@ class Pack:
                 else:
                     self.dists[dog.id][other.id] = np.linalg.norm(other.pos - dog.pos)
 
-    # evalute whether dogs need to collect or drive
-    def determine_phase(self):
-        pass
-
     # calculate average position
     def calc_sheepdogs_avg_pos(self):
         avg_x = np.average(self.sheepdogs_positionsX)
@@ -86,16 +85,19 @@ class Pack:
         self.flock_centre = p
         for dog in self.sheepdogs:
             dog.set_flock_centre(p)  
-
-    # calc point behind flock that dogs are aiming for
-    def calc_push_point(self):
-        point = self.flock_centre - self.target
-        point = point/np.linalg.norm(point)*30 # keep dist of 30 from flock com
-        self.push_point = point
-    
-    # calculate sheepdogs' next moves
-    def calc_next_moves(self):
-        pass
+            
+    # store flock default personal space
+    def set_stop_dist(self, d, n):
+        # d = personal space
+        # n = num of sheep
+        self.flock_personal_space = d
+        dog:Sheepdog
+        for dog in self.sheepdogs:
+            dog.set_flock_personal_space(d)
+            dog.stop_dist = self.flock_personal_space * 3
+            dog.maintain_dist = self.flock_personal_space * (n ** (2/3)) 
+            #dog.maintain_dist = self.flock_personal_space * math.sqrt(n)
+            dog.collect_dist = self.flock_personal_space 
     
     def apply_obstacle_effects(self):
         dog:Sheepdog

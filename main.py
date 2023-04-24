@@ -25,12 +25,12 @@ sheep_data = pd.DataFrame(columns=['X_Positions', 'Y_Positions'])
 dog_data = pd.DataFrame(columns=['X_Positions', 'Y_Positions'])
 
 # instantiate environment
-ENV_HEIGHT = 750 # 150 # 750
-ENV_WIDTH = 750
+ENV_HEIGHT = 250 # 150 # 750
+ENV_WIDTH = 250
 env = Environment(ENV_HEIGHT, ENV_WIDTH)
 
 # generate sheep
-n_sheep = 150 # num of sheep
+n_sheep = 100 # num of sheep
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
@@ -49,11 +49,17 @@ dog_data.loc[0] = [np.copy(pack.sheepdogs_positionsX), np.copy(pack.sheepdogs_po
 # dog-sheep dist matrix
 dog_sheep_dists = np.zeros([n_dogs, n_sheep])
 
+# flock personal space
+pack.set_stop_dist(flock.default_personal_space, n_sheep)
+flock_rad = flock.default_personal_space * (n_sheep ** (2/3))
+print(flock_rad)
 
-T_LIMIT = 500 # num of time steps
+T_LIMIT = 4000 # num of time steps
 
 # MAIN LOOP
 for t in range(1, T_LIMIT+1): # does this need to be +1?
+    
+    # print(f"t: {t}")
     
     """apply obstacle effects"""
     pack.apply_obstacle_effects()
@@ -64,23 +70,37 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
         for s in flock.flock:
             dog_sheep_dists[d.id][s.id] = math.dist(d.pos, s.pos)
 
-    # update pack with flock info
+    """update pack with flock info"""
     # pack.set_flock_pos()
     # pack.set_flock_centre(flock.calc_flock_centre(flock.))
+    dog:Sheepdog
     for dog in pack.sheepdogs:
+        
         # sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
-        sheep_in_range = flock.calc_n_closest_sheep(dog.pos, 20) #20
+        sheep_in_range = flock.calc_n_closest_sheep(dog.pos, n_sheep) #20
         # print([i.id for i in sheep_in_range])
+        # print(len(sheep_in_range))
         if len(sheep_in_range) > 0:
             dog.set_seen_sheep_centre(flock.calc_sheep_centre(sheep_in_range))
             dog.sheep_in_range = True
-            # print(dog.sheep_centre)
+            dog.v_close = dog.is_a_sheep_v_close(sheep_in_range)
+            
+            # find furthest sheep
+            furthest_sheep, dist = flock.furthest_sheep_from_cm(sheep_in_range)
+            print(f"furthest: {dist}")
+            if dist > flock_rad:
+                dog.set_furthest_sheep(furthest_sheep, True)
+            else:
+                dog.set_furthest_sheep(furthest_sheep, False)
+            
         else:
             dog.sheep_in_range = False
+            dog.v_close = False
+            dog.set_furthest_sheep(None, False)
         # print("sheep in range: {}".format(dog.sheep_in_range))
 
 
-    # update flock with pack info
+    """update flock with pack info"""
     # sheep need to know if dog in range
     for sheep in flock.flock:
         seen_dogs_avg = np.array([0.0, 0.0])
@@ -94,7 +114,6 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
         if seen_dogs_count > 0:
             seen_dogs_avg /= seen_dogs_count
             sheep.dog_in_range = True
-            # sheep.set_dog_avg_pos()
             sheep.set_avg_dog_pos(seen_dogs_avg)
 
         else:
@@ -103,23 +122,21 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
 
 
 
-    # calc sheepdogs moves
+    """calc sheepdogs moves"""
     pack.calc_distances_dogs()
-    
-    
     pack.calc_herding()
 
-    # calc sheep moves
+    """calc sheep moves"""
     flock.calc_distances_sheep()
     flock.calc_flocking()
     
-    # update sheepdog 
+    """update sheepdog""" 
     pack.update_pack()
 
-    # update sheep 
+    """update sheep""" 
     flock.update_flock()    # if dogs updated first doesnt matter than velocity might be tangled up
 
-    # store positions
+    """store positions"""
     sheep_data.loc[t] = [np.copy(flock.flock_positionsX), np.copy(flock.flock_positionsY)]
     dog_data.loc[t] = [np.copy(pack.sheepdogs_positionsX), np.copy(pack.sheepdogs_positionsY)]
 
@@ -136,6 +153,7 @@ print(dog_data)
 sheep_data.to_csv("sheep_data.csv", encoding='utf-8', sep="|")
 dog_data.to_csv("dog_data.csv", encoding='utf-8', sep="|")
 
+# ! output env data: dimensions, target, obstacles
 
 # generate animated plot
 time = 0
@@ -150,8 +168,8 @@ if len(env.obstacles) > 0:
     for obstacle in env.obstacles:
         rect = obstacle.draw()
         scat = ax.add_patch(rect)
-scat = ax.scatter(sheep_data.loc[0]["X_Positions"], sheep_data.loc[0]["Y_Positions"], c='k')
-scat = ax.scatter(dog_data.loc[0]["X_Positions"], dog_data.loc[0]["Y_Positions"], c='r')
+scat = ax.scatter(sheep_data.loc[0]["X_Positions"], sheep_data.loc[0]["Y_Positions"], c='k', s=1)
+scat = ax.scatter(dog_data.loc[0]["X_Positions"], dog_data.loc[0]["Y_Positions"], c='r', s=1)
 scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
 scat = ax.text(0, ENV_HEIGHT, "time=0")
 scatter = FigureCanvasTkAgg(fig, window)
@@ -171,8 +189,8 @@ def animate(time):
         for obstacle in env.obstacles:
             rect = obstacle.draw()
             scat = ax.add_patch(rect)
-    scat = ax.scatter(sheep_data.loc[time]["X_Positions"], sheep_data.loc[time]["Y_Positions"], c='k')
-    scat = ax.scatter(dog_data.loc[time]["X_Positions"], dog_data.loc[time]["Y_Positions"], c='r')
+    scat = ax.scatter(sheep_data.loc[time]["X_Positions"], sheep_data.loc[time]["Y_Positions"], c='k', s=1)
+    scat = ax.scatter(dog_data.loc[time]["X_Positions"], dog_data.loc[time]["Y_Positions"], c='r', s=1)
     scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
     scat = ax.text(0, ENV_HEIGHT, "time="+str(time))
     return scat

@@ -25,8 +25,8 @@ class Agent:
     max_speed = 1 #5
 
     #
-    default_vision_range = 50
-    vision_range = 50
+    default_vision_range = 2
+    vision_range = 2
 
     # drawing vars
     shape_radius = 5
@@ -71,7 +71,8 @@ class Agent:
     def can_see(self, pos, range):
         # include env checks
         if math.dist(self.pos, pos) <= range:
-            return True
+            if self.env.is_obstacle_blocking_vision(self.pos, pos) == False:
+                return True
         else:
             return False
 
@@ -115,9 +116,9 @@ class Agent:
         self.calc_velocity()
 
         # check if next pos is valid
-        av_am = self.env.check_valid_position(self.pos, self.velocity)
-        if av_am[0] != 0.0 or av_am[1] != 0.0:
-            print(f"id: {self.id}, avoid amount: {av_am}")
+        # av_am = self.env.check_valid_position(self.pos, self.velocity)
+        # if av_am[0] != 0.0 or av_am[1] != 0.0:
+        #     print(f"id: {self.id}, avoid amount: {av_am}")
 
         self.velocity += self.env.check_valid_position(self.pos, self.velocity)
     

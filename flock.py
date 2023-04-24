@@ -12,8 +12,12 @@ class Flock:
 
     separation_weight = 2
     alignment_weight = 1 #0
-    cohesion_weight = 1.5 #0.5
+    cohesion_weight = 1.05 #1.05
     dog_push_weight = 1
+    
+    default_personal_space = 2
+    default_threat_range = 45 #65
+    default_max_speed = 1
 
     def __init__(self, n:int, e:Environment):
         self.num_of_sheep = n    
@@ -28,7 +32,7 @@ class Flock:
         sheep_posY = []
         for s in range(self.num_of_sheep):
             sheep.append(Sheep(s, self.env))
-            sheep[s].set_pos(self.random_start_pos(25, 25, self.env.width-25, self.env.height-25))
+            sheep[s].set_pos(self.random_start_pos(75, 75, self.env.width-50, self.env.height-50))
             sheep_posX.append(sheep[s].pos[0])
             sheep_posY.append(sheep[s].pos[1])
             sheep[s].velocity = sheep[s].rand_velocity()
@@ -99,6 +103,20 @@ class Flock:
         flock_avg_y = np.average(self.flock_positionsY)
         return np.array([flock_avg_x, flock_avg_y])
     
+    # calc the furthest sheep from the centre of mass
+    def furthest_sheep_from_cm(self, sheep):
+        flock_centre = self.calc_sheep_centre(sheep)
+        furthest_sheep = None
+        d = 0
+        for s in sheep:
+            if furthest_sheep == None:
+                furthest_sheep = s
+                d = math.dist(flock_centre, s.pos)
+            else:
+                if math.dist(flock_centre, s.pos) > d:
+                    furthest_sheep = s
+                    d = math.dist(flock_centre, s.pos)
+        return furthest_sheep, d
 
     # calc centre of mass for an array of sheep
     def calc_sheep_centre(self, sheep):
@@ -114,19 +132,19 @@ class Flock:
             """apply obstacle effects"""
             if self.env.is_obstacle_reducing_movement(sheep.pos):
                 # print("mud")
-                sheep.max_speed = sheep.default_max_speed * self.env.speed_reduction_factor
+                sheep.max_speed = self.default_max_speed * self.env.speed_reduction_factor
             else:
-                sheep.max_speed = sheep.default_max_speed
+                sheep.max_speed = self.default_max_speed
                 
             if self.env.is_obstacle_reducing_vision(sheep.pos):
                 # print("fog")
                 sheep.vision_range = sheep.default_vision_range * self.env.vision_reduction_factor
-                sheep.threat_range = sheep.default_threat_range * self.env.vision_reduction_factor
-                sheep.personal_space = sheep.default_personal_space * self.env.vision_reduction_factor
+                sheep.threat_range = self.default_threat_range * self.env.vision_reduction_factor
+                sheep.personal_space = self.default_personal_space * self.env.vision_reduction_factor
             else:
                 sheep.vision_range = sheep.default_vision_range
-                sheep.threat_range = sheep.default_threat_range 
-                sheep.personal_space = sheep.default_personal_space 
+                sheep.threat_range = self.default_threat_range 
+                sheep.personal_space = self.default_personal_space 
 
     # calc flock density
     def calc_flock_density(self): # -> float
