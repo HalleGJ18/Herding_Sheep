@@ -7,6 +7,9 @@ class Environment:
 
     height : int = 0
     width : int = 0
+    
+    target = np.array([25.0, 25.0])
+    target_range = 10
 
     obstacles = []
     
@@ -14,8 +17,8 @@ class Environment:
     vision_reduction_factor = 0.75
     
 
-    bound_inset = 15 #! scale with env size
-    edge_avoid_factor = bound_inset + 5 #! scale with env size
+    bound_inset = 5 #! scale with env size
+    edge_avoid_factor = 3 #! scale with env size
 
     def __init__(self, h:int, w:int):
         self.height = h

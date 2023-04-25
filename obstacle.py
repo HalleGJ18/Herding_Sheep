@@ -61,6 +61,9 @@ class Obstacle:
         s = f"Obs id: {self.id}, type: {t}, passable: {self.passable}, pos: {self.pos}, size: {self.width}x{self.height}"
         return s
     
+    def export(self):
+        return self.pos[0], self.pos[1], self.width, self.height, self.colour
+    
     def draw(self):
         return patches.Rectangle((self.pos[0], self.pos[1]), self.width, self.height, linewidth=1, color=self.colour)
 
