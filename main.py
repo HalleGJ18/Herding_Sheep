@@ -52,7 +52,7 @@ dog_sheep_dists = np.zeros([n_dogs, n_sheep])
 # flock personal space
 pack.set_stop_dist(flock.default_personal_space, n_sheep)
 flock_rad = flock.default_personal_space * (n_sheep ** (2/3))
-print(flock_rad)
+# print(flock_rad)
 
 T_LIMIT = 5000 # num of time steps
 
@@ -69,7 +69,7 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
         T_LIMIT = t-1
         break
     
-    print(f"t: {t}")
+    # print(f"t: {t}")
     
     """apply obstacle effects"""
     pack.apply_obstacle_effects()
@@ -97,7 +97,7 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
             
             # find furthest sheep
             furthest_sheep, dist = flock.furthest_sheep_from_cm(sheep_in_range)
-            print(f"furthest: {dist}")
+            # print(f"furthest: {dist}")
             if dist > flock_rad:
                 dog.set_furthest_sheep(furthest_sheep, True)
             else:

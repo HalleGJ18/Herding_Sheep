@@ -141,14 +141,14 @@ class Sheepdog(Agent):
                     # push in furthest sheep
                     to_push = self.collect_furthest_sheep()
                     # print("collect")
-                    print(f"collect: {to_push}")
+                    # print(f"collect: {to_push}")
                 
                 # else drive
                 else:      
                     # move to make avg pos closer to push point
                     to_push = self.calc_movement_to_drive_point()
                     # print("drive")
-                    print(f"drive: {to_push}")
+                    # print(f"drive: {to_push}")
                 
                 
                 # put it all together
@@ -160,7 +160,7 @@ class Sheepdog(Agent):
         
         if np.linalg.norm(movement) > 0:
             # print("movement change")
-            self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
+            self.velocity = 0.45*self.velocity + movement #TODO: is this weighting what we want?
 
         # print(self.velocity)
 

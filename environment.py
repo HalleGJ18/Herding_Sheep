@@ -18,7 +18,7 @@ class Environment:
     
 
     bound_inset = 5 #! scale with env size
-    edge_avoid_factor = 1 #! scale with env size
+    edge_avoid_factor = 3 #! scale with env size
 
     def __init__(self, h:int, w:int):
         self.height = h
