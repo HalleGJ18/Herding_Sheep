@@ -34,7 +34,7 @@ n_sheep = 75 # num of sheep # 100
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
-n_dogs = 1 # num of dogs
+n_dogs = 3 # num of dogs
 pack = Pack(n_dogs, env)
 
 
@@ -54,7 +54,7 @@ pack.set_stop_dist(flock.default_personal_space, n_sheep)
 flock_rad = flock.default_personal_space * (n_sheep ** (2/3))
 # print(flock_rad)
 
-T_LIMIT = 5000 # num of time steps
+T_LIMIT = 7000 # num of time steps
 
 success = False
 
@@ -96,29 +96,28 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
             dog.v_close = dog.is_a_sheep_v_close(sheep_in_range)
             
             # find furthest sheep
-            furthest_sheep, dist = flock.furthest_sheep_from_cm(sheep_in_range)
+            furthest_sheep = flock.furthest_sheep_from_target(sheep_in_range)
             # print(f"furthest: {dist}")
-            if dist > flock_rad:
-                dog.set_furthest_sheep(furthest_sheep, True)
-            else:
-                dog.set_furthest_sheep(furthest_sheep, False)
-            
+            dog.set_furthest_sheep(furthest_sheep)
         else:
             dog.sheep_in_range = False
             dog.v_close = False
-            dog.set_furthest_sheep(None, False)
+            dog.set_furthest_sheep(None)
         # print("sheep in range: {}".format(dog.sheep_in_range))
 
 
     """update flock with pack info"""
     # sheep need to know if dog in range
     for sheep in flock.flock:
+        sheep.total_dogs = n_dogs
         seen_dogs_avg = np.array([0.0, 0.0])
         seen_dogs_count = 0
         for dog in pack.sheepdogs:
             if sheep.can_see(dog.pos, sheep.threat_range):
                 seen_dogs_avg += dog.pos
                 seen_dogs_count += 1
+                
+        sheep.seen_dogs = seen_dogs_count
         
         # if there are dogs seen, set avg pos of dogs
         if seen_dogs_count > 0:

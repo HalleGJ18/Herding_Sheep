@@ -10,10 +10,12 @@ class Sheep(Agent):
     personal_space = 2 #2
 
     dog_in_range = False
+    seen_dogs = 0
+    total_dogs = 1
 
     velocity = np.array([0.1, 0.1])
 
-    threat_range = 45
+    threat_range = 45 #45
 
     max_speed = 1 #1
     
@@ -136,7 +138,7 @@ class Sheep(Agent):
             away = self.pos - self.dog_in_range_avg
             away = away/np.linalg.norm(away)
             # print(f"away: {away}")
-            velocity_changes += (away*dog_push_weight)
+            velocity_changes += (away*dog_push_weight*(self.seen_dogs/self.total_dogs))
 
             # print("dog near")
             # print(away*dog_push_weight)

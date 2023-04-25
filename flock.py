@@ -16,7 +16,7 @@ class Flock:
     dog_push_weight = 1
     
     default_personal_space = 2
-    default_threat_range = 45 #65
+    default_threat_range = 45 #45 #65
     default_max_speed = 1
     
     success = False
@@ -119,6 +119,20 @@ class Flock:
                     furthest_sheep = s
                     d = math.dist(flock_centre, s.pos)
         return furthest_sheep, d
+    
+    # calc furthest sheep from target
+    def furthest_sheep_from_target(self, sheep):
+        furthest_sheep = None
+        d = 0
+        for s in sheep:
+            if furthest_sheep == None:
+                furthest_sheep = s
+                d = math.dist(self.env.target, s.pos)
+            else:
+                if math.dist(self.env.target, s.pos) > d:
+                    furthest_sheep = s
+                    d = math.dist(self.env.target, s.pos)
+        return furthest_sheep
 
     # calc centre of mass for an array of sheep
     def calc_sheep_centre(self, sheep):
@@ -174,13 +188,25 @@ class Flock:
         density:float = len(x_positions)/area
         return density
     
+    # check all sheep in flock in endzone
+    def check_endzone(self):
+        in_endzone = True
+        for sheep in self.flock:
+            if self.env.in_endzone(sheep.pos) == False:
+                in_endzone = False
+                return False
+        return True
+    
     # check for success
     def check_success(self):
         # if gcm within 10 of target
+        # ! and all sheep within 25 of target, or 10?
         gcm = self.calc_flock_centre()
         if (gcm[0] >= self.env.target[0]-self.env.target_range) and (gcm[0] <= self.env.target[0]+self.env.target_range):
             if (gcm[1] >= self.env.target[1]-self.env.target_range) and (gcm[1] <= self.env.target[1]+self.env.target_range):
-                self.success = True   
+                # check all sheep in endzone
+                if self.check_endzone():
+                    self.success = True   
 
     def calc_flocking(self):        
         # loop through flock
