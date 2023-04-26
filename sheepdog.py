@@ -174,7 +174,7 @@ class Sheepdog(Agent):
         
         if np.linalg.norm(movement) > 0:
             # print("movement change")
-            self.velocity = 0.5*self.velocity + movement #TODO: is this weighting what we want?
+            self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
             # self.velocity = movement
 
         # print(self.velocity)
