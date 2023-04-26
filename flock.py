@@ -174,13 +174,25 @@ class Flock:
         density:float = len(x_positions)/area
         return density
     
+    # check all sheep in flock in endzone
+    def check_endzone(self):
+        in_endzone = True
+        for sheep in self.flock:
+            if self.env.in_endzone(sheep.pos) == False:
+                in_endzone = False
+                return False
+        return True
+    
     # check for success
     def check_success(self):
         # if gcm within 10 of target
+        # ! and all sheep within 25 of target, or 10?
         gcm = self.calc_flock_centre()
         if (gcm[0] >= self.env.target[0]-self.env.target_range) and (gcm[0] <= self.env.target[0]+self.env.target_range):
             if (gcm[1] >= self.env.target[1]-self.env.target_range) and (gcm[1] <= self.env.target[1]+self.env.target_range):
-                self.success = True   
+                # check all sheep in endzone
+                if self.check_endzone():
+                    self.success = True   
 
     def calc_flocking(self):        
         # loop through flock

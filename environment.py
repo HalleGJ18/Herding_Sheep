@@ -10,6 +10,7 @@ class Environment:
     
     target = np.array([25.0, 25.0])
     target_range = 10
+    target_endzone = 25 #25
 
     obstacles = []
     
@@ -172,3 +173,17 @@ class Environment:
                     if obstacle.is_inside(p):
                         return True
         return False
+    
+    def in_endzone(self, p):
+        x_inside = False
+        y_inside = False
+        # check x in range
+        if (p[0] >= self.target[0]-self.target_endzone) and (p[0] <= self.target[0]+self.target_endzone):
+            x_inside = True
+        # check y in range
+        if (p[1] >= self.target[1]-self.target_endzone) and (p[1] <= self.target[1]+self.target_endzone):
+            y_inside = True
+        if x_inside and y_inside:
+            return True
+        else:
+            return False
