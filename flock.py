@@ -34,7 +34,8 @@ class Flock:
         sheep_posY = []
         for s in range(self.num_of_sheep):
             sheep.append(Sheep(s, self.env))
-            sheep[s].set_pos(self.random_start_pos(75, 75, self.env.width-50, self.env.height-50))
+            # sheep[s].set_pos(self.random_start_pos(75, 75, self.env.width-50, self.env.height-50))
+            sheep[s].set_pos(self.random_start_pos(100, 100, 175, 175))
             sheep_posX.append(sheep[s].pos[0])
             sheep_posY.append(sheep[s].pos[1])
             sheep[s].velocity = sheep[s].rand_velocity()

@@ -11,7 +11,7 @@ class Sheepdog(Agent):
     default_vision_range = 250
     vision_range = 250 # 150?
     
-    personal_space = 60
+    personal_space = 250/2
 
     maintain_dist = 10 #10
     collect_dist = 2
@@ -26,10 +26,10 @@ class Sheepdog(Agent):
     default_max_speed = 1.5
     max_speed = 1.5 #1.5
     
-    weight_a = 10
+    weight_a = 9
     weight_b = 2
-    weight_c = 5
-    weight_d = 3
+    weight_c = 3
+    weight_d = 1.2
 
     # blind_angle = pi/2    # sheepdog can't see behind itself
 
@@ -82,7 +82,7 @@ class Sheepdog(Agent):
         for dog in nearby_dogs:
             d = math.dist(self.pos,dog.pos)
             if d <= self.personal_space: #! only care about other dogs being close if theyre very close
-                v += ((self.pos - dog.pos)*(1/d)) #! weight inversely to dist between dogs
+                v += ((self.pos - dog.pos)*(self.personal_space/d)) #! weight inversely to dist between dogs
         # v = v / len(nearby_dogs)
         v = v / len(nearby_dogs)
         if np.linalg.norm(v) != 0:
@@ -135,7 +135,7 @@ class Sheepdog(Agent):
         # D: away from sheepdogs
         nearby_dogs = self.find_nearby(dogs, dog_dists)
         if len(nearby_dogs) > 0:
-            away_from_other_dogs = self.move_away_from_other_dogs(nearby_dogs) * (1/len(nearby_dogs)) * self.weight_d
+            away_from_other_dogs = self.move_away_from_other_dogs(nearby_dogs)  * self.weight_d #* (1/len(nearby_dogs))
             movement += away_from_other_dogs
 
         """if dog within 3 x personal space of a sheep, stop"""
@@ -174,7 +174,7 @@ class Sheepdog(Agent):
         
         if np.linalg.norm(movement) > 0:
             # print("movement change")
-            self.velocity = 0.45*self.velocity + movement #TODO: is this weighting what we want?
+            self.velocity = 0.5*self.velocity + movement #TODO: is this weighting what we want?
             # self.velocity = movement
 
         # print(self.velocity)
