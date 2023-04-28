@@ -202,12 +202,12 @@ class Flock:
     def check_success(self):
         # if gcm within 10 of target
         # ! and all sheep within 25 of target, or 10?
-        gcm = self.calc_flock_centre()
-        if (gcm[0] >= self.env.target[0]-self.env.target_range) and (gcm[0] <= self.env.target[0]+self.env.target_range):
-            if (gcm[1] >= self.env.target[1]-self.env.target_range) and (gcm[1] <= self.env.target[1]+self.env.target_range):
+        # gcm = self.calc_flock_centre()
+        # if (gcm[0] >= self.env.target[0]-self.env.target_range) and (gcm[0] <= self.env.target[0]+self.env.target_range):
+        #     if (gcm[1] >= self.env.target[1]-self.env.target_range) and (gcm[1] <= self.env.target[1]+self.env.target_range):
                 # check all sheep in endzone
-                if self.check_endzone():
-                    self.success = True   
+        if self.check_endzone():
+            self.success = True   
 
     def calc_flocking(self):        
         # loop through flock

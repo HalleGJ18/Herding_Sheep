@@ -8,10 +8,10 @@ class Sheepdog(Agent):
 
     velocity = np.array([1.0,1.0])
 
-    default_vision_range = 250
-    vision_range = 250 # 150?
+    default_vision_range = 400
+    vision_range = 400 # 150?
     
-    personal_space = 250/2
+    personal_space = 100
 
     maintain_dist = 10 #10
     collect_dist = 2
@@ -26,10 +26,10 @@ class Sheepdog(Agent):
     default_max_speed = 1.5
     max_speed = 1.5 #1.5
     
-    weight_a = 9
-    weight_b = 2
-    weight_c = 3
-    weight_d = 1.2
+    weight_a = 10
+    weight_b = 200
+    weight_c = 8
+    weight_d = 1000
 
     # blind_angle = pi/2    # sheepdog can't see behind itself
 
@@ -80,13 +80,15 @@ class Sheepdog(Agent):
     def move_away_from_other_dogs(self, nearby_dogs): #TODO: check this returns sane numbers
         v = np.array([0.0, 0.0])
         for dog in nearby_dogs:
+            # print(f"self id: {self.id}, dog id: {dog.id}")
             d = math.dist(self.pos,dog.pos)
-            if d <= self.personal_space: #! only care about other dogs being close if theyre very close
-                v += ((self.pos - dog.pos)*(self.personal_space/d)) #! weight inversely to dist between dogs
-        # v = v / len(nearby_dogs)
+            # if d <= self.personal_space: #! only care about other dogs being close if theyre very close
+            dir  = (self.pos - dog.pos) # *(1/d)
+            v += (dir/(np.linalg.norm(dir)**3)) #! weight inversely to dist between dogs 
+                # v += (self.pos - dog.pos) 
         v = v / len(nearby_dogs)
-        if np.linalg.norm(v) != 0:
-            v = v / np.linalg.norm(v)
+        # if np.linalg.norm(v) != 0:
+        #     v = v / np.linalg.norm(v) # remove zero magnitude check?
         # print(v)
         return v
          
@@ -135,47 +137,45 @@ class Sheepdog(Agent):
         # D: away from sheepdogs
         nearby_dogs = self.find_nearby(dogs, dog_dists)
         if len(nearby_dogs) > 0:
-            away_from_other_dogs = self.move_away_from_other_dogs(nearby_dogs)  * self.weight_d #* (1/len(nearby_dogs))
+            away_from_other_dogs = self.move_away_from_other_dogs(nearby_dogs)  * self.weight_d * (1/len(nearby_dogs))
             movement += away_from_other_dogs
 
-        """if dog within 3 x personal space of a sheep, stop"""
-        if self.v_close:
-            self.velocity = np.array([0.0,0.0])
-            # self.max_speed = 0.3*self.flock_personal_space
-        
-        else:
-            # self.max_speed = self.default_max_speed
-
-            if self.sheep_in_range:   
+        if self.sheep_in_range:   
                 
-                """determine if drive or collect""" 
+            """determine if drive or collect""" 
+            
+            # A: chase furthest sheep
+            # chase_sheep = self.furthest_sheep.pos - self.pos
+            chase_sheep = self.pos - self.furthest_sheep.pos
+            if np.linalg.norm(chase_sheep) != 0:
+                chase_sheep = chase_sheep/np.linalg.norm(chase_sheep)
+            chase_sheep *= -1
                 
-                # A: chase furthest sheep
-                chase_sheep = self.furthest_sheep.pos - self.pos
-                if np.linalg.norm(chase_sheep) != 0:
-                    chase_sheep = chase_sheep/np.linalg.norm(chase_sheep)
-                    
-                # B: keep slightly away from furthest sheep
-                away_from_sheep = self.pos - self.furthest_sheep.pos
-                if np.linalg.norm(away_from_sheep) != 0:
-                    away_from_sheep = away_from_sheep/np.linalg.norm(away_from_sheep)
-                    
-                # C: keep away from goal
-                away_from_goal = self.pos - self.env.target
-                if np.linalg.norm(away_from_goal) != 0:
-                    away_from_goal = away_from_goal/np.linalg.norm(away_from_goal)
+            # B: keep slightly away from furthest sheep
+            away_from_sheep = self.pos - self.furthest_sheep.pos
+            if np.linalg.norm(away_from_sheep) != 0:
+                away_from_sheep = away_from_sheep/(np.linalg.norm(away_from_sheep)**3)
                 
-                # put it all together
-                movement = movement + (chase_sheep*self.weight_a) + (away_from_sheep*self.weight_b) + (away_from_goal*self.weight_c)
+            # C: keep away from goal
+            away_from_goal = self.pos - self.env.target
+            if np.linalg.norm(away_from_goal) != 0:
+                away_from_goal = away_from_goal/np.linalg.norm(away_from_goal)
+                # away_from_goal *= -1  # ? dont know but its what the paper says
+            
+            # put it all together
+            movement = movement + (chase_sheep*self.weight_a) + (away_from_sheep*self.weight_b) + (away_from_goal*self.weight_c)
+            
             
             
         """avoid impassable obstacles"""
         movement += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 20)
         
+        # print(f"movement: {movement}")
+        
         if np.linalg.norm(movement) > 0:
             # print("movement change")
-            self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
-            # self.velocity = movement
+            # self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
+            self.velocity = movement
 
         # print(self.velocity)
 

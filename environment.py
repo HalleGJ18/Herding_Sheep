@@ -8,7 +8,7 @@ class Environment:
     height : int = 0
     width : int = 0
     
-    target = np.array([15.0, 15.0])
+    target = np.array([125.0, 15.0])
     target_range = 10
     target_endzone = 25 #25
 
@@ -51,13 +51,29 @@ class Environment:
 
             if p[0] < self.xMin:
                 avoid_amount[0] += self.edge_avoid_factor
+                # if v[1] >= 0:
+                #     avoid_amount[1] += 1
+                # else:
+                #     avoid_amount[1] -= 1
             elif p[0] > self.xMax:
                 avoid_amount[0] -= self.edge_avoid_factor
+                # if v[1] >= 0:
+                #     avoid_amount[1] += 1
+                # else:
+                #     avoid_amount[1] -= 1
 
             if p[1] < self.yMin:
                 avoid_amount[1] += self.edge_avoid_factor
+                # if v[0] >= 0:
+                #     avoid_amount[0] += 1
+                # else:
+                #     avoid_amount[0] -= 1
             elif p[1] > self.yMax:
                 avoid_amount[1] -= self.edge_avoid_factor
+                # if v[0] >= 0:
+                #     avoid_amount[0] += 1
+                # else:
+                #     avoid_amount[0] -= 1
 
         # check obstacles
 
