@@ -8,9 +8,9 @@ class Environment:
     height : int = 0
     width : int = 0
     
-    target = np.array([125.0, 15.0])
+    target = np.array([125.0, 35.0])
     target_range = 10
-    target_endzone = 25 #25
+    target_endzone = 30 #25
 
     obstacles = []
     

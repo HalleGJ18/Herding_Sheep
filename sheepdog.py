@@ -8,8 +8,8 @@ class Sheepdog(Agent):
 
     velocity = np.array([1.0,1.0])
 
-    default_vision_range = 400
-    vision_range = 400 # 150?
+    default_vision_range = 100
+    vision_range = 100 # 150?
     
     personal_space = 100
 
@@ -137,7 +137,7 @@ class Sheepdog(Agent):
         # D: away from sheepdogs
         nearby_dogs = self.find_nearby(dogs, dog_dists)
         if len(nearby_dogs) > 0:
-            away_from_other_dogs = self.move_away_from_other_dogs(nearby_dogs)  * self.weight_d * (1/len(nearby_dogs))
+            away_from_other_dogs = self.move_away_from_other_dogs(nearby_dogs)  * self.weight_d #* (1/len(nearby_dogs))
             movement += away_from_other_dogs
 
         if self.sheep_in_range:   
@@ -160,7 +160,7 @@ class Sheepdog(Agent):
             away_from_goal = self.pos - self.env.target
             if np.linalg.norm(away_from_goal) != 0:
                 away_from_goal = away_from_goal/np.linalg.norm(away_from_goal)
-                # away_from_goal *= -1  # ? dont know but its what the paper says
+            # away_from_goal *= -1  # ? dont know but its what the paper says
             
             # put it all together
             movement = movement + (chase_sheep*self.weight_a) + (away_from_sheep*self.weight_b) + (away_from_goal*self.weight_c)

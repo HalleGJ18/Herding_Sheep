@@ -54,7 +54,8 @@ class Pack:
         for d in range(n):
             dogs.append(Sheepdog(d, e))
             # dogs[d].set_pos(self.random_start_pos(13,175,27,180))
-            dogs[d].set_pos(self.random_start_pos(50,200,200,225))
+            # dogs[d].set_pos(self.random_start_pos(50,175,200,180))
+            dogs[d].set_pos(self.random_start_pos(50,10,200,15))
             dogs[d].set_target(self.target)
             dogs_posX.append(dogs[d].pos[0])
             dogs_posY.append(dogs[d].pos[1])

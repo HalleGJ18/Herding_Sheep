@@ -35,7 +35,8 @@ class Flock:
         for s in range(self.num_of_sheep):
             sheep.append(Sheep(s, self.env))
             # sheep[s].set_pos(self.random_start_pos(75, 75, self.env.width-50, self.env.height-50))
-            sheep[s].set_pos(self.random_start_pos(100, 100, 175, 175))
+            # sheep[s].set_pos(self.random_start_pos(75, 75, 175, 175))
+            sheep[s].set_pos(self.random_start_pos(25, 25, 225, 225))
             sheep_posX.append(sheep[s].pos[0])
             sheep_posY.append(sheep[s].pos[1])
             sheep[s].velocity = sheep[s].rand_velocity()
@@ -77,6 +78,23 @@ class Flock:
         # n is the number of sheep wanted
         # id is given if a sheep is looking for other sheep, to remove itself from list
         sorted_by_dist = sorted(self.flock, key= lambda sheep: math.dist(sheep.pos, p))
+        if id != None:
+            sorted_by_dist = [i for i in sorted_by_dist if i.id != id]
+        # check not blocked by obstacle
+        # print(f"before removing can't see: {len(sorted_by_dist)}")
+        if len(self.env.obstacles) > 0:
+            sorted_by_dist = [j for j in sorted_by_dist if self.env.is_obstacle_blocking_vision(p,j.pos) == False]
+            # print(f"after removing can't see: {len(sorted_by_dist)}")
+        if len(sorted_by_dist) > n:
+            sorted_by_dist = sorted_by_dist[0:n]
+        return sorted_by_dist
+    
+    # calc sheep furthest from given point
+    def calc_n_furthest_sheep(self, p, n, id=None):
+        # p is pos of target
+        # n is the number of sheep wanted
+        # id is given if a sheep is looking for other sheep, to remove itself from list
+        sorted_by_dist = sorted(self.flock, key= lambda sheep: 1/math.dist(sheep.pos, p))
         if id != None:
             sorted_by_dist = [i for i in sorted_by_dist if i.id != id]
         # check not blocked by obstacle

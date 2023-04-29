@@ -6,6 +6,7 @@ import matplotlib.patches as patches
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import math
+import os
 
 from flock import Flock
 from environment import Environment
@@ -30,7 +31,7 @@ ENV_WIDTH = 250
 env = Environment(ENV_HEIGHT, ENV_WIDTH)
 
 # generate sheep
-n_sheep = 75 # num of sheep # 100
+n_sheep = 100 # num of sheep # 100
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
@@ -54,7 +55,7 @@ pack.set_stop_dist(flock.default_personal_space, n_sheep)
 flock_rad = flock.default_personal_space * (n_sheep ** (2/3))
 # print(flock_rad)
 
-T_LIMIT = 5000 # num of time steps
+T_LIMIT = 7000 # num of time steps
 
 success = False
 
@@ -86,8 +87,8 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
     dog:Sheepdog
     for dog in pack.sheepdogs:
         
-        # sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
-        sheep_in_range = flock.calc_n_closest_sheep(dog.pos, n_sheep) #20
+        sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
+        # sheep_in_range = flock.calc_n_closest_sheep(dog.pos, 50) #20
         # print([i.id for i in sheep_in_range])
         # print(len(sheep_in_range))
         if len(sheep_in_range) > 0:
@@ -157,20 +158,41 @@ print(dog_data)
 
 # print(type(flock.flock_positionsX))
 # print(type(pack.sheepdogs_positionsX))
+folder = "output2"
 
-# output to csv
+try:
+   os.makedirs(folder)
+except FileExistsError:
+   # directory already exists
+   pass
+ 
+i = 1
+num_exists = True
+while num_exists:
+    n = str(i).zfill(3)
+    result_csv_name = folder+"/data"+n+".csv"
+    if os.path.exists(result_csv_name):
+        i += 1
+    else:
+        break
+
+print(result_csv_name)
+
+# ! output to csv
+# result_csv_name = "data.csv"
 result = pd.merge(sheep_data, dog_data, left_index=True, right_index=True)
-result.to_csv("data.csv", encoding='utf-8', sep="|")
+result.to_csv(result_csv_name, encoding='utf-8', sep="|")
 # sheep_data.to_csv("sheep_data.csv", encoding='utf-8', sep="|")
 # dog_data.to_csv("dog_data.csv", encoding='utf-8', sep="|")
 
 # ! output env data: dimensions, target, obstacles, success
-env_data = pd.DataFrame(columns=['width', 'height', 'target_x', 'target_y', 'target_range', 'success'])
-env_data.loc[0] = [env.width, env.height, env.target[0], env.target[1], env.target_range, success]
-env_data.to_csv("env_data.csv", encoding='utf-8')
+env_csv_name = folder+"/env_data"+str(i).zfill(3)+".csv"
+env_data = pd.DataFrame(columns=['width', 'height', 'target_x', 'target_y', 'target_range', 'endzone', 'success'])
+env_data.loc[0] = [env.width, env.height, env.target[0], env.target[1], env.target_range, env.target_endzone, success]
+env_data.to_csv(env_csv_name, encoding='utf-8')
 
 
-
+obstacle_csv_name = folder+"/obstacle_data"+str(i).zfill(3)+".csv"
 if len(env.obstacles) > 0:
     obstacle_data = pd.DataFrame(columns=['x', 'y', 'width', 'height', 'color'])
     index = 0
@@ -178,58 +200,58 @@ if len(env.obstacles) > 0:
         a,b,c,d,e = obstacle.export()
         obstacle_data.loc[index] = [a,b,c,d,e]
         
-    obstacle_data.to_csv("obstacle_data.csv",encoding='utf-8')
+    obstacle_data.to_csv(obstacle_csv_name,encoding='utf-8')
     
 
 # generate animated plot
 time = 0
 
-fig = plt.Figure(figsize=(6, 6), dpi=150)
-ax = fig.add_subplot()
-ax.set_xlim([0, ENV_WIDTH])
-ax.set_ylim([0, ENV_HEIGHT])
-scat = ax.set_axisbelow(True)
-scat = ax.grid()
-if len(env.obstacles) > 0:
-    for obstacle in env.obstacles:
-        rect = obstacle.draw()
-        scat = ax.add_patch(rect)
-rect = patches.Rectangle((env.target[0]-env.target_range, env.target[1]-env.target_range), env.target_range*2, env.target_range*2, linewidth=1, edgecolor='b', facecolor='none')
-scat = ax.add_patch(rect)
-rect = patches.Rectangle((env.target[0]-env.target_endzone, env.target[1]-env.target_endzone), env.target_endzone*2, env.target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')
-scat = ax.add_patch(rect)
-scat = ax.scatter(sheep_data.loc[0]["sheep_x_positions"], sheep_data.loc[0]["sheep_y_positions"], c='k', s=1)
-scat = ax.scatter(dog_data.loc[0]["dog_x_positions"], dog_data.loc[0]["dog_y_positions"], c='r', s=1)
-scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
-scat = ax.text(0, ENV_HEIGHT, "time=0")
-scatter = FigureCanvasTkAgg(fig, window)
-scatter.get_tk_widget().pack()
+# fig = plt.Figure(figsize=(6, 6), dpi=150)
+# ax = fig.add_subplot()
+# ax.set_xlim([0, ENV_WIDTH])
+# ax.set_ylim([0, ENV_HEIGHT])
+# scat = ax.set_axisbelow(True)
+# scat = ax.grid()
+# if len(env.obstacles) > 0:
+#     for obstacle in env.obstacles:
+#         rect = obstacle.draw()
+#         scat = ax.add_patch(rect)
+# rect = patches.Rectangle((env.target[0]-env.target_range, env.target[1]-env.target_range), env.target_range*2, env.target_range*2, linewidth=1, edgecolor='b', facecolor='none')
+# scat = ax.add_patch(rect)
+# rect = patches.Rectangle((env.target[0]-env.target_endzone, env.target[1]-env.target_endzone), env.target_endzone*2, env.target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')
+# scat = ax.add_patch(rect)
+# scat = ax.scatter(sheep_data.loc[0]["sheep_x_positions"], sheep_data.loc[0]["sheep_y_positions"], c='k', s=1)
+# scat = ax.scatter(dog_data.loc[0]["dog_x_positions"], dog_data.loc[0]["dog_y_positions"], c='r', s=1)
+# scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
+# scat = ax.text(0, ENV_HEIGHT, "time=0")
+# scatter = FigureCanvasTkAgg(fig, window)
+# scatter.get_tk_widget().pack()
 
 
-def animate(time):
-    time += 1
-    if time > T_LIMIT: # used to be == ???
-        time = 0
-    ax.clear()
-    ax.set_xlim([0, ENV_WIDTH])
-    ax.set_ylim([0, ENV_HEIGHT])
-    scat = ax.set_axisbelow(True)
-    scat = ax.grid()
-    if len(env.obstacles) > 0:
-        for obstacle in env.obstacles:
-            rect = obstacle.draw()
-            scat = ax.add_patch(rect)
-    rect = patches.Rectangle((env.target[0]-env.target_range, env.target[1]-env.target_range), env.target_range*2, env.target_range*2, linewidth=1, edgecolor='b', facecolor='none')
-    scat = ax.add_patch(rect)
-    rect = patches.Rectangle((env.target[0]-env.target_endzone, env.target[1]-env.target_endzone), env.target_endzone*2, env.target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')
-    scat = ax.add_patch(rect)
-    scat = ax.scatter(sheep_data.loc[time]["sheep_x_positions"], sheep_data.loc[time]["sheep_y_positions"], c='k', s=1)
-    scat = ax.scatter(dog_data.loc[time]["dog_x_positions"], dog_data.loc[time]["dog_y_positions"], c='r', s=1)
-    scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
-    scat = ax.text(0, ENV_HEIGHT, "time="+str(time))
-    return scat
+# def animate(time):
+#     time += 1
+#     if time > T_LIMIT: # used to be == ???
+#         time = 0
+#     ax.clear()
+#     ax.set_xlim([0, ENV_WIDTH])
+#     ax.set_ylim([0, ENV_HEIGHT])
+#     scat = ax.set_axisbelow(True)
+#     scat = ax.grid()
+#     if len(env.obstacles) > 0:
+#         for obstacle in env.obstacles:
+#             rect = obstacle.draw()
+#             scat = ax.add_patch(rect)
+#     rect = patches.Rectangle((env.target[0]-env.target_range, env.target[1]-env.target_range), env.target_range*2, env.target_range*2, linewidth=1, edgecolor='b', facecolor='none')
+#     scat = ax.add_patch(rect)
+#     rect = patches.Rectangle((env.target[0]-env.target_endzone, env.target[1]-env.target_endzone), env.target_endzone*2, env.target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')
+#     scat = ax.add_patch(rect)
+#     scat = ax.scatter(sheep_data.loc[time]["sheep_x_positions"], sheep_data.loc[time]["sheep_y_positions"], c='k', s=1)
+#     scat = ax.scatter(dog_data.loc[time]["dog_x_positions"], dog_data.loc[time]["dog_y_positions"], c='r', s=1)
+#     scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
+#     scat = ax.text(0, ENV_HEIGHT, "time="+str(time))
+#     return scat
 
-ani = animation.FuncAnimation(fig, animate, repeat=False, frames=T_LIMIT, interval=60)
+# ani = animation.FuncAnimation(fig, animate, repeat=False, frames=T_LIMIT, interval=60)
 
-# main loop
-window.mainloop()
+# # main loop
+# window.mainloop()

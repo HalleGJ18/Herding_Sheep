@@ -86,6 +86,7 @@ class Sheep(Agent):
                 d = d/np.linalg.norm(d)
                 total_separation += d
                 too_close += 1
+            
             if too_close > 0:
                 self.too_close = True
             else:
@@ -161,8 +162,8 @@ class Sheep(Agent):
             separation, alignment, cohesion =  self.flocking_algo(nearby_sheep)
             
             if self.dog_in_range:
-                # velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
-                velocity_changes = velocity_changes + sep_weight*separation + cohes_weight*cohesion 
+                velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
+                # velocity_changes = velocity_changes + sep_weight*separation + cohes_weight*cohesion 
             else:
                 # print("sep: {}".format(separation*sep_weight))
                 velocity_changes = velocity_changes + (sep_weight*separation)
