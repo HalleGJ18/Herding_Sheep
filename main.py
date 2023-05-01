@@ -30,11 +30,11 @@ ENV_WIDTH = 250
 env = Environment(ENV_HEIGHT, ENV_WIDTH)
 
 # generate sheep
-n_sheep = 75 # num of sheep # 100
+n_sheep = 100 # num of sheep # 100
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
-n_dogs = 1 # num of dogs
+n_dogs = 2 # num of dogs
 pack = Pack(n_dogs, env)
 
 
@@ -54,7 +54,7 @@ pack.set_stop_dist(flock.default_personal_space, n_sheep)
 flock_rad = flock.default_personal_space * (n_sheep ** (2/3))
 # print(flock_rad)
 
-T_LIMIT = 5000 # num of time steps
+T_LIMIT = 7000 # num of time steps
 
 success = False
 
@@ -86,8 +86,8 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
     dog:Sheepdog
     for dog in pack.sheepdogs:
         
-        # sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
-        sheep_in_range = flock.calc_n_closest_sheep(dog.pos, n_sheep) #20
+        sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
+        # sheep_in_range = flock.calc_n_closest_sheep(dog.pos, n_sheep) #20
         # print([i.id for i in sheep_in_range])
         # print(len(sheep_in_range))
         if len(sheep_in_range) > 0:

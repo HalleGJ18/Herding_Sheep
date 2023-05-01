@@ -8,8 +8,8 @@ class Sheepdog(Agent):
 
     velocity = np.array([1.0,1.0])
 
-    default_vision_range = 250/2
-    vision_range = 250/2 # 150?
+    default_vision_range = 400
+    vision_range = 400 # 150?
 
     maintain_dist = 10 #10
     collect_dist = 2
@@ -73,11 +73,12 @@ class Sheepdog(Agent):
     def move_away_from_other_dogs(self, nearby_dogs): #TODO: check this returns sane numbers
         v = np.array([0.0, 0.0])
         for dog in nearby_dogs:
-            v += (self.pos - dog.pos)
+            dir = (self.pos - dog.pos)
+            v += (dir/(np.linalg.norm(dir)**3))
         # v = v / len(nearby_dogs)
         v = v / len(nearby_dogs)
-        if np.linalg.norm(v) != 0:
-            v = v / np.linalg.norm(v)
+        # if np.linalg.norm(v) != 0:
+        #     v = v / np.linalg.norm(v)
         # print(v)
         return v
          
@@ -118,11 +119,7 @@ class Sheepdog(Agent):
     def apply_herding(self, dogs, dog_dists):
         movement = np.array([0.0, 0.0])
 
-        """keep away from other dogs"""
-        nearby_dogs = self.find_nearby(dogs, dog_dists)
-        if len(nearby_dogs) > 0:
-            away_from_other_dogs = self.move_away_from_other_dogs(nearby_dogs) * 0.1
-            movement += away_from_other_dogs
+        
 
         """if dog within 3 x personal space of a sheep, stop"""
         if self.v_close:
@@ -131,6 +128,12 @@ class Sheepdog(Agent):
         
         else:
             # self.max_speed = self.default_max_speed
+
+            """keep away from other dogs"""
+            nearby_dogs = self.find_nearby(dogs, dog_dists)
+            if len(nearby_dogs) > 0:
+                away_from_other_dogs = self.move_away_from_other_dogs(nearby_dogs) * 35 #35
+                movement += away_from_other_dogs
 
             if self.sheep_in_range:   
                 

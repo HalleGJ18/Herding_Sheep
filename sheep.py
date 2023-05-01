@@ -84,6 +84,7 @@ class Sheep(Agent):
                 d = d/np.linalg.norm(d)
                 total_separation += d
                 too_close += 1
+                
             if too_close > 0:
                 self.too_close = True
             else:
@@ -164,6 +165,8 @@ class Sheep(Agent):
             else:
                 # print("sep: {}".format(separation*sep_weight))
                 velocity_changes = velocity_changes + (sep_weight*separation)
+        else:
+            self.too_close = False
 
         # self.calc_velocity()      # what is this doing here?
         
