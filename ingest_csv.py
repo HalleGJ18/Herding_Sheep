@@ -13,8 +13,8 @@ import math
 # sheep_data = pd.read_csv(SHEEP_CSV, sep="|", index_col=0)
 # dog_data = pd.read_csv(DOG_CSV, sep="|", index_col=0)
 
-DATA_CSV_NAME = "results/strombom_gcm/data03.csv"
-ENV_CSV_NAME = "results/strombom_gcm/env_data03.csv"
+DATA_CSV_NAME = "ct/sheep_20vr_3dog_250vr/results/data001.csv"
+ENV_CSV_NAME = "ct/sheep_20vr_3dog_250vr/results/env_data001.csv"
 
 data = pd.read_csv(DATA_CSV_NAME, sep="|", index_col=0)
 env_data = pd.read_csv(ENV_CSV_NAME, sep=",", index_col=0)
@@ -41,6 +41,12 @@ ENV_WIDTH = int(env_data.loc[0]['width'])
 
 target = [float(env_data.loc[0]['target_x']), float(env_data.loc[0]['target_y'])]
 target_range = float(env_data.loc[0]['target_range'])
+try:	
+    target_endzone = float(env_data.loc[0]['endzone'])	
+    # print("true")	
+except:	
+    target_endzone = 25	
+    # print(target_endzone)
 
 success = env_data.loc[0]['success']
 
@@ -76,6 +82,8 @@ scat = ax.grid()
 #         scat = ax.add_patch(rect)
 rect = patches.Rectangle((target[0]-target_range, target[1]-target_range), target_range*2, target_range*2, linewidth=1, edgecolor='b', facecolor='none')
 scat = ax.add_patch(rect)
+rect = patches.Rectangle((target[0]-target_endzone, target[1]-target_endzone), target_endzone*2, target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')	
+scat = ax.add_patch(rect)
 scat = ax.scatter(format(data.loc[0]["sheep_x_positions"]), format(data.loc[0]["sheep_y_positions"]), c='k', s=1)
 scat = ax.scatter(format(data.loc[0]["dog_x_positions"]), format(data.loc[0]["dog_y_positions"]), c='r', s=1)
 scat = ax.scatter(target[0], target[1], marker="x", c="b")
@@ -99,6 +107,8 @@ def animate(time):
     #         scat = ax.add_patch(rect)
     rect = patches.Rectangle((target[0]-target_range, target[1]-target_range), target_range*2, target_range*2, linewidth=1, edgecolor='b', facecolor='none')
     scat = ax.add_patch(rect)
+    rect = patches.Rectangle((target[0]-target_endzone, target[1]-target_endzone), target_endzone*2, target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')
+    scat = ax.add_patch(rect)	
     scat = ax.scatter(format(data.loc[time]["sheep_x_positions"]), format(data.loc[time]["sheep_y_positions"]), c='k', s=1)
     scat = ax.scatter(format(data.loc[time]["dog_x_positions"]), format(data.loc[time]["dog_y_positions"]), c='r', s=1)
     scat = ax.scatter(target[0], target[1], marker="x", c="b")
