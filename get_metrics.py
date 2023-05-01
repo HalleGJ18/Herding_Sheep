@@ -35,7 +35,7 @@ def success_rate(outcomes):
             true_count += 1
         else:
             false_count += 1
-    print(true_count, false_count)
+    # print(true_count, false_count)
     success_rate = true_count /(true_count + false_count)
     return success_rate, true_count, false_count
 
@@ -95,7 +95,7 @@ def dog_dist_travelled(x_pos, y_pos):
 # load dir
 
 directory = sys.argv[1]
-print(directory)
+print(f"metrics: {directory}")
 
 # make metrics dir
 try:
@@ -177,9 +177,9 @@ while file_exists:
         file_exists = False
 
 
-print(success_rate(test_outcomes))
+print(f"success rate: {success_rate(test_outcomes)}")
 
-print(average_time(success_times))
+print(f"avg success time: {average_time(success_times)}")
 
 sr, tc, fc = success_rate(test_outcomes)
 

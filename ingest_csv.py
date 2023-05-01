@@ -13,8 +13,11 @@ import math
 # sheep_data = pd.read_csv(SHEEP_CSV, sep="|", index_col=0)
 # dog_data = pd.read_csv(DOG_CSV, sep="|", index_col=0)
 
-DATA_CSV_NAME = "test_sheep_20vr_1dog_400vr/results/data010.csv"
-ENV_CSV_NAME = "test_sheep_20vr_1dog_400vr/results/env_data010.csv"
+dir = "fit/sheep_20vr_1dog_50vr"
+num = "001"
+
+DATA_CSV_NAME = dir+"/results/data"+num+".csv"
+ENV_CSV_NAME = dir+"/results/env_data"+num+".csv"
 
 data = pd.read_csv(DATA_CSV_NAME, sep="|", index_col=0)
 env_data = pd.read_csv(ENV_CSV_NAME, sep=",", index_col=0)

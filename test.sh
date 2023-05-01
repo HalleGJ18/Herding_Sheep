@@ -8,13 +8,13 @@ control_c() {
 trap control_c SIGINT
 
 # loop through num of dogs
-for i in {1..5}
+for i in {1..2}
 do
     # loop though vr of dogs
-    for j in {1..8}
+    for j in {1..2}
     do
         # num of tests
-        for k in {1..40}
+        for k in {1..1}
         do
             # echo $i
             # echo $(($j*50))

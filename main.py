@@ -41,7 +41,7 @@ pack = Pack(n_dogs, env)
 
 pack.set_vision_range(float(sys.argv[2]))
 
-print(pack.sheepdogs[0].vision_range)
+print(f"set vr: {pack.sheepdogs[0].vision_range}")
 
 # store intial positions at t=0 in dataframe
 sheep_data.loc[0] = [np.copy(flock.flock_positionsX), np.copy(flock.flock_positionsY)]
@@ -155,10 +155,12 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
     dog_data.loc[t] = [np.copy(pack.sheepdogs_positionsX), np.copy(pack.sheepdogs_positionsY)]  
 
 
-print("sheep data:")
-print(sheep_data)
-print("dog data:")
-print(dog_data)
+# print("sheep data:")
+# print(sheep_data)
+# print("dog data:")
+# print(dog_data)
+
+print(f"rows: {len(sheep_data.index)} (inc 0)")
 
 # print(type(flock.flock_positionsX))
 # print(type(pack.sheepdogs_positionsX))
