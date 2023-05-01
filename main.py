@@ -7,6 +7,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import math
 import os
+import sys
 
 from flock import Flock
 from environment import Environment
@@ -35,9 +36,12 @@ n_sheep = 100 # num of sheep # 100
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
-n_dogs = 3 # num of dogs
+n_dogs = int(sys.argv[1]) #1 # num of dogs
 pack = Pack(n_dogs, env)
 
+pack.set_vision_range(float(sys.argv[2]))
+
+print(pack.sheepdogs[0].vision_range)
 
 # store intial positions at t=0 in dataframe
 sheep_data.loc[0] = [np.copy(flock.flock_positionsX), np.copy(flock.flock_positionsY)]
@@ -158,10 +162,20 @@ print(dog_data)
 
 # print(type(flock.flock_positionsX))
 # print(type(pack.sheepdogs_positionsX))
-folder = "output2"
+
+# ! directory name
+# folder = "kubo_3dogs_vr250_south"
+# folder = "test_sheep_20vr_1dog_250vr"
+folder = sys.argv[3]
 
 try:
    os.makedirs(folder)
+except FileExistsError:
+   # directory already exists
+   pass
+
+try:
+   os.makedirs(folder+"/results")
 except FileExistsError:
    # directory already exists
    pass
@@ -170,7 +184,7 @@ i = 1
 num_exists = True
 while num_exists:
     n = str(i).zfill(3)
-    result_csv_name = folder+"/data"+n+".csv"
+    result_csv_name = folder+"/results/data"+n+".csv"
     if os.path.exists(result_csv_name):
         i += 1
     else:
@@ -186,13 +200,13 @@ result.to_csv(result_csv_name, encoding='utf-8', sep="|")
 # dog_data.to_csv("dog_data.csv", encoding='utf-8', sep="|")
 
 # ! output env data: dimensions, target, obstacles, success
-env_csv_name = folder+"/env_data"+str(i).zfill(3)+".csv"
+env_csv_name = folder+"/results/env_data"+str(i).zfill(3)+".csv"
 env_data = pd.DataFrame(columns=['width', 'height', 'target_x', 'target_y', 'target_range', 'endzone', 'success'])
 env_data.loc[0] = [env.width, env.height, env.target[0], env.target[1], env.target_range, env.target_endzone, success]
 env_data.to_csv(env_csv_name, encoding='utf-8')
 
 
-obstacle_csv_name = folder+"/obstacle_data"+str(i).zfill(3)+".csv"
+obstacle_csv_name = folder+"/results/obstacle_data"+str(i).zfill(3)+".csv"
 if len(env.obstacles) > 0:
     obstacle_data = pd.DataFrame(columns=['x', 'y', 'width', 'height', 'color'])
     index = 0

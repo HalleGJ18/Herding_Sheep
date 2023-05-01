@@ -152,9 +152,11 @@ class Sheepdog(Agent):
             chase_sheep *= -1
                 
             # B: keep slightly away from furthest sheep
-            away_from_sheep = self.pos - self.furthest_sheep.pos
+            # away_from_sheep = self.pos - self.furthest_sheep.pos
+            away_from_sheep = self.furthest_sheep.pos - self.pos
             if np.linalg.norm(away_from_sheep) != 0:
                 away_from_sheep = away_from_sheep/(np.linalg.norm(away_from_sheep)**3)
+            # away_from_sheep *= -1
                 
             # C: keep away from goal
             away_from_goal = self.pos - self.env.target

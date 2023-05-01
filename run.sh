@@ -1,6 +1,16 @@
 #!/bin/bash
 
-for i in {1..45}
+control_c() {
+    kill $PID
+    exit
+}
+
+trap control_c SIGINT
+
+for i in {1..10}
 do
-    python main.py
+    PID=$!
+    python main.py 1 250 test_sheep_20vr_1dog_250vr
 done
+
+python get_metrics.py test_sheep_20vr_1dog_250vr

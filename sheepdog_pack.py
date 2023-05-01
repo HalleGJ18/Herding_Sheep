@@ -64,6 +64,12 @@ class Pack:
         self.sheepdogs = np.array(dogs)
         self.sheepdogs_positionsX = np.array(dogs_posX)
         self.sheepdogs_positionsY = np.array(dogs_posY)
+        
+    def set_vision_range(self, vr):
+        dog:Sheepdog
+        for dog in self.sheepdogs:
+            dog.vision_range = vr
+            dog.default_vision_range = vr
 
     def calc_distances_dogs(self):
         for dog in self.sheepdogs:

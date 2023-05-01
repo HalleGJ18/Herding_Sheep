@@ -13,8 +13,8 @@ import math
 # sheep_data = pd.read_csv(SHEEP_CSV, sep="|", index_col=0)
 # dog_data = pd.read_csv(DOG_CSV, sep="|", index_col=0)
 
-DATA_CSV_NAME = "output/data012.csv"
-ENV_CSV_NAME = "output/env_data012.csv"
+DATA_CSV_NAME = "test_sheep_20vr_1dog_400vr/results/data010.csv"
+ENV_CSV_NAME = "test_sheep_20vr_1dog_400vr/results/env_data010.csv"
 
 data = pd.read_csv(DATA_CSV_NAME, sep="|", index_col=0)
 env_data = pd.read_csv(ENV_CSV_NAME, sep=",", index_col=0)
@@ -43,10 +43,10 @@ target = [float(env_data.loc[0]['target_x']), float(env_data.loc[0]['target_y'])
 target_range = float(env_data.loc[0]['target_range'])
 try:
     target_endzone = float(env_data.loc[0]['endzone'])
-    print("true")
+    # print("true")
 except:
     target_endzone = 25
-    print(target_endzone)
+    # print(target_endzone)
   
 
 success = env_data.loc[0]['success']
