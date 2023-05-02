@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import random
+from numpy.linalg import norm
 import math
 
 from sheepdog import Sheepdog
@@ -77,7 +78,7 @@ class Pack:
                 if dog.id == other.id:
                     self.dists[dog.id][other.id] = 0  # zero distance from self, remember to account for this later
                 else:
-                    self.dists[dog.id][other.id] = np.linalg.norm(other.pos - dog.pos)
+                    self.dists[dog.id][other.id] = norm(other.pos - dog.pos)
 
     # calculate average position
     def calc_sheepdogs_avg_pos(self):

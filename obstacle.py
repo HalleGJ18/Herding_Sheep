@@ -28,6 +28,11 @@ class Obstacle:
     colour = "grey"
     
     def __init__(self, id, t, p, w, h):
+        # id is obs id, manually increment
+        # t is obs type (0,1,2)
+        # p is bottom left corner
+        # w is width
+        # h is height
         self.id = id
         self.type = t
         self.pos = np.array(p)
@@ -204,7 +209,7 @@ class Obstacle:
                     y_diff = p[1]-(self.pos[1]+self.height)
                     turn[1] += y_diff
             
-            # steer_away = steer_away / np.linalg.norm(steer_away)
+            # steer_away = steer_away / norm(steer_away)
         turn *= self.avoid_strength
         return turn
 

@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import random
+from numpy.linalg import norm
 import math
 
 from agent import Agent
@@ -67,11 +68,11 @@ class Sheepdog(Agent):
     def calc_movement_to_drive_point(self):  #TODO: check the numbers this returns are what we want
         # v = self.sheep_centre - self.target
         v = self.target - self.sheep_centre
-        v = v/np.linalg.norm(v)
+        v = v/norm(v)
         v = self.sheep_centre - (v * self.maintain_dist)
         # print("v: {}".format(v))
         move = v - self.pos
-        move = move/np.linalg.norm(move)
+        move = move/norm(move)
         # print("move towards push point")
         # print(f"d move: {move}")
         return move
@@ -84,11 +85,11 @@ class Sheepdog(Agent):
             d = math.dist(self.pos,dog.pos)
             # if d <= self.personal_space: #! only care about other dogs being close if theyre very close
             dir  = (self.pos - dog.pos) # *(1/d)
-            v += (dir/(np.linalg.norm(dir)**3)) #! weight inversely to dist between dogs 
+            v += (dir/(norm(dir)**3)) #! weight inversely to dist between dogs 
                 # v += (self.pos - dog.pos) 
         v = v / len(nearby_dogs)
-        # if np.linalg.norm(v) != 0:
-        #     v = v / np.linalg.norm(v) # remove zero magnitude check?
+        # if norm(v) != 0:
+        #     v = v / norm(v) # remove zero magnitude check?
         # print(v)
         return v
          
@@ -112,11 +113,11 @@ class Sheepdog(Agent):
         collect_point = self.furthest_sheep.pos - self.sheep_centre
         # unit vector it, times collect_dist
         # translate to behind sheep
-        collect_point = self.furthest_sheep.pos + (collect_point/np.linalg.norm(collect_point) * self.collect_dist)
+        collect_point = self.furthest_sheep.pos + (collect_point/norm(collect_point) * self.collect_dist)
         # get vector collect_point - dog.pos
         to_collect = collect_point - self.pos
         # unit vector it?
-        to_collect = to_collect/np.linalg.norm(to_collect)
+        to_collect = to_collect/norm(to_collect)
         return to_collect
     
     # push furthest sheep towards target
@@ -147,21 +148,21 @@ class Sheepdog(Agent):
             # A: chase furthest sheep
             # chase_sheep = self.furthest_sheep.pos - self.pos
             chase_sheep = self.pos - self.furthest_sheep.pos
-            if np.linalg.norm(chase_sheep) != 0:
-                chase_sheep = chase_sheep/np.linalg.norm(chase_sheep)
+            if norm(chase_sheep) != 0:
+                chase_sheep = chase_sheep/norm(chase_sheep)
             chase_sheep *= -1
                 
             # B: keep slightly away from furthest sheep
             # away_from_sheep = self.pos - self.furthest_sheep.pos
             away_from_sheep = self.furthest_sheep.pos - self.pos
-            if np.linalg.norm(away_from_sheep) != 0:
-                away_from_sheep = away_from_sheep/(np.linalg.norm(away_from_sheep)**3)
+            if norm(away_from_sheep) != 0:
+                away_from_sheep = away_from_sheep/(norm(away_from_sheep)**3)
             # away_from_sheep *= -1
                 
             # C: keep away from goal
             away_from_goal = self.pos - self.env.target
-            if np.linalg.norm(away_from_goal) != 0:
-                away_from_goal = away_from_goal/np.linalg.norm(away_from_goal)
+            if norm(away_from_goal) != 0:
+                away_from_goal = away_from_goal/norm(away_from_goal)
             # away_from_goal *= -1  # ? dont know but its what the paper says
             
             # put it all together
@@ -174,7 +175,7 @@ class Sheepdog(Agent):
         
         # print(f"movement: {movement}")
         
-        if np.linalg.norm(movement) > 0:
+        if norm(movement) > 0:
             # print("movement change")
             # self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
             self.velocity = movement
