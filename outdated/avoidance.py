@@ -101,6 +101,6 @@ def avoid(self, p, v):
                 
             steer_away += turn # add turn
             
-            # steer_away = steer_away / np.linalg.norm(steer_away)
+            # steer_away = steer_away / norm(steer_away)
         
         return steer_away

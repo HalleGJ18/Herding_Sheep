@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from numpy.linalg import norm
 from numpy import random
 
 from sheep import Sheep
@@ -66,7 +67,7 @@ class Flock:
                 if sheep.id == other.id:
                     self.dists[sheep.id][other.id] = 0  # zero distance from self, remember to account for this later
                 else:
-                    self.dists[sheep.id][other.id] = np.linalg.norm(other.pos - sheep.pos)
+                    self.dists[sheep.id][other.id] = norm(other.pos - sheep.pos)
         # print(self.dists)
 
     def calc_distances_sheepdogs(self):
@@ -96,7 +97,7 @@ class Flock:
         # r is radius
         found_sheep = []
         for s in self.flock:
-            if np.linalg.norm(s.pos - p) <= r:
+            if norm(s.pos - p) <= r:
                 found_sheep.append(s)
         return np.array(found_sheep)
 

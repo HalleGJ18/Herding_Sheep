@@ -1,5 +1,6 @@
 import tkinter as tk
 import numpy as np
+from numpy.linalg import norm
 from numpy import random
 import math
 
@@ -81,7 +82,7 @@ class Sheep(Agent):
             too_close = 0
             if dist <= self.personal_space:
                 d = self.pos - s.pos
-                d = d/np.linalg.norm(d)
+                d = d/norm(d)
                 total_separation += d
                 too_close += 1
                 
@@ -103,18 +104,18 @@ class Sheep(Agent):
         else:
             sep_vector = total_separation
         
-        if np.linalg.norm(sep_vector) != 0:
-            sep_vector = sep_vector/np.linalg.norm(sep_vector)
+        if norm(sep_vector) != 0:
+            sep_vector = sep_vector/norm(sep_vector)
 
 
         align_vector = (total_alignment/len(nearby)) - self.velocity
-        if np.linalg.norm(align_vector) != 0:
-            align_vector = align_vector/np.linalg.norm(align_vector)
+        if norm(align_vector) != 0:
+            align_vector = align_vector/norm(align_vector)
 
 
         cohes_vector = (total_cohesion/len(nearby)) - self.pos
-        if np.linalg.norm(cohes_vector) != 0:
-            cohes_vector = cohes_vector/np.linalg.norm(cohes_vector)
+        if norm(cohes_vector) != 0:
+            cohes_vector = cohes_vector/norm(cohes_vector)
 
         # print(self.id, sep_vector, align_vector, cohes_vector)
 
@@ -133,9 +134,9 @@ class Sheep(Agent):
         if self.dog_in_range:
 
             # get unit vector away from dog avg pos
-            # away = self.dog_in_range_avg / np.linalg.norm(self.dog_in_range_avg) # TODO: scale this by dogs_in_range/n_dogs
+            # away = self.dog_in_range_avg / norm(self.dog_in_range_avg) # TODO: scale this by dogs_in_range/n_dogs
             away = self.pos - self.dog_in_range_avg
-            away = away/np.linalg.norm(away)
+            away = away/norm(away)
             # print(f"away: {away}")
             velocity_changes += (away*dog_push_weight)
 

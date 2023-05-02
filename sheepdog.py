@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import random
+from numpy.linalg import norm
 import math
 
 from agent import Agent
@@ -60,11 +61,11 @@ class Sheepdog(Agent):
     def calc_movement_to_drive_point(self):  #TODO: check the numbers this returns are what we want
         # v = self.sheep_centre - self.target
         v = self.target - self.sheep_centre
-        v = v/np.linalg.norm(v)
+        v = v/norm(v)
         v = self.sheep_centre - (v * self.maintain_dist)
         # print("v: {}".format(v))
         move = v - self.pos
-        move = move/np.linalg.norm(move)
+        move = move/norm(move)
         # print("move towards push point")
         # print(f"d move: {move}")
         return move
@@ -74,11 +75,11 @@ class Sheepdog(Agent):
         v = np.array([0.0, 0.0])
         for dog in nearby_dogs:
             dir = (self.pos - dog.pos)
-            v += (dir/(np.linalg.norm(dir)**3))
+            v += (dir/(norm(dir)**3))
         # v = v / len(nearby_dogs)
         v = v / len(nearby_dogs)
-        # if np.linalg.norm(v) != 0:
-        #     v = v / np.linalg.norm(v)
+        # if norm(v) != 0:
+        #     v = v / norm(v)
         # print(v)
         return v
          
@@ -102,11 +103,11 @@ class Sheepdog(Agent):
         collect_point = self.furthest_sheep.pos - self.sheep_centre
         # unit vector it, times collect_dist
         # translate to behind sheep
-        collect_point = self.furthest_sheep.pos + (collect_point/np.linalg.norm(collect_point) * self.collect_dist)
+        collect_point = self.furthest_sheep.pos + (collect_point/norm(collect_point) * self.collect_dist)
         # get vector collect_point - dog.pos
         to_collect = collect_point - self.pos
         # unit vector it?
-        to_collect = to_collect/np.linalg.norm(to_collect)
+        to_collect = to_collect/norm(to_collect)
         return to_collect
 
     # calc line from target to flock centre of mass
@@ -161,7 +162,7 @@ class Sheepdog(Agent):
         """avoid impassable obstacles"""
         movement += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 20)
         
-        if np.linalg.norm(movement) > 0:
+        if norm(movement) > 0:
             # print("movement change")
             self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
 

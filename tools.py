@@ -1,8 +1,9 @@
 import numpy as np
+from numpy.linalg import norm
 
 # get magnitude of a given vector
 def vector_magnitude(v):
-    return np.linalg.norm(v)
+    return norm(v)
 
 # get the unit vector version of a given vector
 def unit_vector(v):

@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.linalg import norm
 from numpy import random
 from numpy import arcsin, arccos, arctan, sin, cos, tan, pi
 import math
@@ -204,7 +205,7 @@ class Obstacle:
                     y_diff = p[1]-(self.pos[1]+self.height)
                     turn[1] += y_diff
             
-            # steer_away = steer_away / np.linalg.norm(steer_away)
+            # steer_away = steer_away / norm(steer_away)
         turn *= self.avoid_strength
         return turn
 

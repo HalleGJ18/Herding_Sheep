@@ -23,7 +23,7 @@ import IPython
 
 def normalize(v):
     """ Normalize a vector to length 1. """
-    norm = np.linalg.norm(v)
+    norm = norm(v)
     if norm == 0: 
         return v
     return v / norm

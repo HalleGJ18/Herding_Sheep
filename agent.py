@@ -1,5 +1,6 @@
 import tkinter as tk
 import numpy as np
+from numpy.linalg import norm
 from numpy import random
 import math
 from environment import Environment 
@@ -18,7 +19,7 @@ class Agent:
     next_velocity = np.array([10.0,10.0])
     
     # speed = magnitude of velocity
-    speed = np.linalg.norm(velocity)
+    speed = norm(velocity)
 
     #
     default_max_speed = 1
@@ -84,7 +85,7 @@ class Agent:
         y = random.randint(0,lim) - half + random.rand()
         # print("x: {}, y: {}".format(x,y))
         v = np.array([x,y])
-        v = v / np.linalg.norm(v)
+        v = v / norm(v)
         return v
 
     def calc_acceleration(self):
@@ -94,12 +95,12 @@ class Agent:
         # v + a
         # keep new v under max spd
         self.velocity = np.add(self.velocity, self.acceleration)  # why does this line make everything work???
-        self.speed = np.linalg.norm(self.velocity)
+        self.speed = norm(self.velocity)
         # if self.speed > self.max_speed:
             # print("yup")
         if self.speed != 0: # > max_speed, cap it
             self.velocity = self.velocity / self.speed * self.max_speed
-            self.speed = np.linalg.norm(self.velocity)
+            self.speed = norm(self.velocity)
             # self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
             # self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
 
