@@ -16,14 +16,14 @@ class Sheep(Agent):
 
     velocity = np.array([0.1, 0.1])
 
-    threat_range = 45 #45
+    threat_range = 65 #45
 
     max_speed = 1 #1
     
     n_closest = 100
     
-    default_vision_range = 20
-    vision_range = 20
+    default_vision_range = 40 #20
+    vision_range = 40
     
     too_close = False
     
@@ -175,7 +175,7 @@ class Sheep(Agent):
         # self.calc_velocity()      # what is this doing here?
         
         """avoid impassable obstacles"""
-        velocity_changes += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 20)
+        velocity_changes += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 60)
 
         noise = self.rand_velocity()
 

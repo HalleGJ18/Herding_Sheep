@@ -7,13 +7,100 @@ control_c() {
 
 trap control_c SIGINT
 
-for k in {1..2}
-    do
-        # echo $i
-        # echo $(($j*50))
-        # vr=$(($j*50))
-        folder="fit/sheep_20vr_1dog_250vr"
-        echo $folder
-        python main.py 1 250 $folder
-    done
-    python get_metrics.py $folder
+for i in {1..5}
+do
+    vr=$(($i*50))
+    for j in {1..5}
+        do
+            folder="fit/none/1dog_${vr}vr"
+            echo $folder
+            python main.py 1 $vr $folder 75 none
+        done
+        python get_metrics.py $folder
+done
+
+for i in {1..5}
+do
+    vr=$(($i*50))
+    for j in {1..5}
+        do
+            folder="fit/none/3dog_${vr}vr"
+            echo $folder
+            python main.py 3 $vr $folder 75 none
+        done
+        python get_metrics.py $folder
+done
+
+for i in {1..5}
+do
+    vr=$(($i*50))
+    for j in {1..5}
+        do
+            folder="fit/fog/1dog_${vr}vr"
+            echo $folder
+            python main.py 1 $vr $folder 75 f
+        done
+        python get_metrics.py $folder
+done
+
+for i in {1..5}
+do
+    vr=$(($i*50))
+    for j in {1..5}
+        do
+            folder="fit/fog/3dog_${vr}vr"
+            echo $folder
+            python main.py 3 $vr $folder 75 f
+        done
+        python get_metrics.py $folder
+done
+
+
+for i in {1..5}
+do
+    vr=$(($i*50))
+    for j in {1..5}
+        do
+            folder="fit/mud/1dog_${vr}vr"
+            echo $folder
+            python main.py 1 $vr $folder 75 m
+        done
+        python get_metrics.py $folder
+done
+
+for i in {1..5}
+do
+    vr=$(($i*50))
+    for j in {1..5}
+        do
+            folder="fit/mud/3dog_${vr}vr"
+            echo $folder
+            python main.py 3 $vr $folder 75 m
+        done
+        python get_metrics.py $folder
+done
+
+
+for i in {1..5}
+do
+    vr=$(($i*50))
+    for j in {1..5}
+        do
+            folder="fit/hedge/1dog_${vr}vr"
+            echo $folder
+            python main.py 1 $vr $folder 75 h
+        done
+        python get_metrics.py $folder
+done
+
+for i in {1..5}
+do
+    vr=$(($i*50))
+    for j in {1..5}
+        do
+            folder="fit/hedge/3dog_${vr}vr"
+            echo $folder
+            python main.py 3 $vr $folder 75 h
+        done
+        python get_metrics.py $folder
+done

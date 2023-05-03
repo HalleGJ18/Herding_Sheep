@@ -1,3 +1,5 @@
+""" python main.py n_dogs dog_vr folder n_sheep obstacle_type"""
+
 import tkinter as tk
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,10 +31,11 @@ dog_data = pd.DataFrame(columns=['dog_x_positions', 'dog_y_positions'])
 # instantiate environment
 ENV_HEIGHT = 250 # 150 # 750
 ENV_WIDTH = 250
-env = Environment(ENV_HEIGHT, ENV_WIDTH)
+env = Environment(ENV_HEIGHT, ENV_WIDTH, sys.argv[5
+])
 
 # generate sheep
-n_sheep = 100 # num of sheep # 100
+n_sheep = int(sys.argv[4]) # num of sheep # 100
 flock = Flock(n_sheep, env)
 
 # generate sheepdog(s)
@@ -210,11 +213,12 @@ env_data.to_csv(env_csv_name, encoding='utf-8')
 
 obstacle_csv_name = folder+"/results/obstacle_data"+str(i).zfill(3)+".csv"
 if len(env.obstacles) > 0:
-    obstacle_data = pd.DataFrame(columns=['x', 'y', 'width', 'height', 'color'])
+    obstacle_data = pd.DataFrame(columns=['x', 'y', 'width', 'height', 'colour'])
     index = 0
     for obstacle in env.obstacles:
         a,b,c,d,e = obstacle.export()
         obstacle_data.loc[index] = [a,b,c,d,e]
+        index +=1
         
     obstacle_data.to_csv(obstacle_csv_name,encoding='utf-8')
     

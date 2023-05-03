@@ -73,7 +73,7 @@ class Obstacle:
         return patches.Rectangle((self.pos[0], self.pos[1]), self.width, self.height, linewidth=1, color=self.colour)
 
     def is_inside(self, p):
-        if (p[0]>=self.pos[0] and p[0]<=self.pos[0]+self.width) and (p[1]>=self.pos[1] and p[1]<=self.pos[1]+self.height):
+        if (p[0]>=self.pos[0]-3 and p[0]<=self.pos[0]+self.width+3) and (p[1]>=self.pos[1]-3 and p[1]<=self.pos[1]+self.height+3):
             return True
         else:
             return False

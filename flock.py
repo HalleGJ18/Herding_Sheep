@@ -17,7 +17,7 @@ class Flock:
     dog_push_weight = 1
     
     default_personal_space = 2
-    default_threat_range = 45 #45 #65
+    default_threat_range = 65 #45 #65
     default_max_speed = 1
     
     success = False
