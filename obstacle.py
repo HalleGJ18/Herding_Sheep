@@ -75,7 +75,7 @@ class Obstacle:
             return False
         
     def is_near(self,p):
-        if (p[0]>=self.pos[0]-self.near_range and p[0]<=self.pos[0]+self.width+self.near_range) and (p[1]>=self.pos[1]-self.near_range and p[1]<=self.pos[1]+self.height+self.near_range):
+        if (p[0]>=self.pos[0]-self.near_range-3 and p[0]<=self.pos[0]+self.width+self.near_range+3) and (p[1]>=self.pos[1]-self.near_range-3 and p[1]<=self.pos[1]+self.height+self.near_range+3):
             return True
         else:
             return False

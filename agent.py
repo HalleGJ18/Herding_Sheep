@@ -61,8 +61,8 @@ class Agent:
         before = len(nearby_agents)
         nearby_agents = [a for a in nearby_agents if self.env.is_obstacle_blocking_vision(self.pos, a.pos) == False]
         after = len(nearby_agents)
-        if before != after:
-            print(f"before: {before}, after: {after}")
+        # if before != after:
+        #     print(f"before: {before}, after: {after}")
         # check nearby agents
         # nearby_ids = [i.id for i in nearby_agents]
         # print("self.id: {}, nearby: {}".format(self.id, nearby_ids))

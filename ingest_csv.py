@@ -7,17 +7,27 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import math
 
+import os
+
 # SHEEP_CSV = "sheep_data3.csv"
 # DOG_CSV = "dog_data3.csv"
 
 # sheep_data = pd.read_csv(SHEEP_CSV, sep="|", index_col=0)
 # dog_data = pd.read_csv(DOG_CSV, sep="|", index_col=0)
 
-DATA_CSV_NAME = "output/results/data006.csv"
-ENV_CSV_NAME = "output/results/env_data006.csv"
+dir = "output"
+num = "042"
+
+DATA_CSV_NAME = dir+"/results/data"+num+".csv"
+ENV_CSV_NAME = dir+"/results/env_data"+num+".csv"
+OBS_CSV_NAME = dir+"/results/obstacle_data"+num+".csv"
 
 data = pd.read_csv(DATA_CSV_NAME, sep="|", index_col=0)
 env_data = pd.read_csv(ENV_CSV_NAME, sep=",", index_col=0)
+
+obs_data = []
+if os.path.exists(OBS_CSV_NAME):
+    obs_data = pd.read_csv(OBS_CSV_NAME, sep=",", index_col=0)
 
 # print(sheep_data)
 # print(dog_data)
@@ -76,10 +86,13 @@ ax.set_xlim([0, ENV_WIDTH])
 ax.set_ylim([0, ENV_HEIGHT])
 scat = ax.set_axisbelow(True)
 scat = ax.grid()
-# if len(env.obstacles) > 0:
-#     for obstacle in env.obstacles:
-#         rect = obstacle.draw()
-#         scat = ax.add_patch(rect)
+if len(obs_data) > 0:
+    for i in range (len(obs_data)):
+        rect = patches.Rectangle((obs_data.loc[i, 'x'], obs_data.loc[i, 'y']), obs_data.loc[i, 'width'], obs_data.loc[i, 'height'], linewidth=1, color=obs_data.loc[i, 'colour'])
+        scat = ax.add_patch(rect)
+    # for index, row in obs_data.iterrows():
+    #     rect = patches.Rectangle((row['x'], row['y']), row['width'], row['height'], linewidth=1, color=row['colour'])
+    #     scat = ax.add_patch(rect)
 rect = patches.Rectangle((target[0]-target_range, target[1]-target_range), target_range*2, target_range*2, linewidth=1, edgecolor='b', facecolor='none')
 scat = ax.add_patch(rect)
 rect = patches.Rectangle((target[0]-target_endzone, target[1]-target_endzone), target_endzone*2, target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')	
@@ -101,10 +114,13 @@ def animate(time):
     ax.set_ylim([0, ENV_HEIGHT])
     scat = ax.set_axisbelow(True)
     scat = ax.grid()
-    # if len(env.obstacles) > 0:
-    #     for obstacle in env.obstacles:
-    #         rect = obstacle.draw()
-    #         scat = ax.add_patch(rect)
+    if len(obs_data) > 0:
+        for i in range (len(obs_data)):
+            rect = patches.Rectangle((obs_data.loc[i, 'x'], obs_data.loc[i, 'y']), obs_data.loc[i, 'width'], obs_data.loc[i, 'height'], linewidth=1, color=obs_data.loc[i, 'colour'])
+            scat = ax.add_patch(rect)
+        # for index, row in obs_data.iterrows():
+        #     rect = patches.Rectangle((row['x'], row['y']), row['width'], row['height'], linewidth=1, color=row['colour'])
+        #     scat = ax.add_patch(rect)
     rect = patches.Rectangle((target[0]-target_range, target[1]-target_range), target_range*2, target_range*2, linewidth=1, edgecolor='b', facecolor='none')
     scat = ax.add_patch(rect)
     rect = patches.Rectangle((target[0]-target_endzone, target[1]-target_endzone), target_endzone*2, target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')

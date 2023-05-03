@@ -105,8 +105,9 @@ class Pack:
         for dog in self.sheepdogs:
             dog.set_flock_personal_space(d)
             dog.stop_dist = self.flock_personal_space * 3
-            dog.maintain_dist = self.flock_personal_space * (n ** (2/3)) 
-            #dog.maintain_dist = self.flock_personal_space * math.sqrt(n)
+            # dog.maintain_dist = self.flock_personal_space * (n ** (2/3)) 
+            dog.maintain_dist = self.flock_personal_space * math.sqrt(n)
+            print(dog.maintain_dist)
             dog.collect_dist = self.flock_personal_space 
     
     def apply_obstacle_effects(self):

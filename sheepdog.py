@@ -62,10 +62,10 @@ class Sheepdog(Agent):
         # v = self.sheep_centre - self.target
         v = self.target - self.sheep_centre
         v = v/norm(v)
-        v = self.sheep_centre - (v * self.maintain_dist)
+        p = self.sheep_centre - (v * self.maintain_dist)
         # print("v: {}".format(v))
-        move = v - self.pos
-        move = move/norm(move)
+        move = p - self.pos
+        # move = move/norm(move)
         # print("move towards push point")
         # print(f"d move: {move}")
         return move
@@ -160,11 +160,12 @@ class Sheepdog(Agent):
             
             
         """avoid impassable obstacles"""
-        movement += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 20)
+        movement += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 100)
         
         if norm(movement) > 0:
             # print("movement change")
-            self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
+            # self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
+            self.velocity = 0.5*self.velocity + movement
 
         # print(self.velocity)
 
