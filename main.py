@@ -224,54 +224,54 @@ if len(env.obstacles) > 0:
     
 
 # generate animated plot
-time = 0
+# time = 0
 
-fig = plt.Figure(figsize=(6, 6), dpi=150)
-ax = fig.add_subplot()
-ax.set_xlim([0, ENV_WIDTH])
-ax.set_ylim([0, ENV_HEIGHT])
-scat = ax.set_axisbelow(True)
-scat = ax.grid()
-if len(env.obstacles) > 0:
-    for obstacle in env.obstacles:
-        rect = obstacle.draw()
-        scat = ax.add_patch(rect)
-rect = patches.Rectangle((env.target[0]-env.target_range, env.target[1]-env.target_range), env.target_range*2, env.target_range*2, linewidth=1, edgecolor='b', facecolor='none')
-scat = ax.add_patch(rect)
-rect = patches.Rectangle((env.target[0]-env.target_endzone, env.target[1]-env.target_endzone), env.target_endzone*2, env.target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')
-scat = ax.add_patch(rect)
-scat = ax.scatter(sheep_data.loc[0]["sheep_x_positions"], sheep_data.loc[0]["sheep_y_positions"], c='k', s=1)
-scat = ax.scatter(dog_data.loc[0]["dog_x_positions"], dog_data.loc[0]["dog_y_positions"], c='r', s=1)
-scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
-scat = ax.text(0, ENV_HEIGHT, "time=0")
-scatter = FigureCanvasTkAgg(fig, window)
-scatter.get_tk_widget().pack()
+# fig = plt.Figure(figsize=(6, 6), dpi=150)
+# ax = fig.add_subplot()
+# ax.set_xlim([0, ENV_WIDTH])
+# ax.set_ylim([0, ENV_HEIGHT])
+# scat = ax.set_axisbelow(True)
+# scat = ax.grid()
+# if len(env.obstacles) > 0:
+#     for obstacle in env.obstacles:
+#         rect = obstacle.draw()
+#         scat = ax.add_patch(rect)
+# rect = patches.Rectangle((env.target[0]-env.target_range, env.target[1]-env.target_range), env.target_range*2, env.target_range*2, linewidth=1, edgecolor='b', facecolor='none')
+# scat = ax.add_patch(rect)
+# rect = patches.Rectangle((env.target[0]-env.target_endzone, env.target[1]-env.target_endzone), env.target_endzone*2, env.target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')
+# scat = ax.add_patch(rect)
+# scat = ax.scatter(sheep_data.loc[0]["sheep_x_positions"], sheep_data.loc[0]["sheep_y_positions"], c='k', s=1)
+# scat = ax.scatter(dog_data.loc[0]["dog_x_positions"], dog_data.loc[0]["dog_y_positions"], c='r', s=1)
+# scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
+# scat = ax.text(0, ENV_HEIGHT, "time=0")
+# scatter = FigureCanvasTkAgg(fig, window)
+# scatter.get_tk_widget().pack()
 
 
-def animate(time):
-    time += 1
-    if time > T_LIMIT: # used to be == ???
-        time = 0
-    ax.clear()
-    ax.set_xlim([0, ENV_WIDTH])
-    ax.set_ylim([0, ENV_HEIGHT])
-    scat = ax.set_axisbelow(True)
-    scat = ax.grid()
-    if len(env.obstacles) > 0:
-        for obstacle in env.obstacles:
-            rect = obstacle.draw()
-            scat = ax.add_patch(rect)
-    rect = patches.Rectangle((env.target[0]-env.target_range, env.target[1]-env.target_range), env.target_range*2, env.target_range*2, linewidth=1, edgecolor='b', facecolor='none')
-    scat = ax.add_patch(rect)
-    rect = patches.Rectangle((env.target[0]-env.target_endzone, env.target[1]-env.target_endzone), env.target_endzone*2, env.target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')
-    scat = ax.add_patch(rect)
-    scat = ax.scatter(sheep_data.loc[time]["sheep_x_positions"], sheep_data.loc[time]["sheep_y_positions"], c='k', s=1)
-    scat = ax.scatter(dog_data.loc[time]["dog_x_positions"], dog_data.loc[time]["dog_y_positions"], c='r', s=1)
-    scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
-    scat = ax.text(0, ENV_HEIGHT, "time="+str(time))
-    return scat
+# def animate(time):
+#     time += 1
+#     if time > T_LIMIT: # used to be == ???
+#         time = 0
+#     ax.clear()
+#     ax.set_xlim([0, ENV_WIDTH])
+#     ax.set_ylim([0, ENV_HEIGHT])
+#     scat = ax.set_axisbelow(True)
+#     scat = ax.grid()
+#     if len(env.obstacles) > 0:
+#         for obstacle in env.obstacles:
+#             rect = obstacle.draw()
+#             scat = ax.add_patch(rect)
+#     rect = patches.Rectangle((env.target[0]-env.target_range, env.target[1]-env.target_range), env.target_range*2, env.target_range*2, linewidth=1, edgecolor='b', facecolor='none')
+#     scat = ax.add_patch(rect)
+#     rect = patches.Rectangle((env.target[0]-env.target_endzone, env.target[1]-env.target_endzone), env.target_endzone*2, env.target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')
+#     scat = ax.add_patch(rect)
+#     scat = ax.scatter(sheep_data.loc[time]["sheep_x_positions"], sheep_data.loc[time]["sheep_y_positions"], c='k', s=1)
+#     scat = ax.scatter(dog_data.loc[time]["dog_x_positions"], dog_data.loc[time]["dog_y_positions"], c='r', s=1)
+#     scat = ax.scatter(pack.target[0], pack.target[1], marker="x", c="b")
+#     scat = ax.text(0, ENV_HEIGHT, "time="+str(time))
+#     return scat
 
-ani = animation.FuncAnimation(fig, animate, repeat=False, frames=T_LIMIT, interval=60)
+# ani = animation.FuncAnimation(fig, animate, repeat=False, frames=T_LIMIT, interval=60)
 
-# main loop
-window.mainloop()
+# # main loop
+# window.mainloop()

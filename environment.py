@@ -53,10 +53,9 @@ class Environment:
             print(o.to_string())
     
     def init_obstacles_hedge(self):
-        self.obstacles.append(Obstacle(0, 2, [100,150], 50, 30))
-        self.obstacles.append(Obstacle(1, 2, [25,15], 20, 40))
-        self.obstacles.append(Obstacle(2, 2, [200,40], 20, 80))
-        self.obstacles.append(Obstacle(2, 2, [150,210], 70, 30))
+        self.obstacles.append(Obstacle(0, 2, [80,165], 40, 10))
+        self.obstacles.append(Obstacle(1, 2, [55,45], 10, 40))
+        self.obstacles.append(Obstacle(2, 2, [170,70], 10, 25))
         
         for o in self.obstacles:
             print(o.to_string())
