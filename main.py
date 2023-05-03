@@ -31,8 +31,7 @@ dog_data = pd.DataFrame(columns=['dog_x_positions', 'dog_y_positions'])
 # instantiate environment
 ENV_HEIGHT = 250 # 150 # 750
 ENV_WIDTH = 250
-env = Environment(ENV_HEIGHT, ENV_WIDTH, sys.argv[5
-])
+env = Environment(ENV_HEIGHT, ENV_WIDTH, sys.argv[5])
 
 # generate sheep
 n_sheep = int(sys.argv[4]) # num of sheep # 100
@@ -62,7 +61,7 @@ pack.set_stop_dist(flock.default_personal_space, n_sheep)
 flock_rad = flock.default_personal_space * (n_sheep ** (2/3))
 # print(flock_rad)
 
-T_LIMIT = 7000 # num of time steps
+T_LIMIT = 6000 # num of time steps
 
 success = False
 

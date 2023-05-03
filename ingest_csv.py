@@ -15,8 +15,34 @@ import os
 # sheep_data = pd.read_csv(SHEEP_CSV, sep="|", index_col=0)
 # dog_data = pd.read_csv(DOG_CSV, sep="|", index_col=0)
 
-dir = "output"
-num = "033"
+# dir = "fit/hedge/3dog_100vr"
+
+# dir = "fit/sheep_20vr_3dog_100vr"
+# dir = "fit/hedge/3dog_100vr"
+
+# dir = "fit/mud/3dog_100vr"
+
+
+"""basic fit example"""
+# dir = "fit/none/1dog_200vr" # 001
+num = "001"
+
+""""""
+
+"""fog example"""
+# dir = "examples"
+# num = "020"
+
+"""empty env example"""
+
+
+"""mud example"""
+# num = "001"
+
+"""hedge example"""
+dir = "fit/hedge/3dog_100vr"
+num = "001"
+
 
 DATA_CSV_NAME = dir+"/results/data"+num+".csv"
 ENV_CSV_NAME = dir+"/results/env_data"+num+".csv"

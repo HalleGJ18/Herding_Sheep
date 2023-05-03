@@ -175,7 +175,7 @@ class Sheep(Agent):
         # self.calc_velocity()      # what is this doing here?
         
         """avoid impassable obstacles"""
-        velocity_changes += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 60)
+        velocity_changes += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
 
         noise = self.rand_velocity()
 
@@ -189,7 +189,7 @@ class Sheep(Agent):
                 if rand_chance <= 0.05: # random chance of slight movement
                     # print("rand move, {}".format(self.id))
                     # print(noise)
-                    self.velocity = noise
+                    self.velocity = noise + (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
                 else:
                     self.velocity = np.array([0.0, 0.0])
         # elif (self.dog_in_range == True) and (len(nearby_sheep) > 0):
