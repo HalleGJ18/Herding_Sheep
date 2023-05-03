@@ -1,5 +1,4 @@
 import numpy as np
-from numpy.linalg import norm
 from numpy import random
 from numpy import arcsin, arccos, arctan, sin, cos, tan, pi
 import math
@@ -14,7 +13,7 @@ class Obstacle:
     height = 5
 
     # nearby boundary
-    near_range = 25
+    near_range = 20
     
     avoid_strength = 2
 
@@ -29,6 +28,11 @@ class Obstacle:
     colour = "grey"
     
     def __init__(self, id, t, p, w, h):
+        # id is obs id, manually increment
+        # t is obs type (0,1,2)
+        # p is bottom left corner
+        # w is width
+        # h is height
         self.id = id
         self.type = t
         self.pos = np.array(p)
@@ -69,13 +73,13 @@ class Obstacle:
         return patches.Rectangle((self.pos[0], self.pos[1]), self.width, self.height, linewidth=1, color=self.colour)
 
     def is_inside(self, p):
-        if (p[0]>=self.pos[0] and p[0]<=self.pos[0]+self.width) and (p[1]>=self.pos[1] and p[1]<=self.pos[1]+self.height):
+        if (p[0]>=self.pos[0]-3 and p[0]<=self.pos[0]+self.width+3) and (p[1]>=self.pos[1]-3 and p[1]<=self.pos[1]+self.height+3):
             return True
         else:
             return False
         
     def is_near(self,p):
-        if (p[0]>=self.pos[0]-self.near_range-3 and p[0]<=self.pos[0]+self.width+self.near_range+3) and (p[1]>=self.pos[1]-self.near_range-3 and p[1]<=self.pos[1]+self.height+self.near_range+3):
+        if (p[0]>=self.pos[0]-self.near_range and p[0]<=self.pos[0]+self.width+self.near_range) and (p[1]>=self.pos[1]-self.near_range and p[1]<=self.pos[1]+self.height+self.near_range):
             return True
         else:
             return False
@@ -94,9 +98,9 @@ class Obstacle:
         x1, y1 = line[0]
         x2, y2 = line[1]
         corner = self.pos
-        x_min, y_min = corner
-        width = self.width 
-        height = self.height
+        x_min, y_min = corner -1
+        width = self.width + 1
+        height = self.height + 1
         
 
         # Calculate the values of p and q for the line
@@ -175,8 +179,12 @@ class Obstacle:
                 
                 # if will collide, scale steering 
                 if collide_xmin == True:
-                    x_diff = self.pos[0]-p[0]
-                    turn[0] -= x_diff   
+                    # x_diff = self.pos[0]-p[0]
+                    # turn[0] -= x_diff   
+
+                    turn += reflect_vector(v, [-1.0, 0.0])
+                    # print(turn)
+                    
             
             elif p[0]<=self.pos[0]+self.width+self.near_range: # to left of x max
                 # print("approach x max")
@@ -184,26 +192,30 @@ class Obstacle:
                 
                 # if will collide, scale steering 
                 if collide_xmax == True:
-                    x_diff = p[0]-(self.pos[0]+self.width)
-                    turn[0] += x_diff
-
+                    # x_diff = p[0]-(self.pos[0]+self.width)
+                    # turn[0] += x_diff
+                    turn += reflect_vector(v, [1.0, 0.0])
+                    # print(turn)
 
             if p[1]>=self.pos[1]-self.near_range: # above y min
                 # print("approach y min")
                 collide_ymin, x_pred = calc_collision_in_y(p, v, self.pos[1], self.pos[0], self.pos[0]+self.width)
                 
                 if collide_ymin == True:
-                    y_diff = self.pos[1]-p[1]
-                    turn[1] -= y_diff
-                    
+                    # y_diff = self.pos[1]-p[1]
+                    # turn[1] -= y_diff
+                    turn += reflect_vector(v, [0.0, -1.0])
+                    # print(turn)
             
             elif p[1]<=self.pos[1]+self.height+self.near_range: # below y max
                 # print("approach y max")
                 collide_ymax, x_pred = calc_collision_in_y(p, v, self.pos[1]+self.height, self.pos[0], self.pos[0]+self.width)
                 
                 if collide_ymax == True:
-                    y_diff = p[1]-(self.pos[1]+self.height)
-                    turn[1] += y_diff
+                    # y_diff = p[1]-(self.pos[1]+self.height)
+                    # turn[1] += y_diff
+                    turn += reflect_vector(v, [0.0, 1.0])
+                    # print(turn)
             
             # steer_away = steer_away / norm(steer_away)
         turn *= self.avoid_strength
@@ -254,3 +266,9 @@ def calc_collision_in_y(pos, vel, y, xmin, xmax):
         return True, x_predict
 
     return False, x_predict
+
+# helper func to reflect a vector
+def reflect_vector(vector, normal):
+    dot_product = 2 * (vector[0] * normal[0] + vector[1] * normal[1])
+    reflected_vector = [vector[0] - dot_product * normal[0], vector[1] - dot_product * normal[1]]
+    return reflected_vector

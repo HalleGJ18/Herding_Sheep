@@ -31,7 +31,7 @@ class Environment:
         self.yMax = self.height - self.bound_inset
 
         # self.init_obstacles()
-        
+
         if layout == "h":
             # hedge
             self.init_obstacles_hedge()
@@ -40,8 +40,6 @@ class Environment:
             self.init_obstacles_fog()
         elif layout == "m":
             self.init_obstacles_mud()
-            
-            
 
     def init_obstacles(self):
         self.obstacles.append(Obstacle(0, 2, [100,150], 100, 30))
@@ -51,11 +49,12 @@ class Environment:
 
         for o in self.obstacles:
             print(o.to_string())
-    
+
     def init_obstacles_hedge(self):
-        self.obstacles.append(Obstacle(0, 2, [80,165], 40, 10))
-        self.obstacles.append(Obstacle(1, 2, [55,45], 10, 40))
-        self.obstacles.append(Obstacle(2, 2, [170,70], 10, 25))
+        self.obstacles.append(Obstacle(0, 2, [60,165], 10, 10))
+        self.obstacles.append(Obstacle(1, 2, [55,45], 10, 10))
+        self.obstacles.append(Obstacle(2, 2, [170,70], 10, 40))
+        self.obstacles.append(Obstacle(3, 2, [140,150], 20, 10))
         
         for o in self.obstacles:
             print(o.to_string())
@@ -76,7 +75,6 @@ class Environment:
         
         for o in self.obstacles:
             print(o.to_string())
-        
 
     def check_valid_position(self, p, v): # p : np.array    v : np.array
 
@@ -88,13 +86,29 @@ class Environment:
 
             if p[0] < self.xMin:
                 avoid_amount[0] += self.edge_avoid_factor
+                # if v[1] >= 0:
+                #     avoid_amount[1] += 1
+                # else:
+                #     avoid_amount[1] -= 1
             elif p[0] > self.xMax:
                 avoid_amount[0] -= self.edge_avoid_factor
+                # if v[1] >= 0:
+                #     avoid_amount[1] += 1
+                # else:
+                #     avoid_amount[1] -= 1
 
             if p[1] < self.yMin:
                 avoid_amount[1] += self.edge_avoid_factor
+                # if v[0] >= 0:
+                #     avoid_amount[0] += 1
+                # else:
+                #     avoid_amount[0] -= 1
             elif p[1] > self.yMax:
                 avoid_amount[1] -= self.edge_avoid_factor
+                # if v[0] >= 0:
+                #     avoid_amount[0] += 1
+                # else:
+                #     avoid_amount[0] -= 1
 
         # check obstacles
 
@@ -198,7 +212,7 @@ class Environment:
                 if obstacle.reduce_vision:
                     if obstacle.is_inside(pos1) != obstacle.is_inside(pos2):
                         return True
-                    elif (obstacle.is_inside(pos1) == False and obstacle.is_inside(pos2) == False) and obstacle.line_rect_intersect([pos1,pos2]):
+                    elif ((obstacle.is_inside(pos1) == False) and ((obstacle.is_inside(pos2) == False))) and obstacle.line_rect_intersect([pos1,pos2]):
                         return True
         return False
     
