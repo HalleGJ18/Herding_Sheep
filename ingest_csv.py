@@ -23,25 +23,38 @@ import os
 # dir = "fit/mud/3dog_100vr"
 
 
-"""basic fit example"""
-# dir = "fit/none/1dog_200vr" # 001
-num = "001"
+dir = "examples"
 
-""""""
+# dir = "fit/sheep_20vr_2dog_200vr"
+# num = "005"
+
+# 3dog_50vr
+# 10 is ok
+# 11 is ok
+
 
 """fog example"""
 # dir = "examples"
-# num = "020"
+num = "020" # FIT
 
 """empty env example"""
-
-
-"""mud example"""
+# dir = "fit/none/1dog_200vr" # FIT
 # num = "001"
 
+# num = "101" # CT
+# num = "201" # CT, 3 dog empty
+
+
+# dir = "fit/sheep_20vr_2dog_150vr" # shows instability in model
+# num = "002"
+
+"""mud example"""
+# num = "001" # FIT
+# num = "501" # CT
+
 """hedge example"""
-dir = "fit/hedge/3dog_100vr"
-num = "001"
+# dir = "fit/hedge/3dog_100vr"
+# num = "001"
 
 
 DATA_CSV_NAME = dir+"/results/data"+num+".csv"
