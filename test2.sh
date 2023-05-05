@@ -10,7 +10,7 @@ trap control_c SIGINT
 # loop through num of dogs
 for i in {1..5}
 do
-    for j in none h m f
+    for j in none 
     do 
         echo $j $i
         # echo $i

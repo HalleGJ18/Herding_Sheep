@@ -61,7 +61,7 @@ pack.set_stop_dist(flock.default_personal_space, n_sheep)
 flock_rad = flock.default_personal_space * (n_sheep ** (2/3))
 # print(flock_rad)
 
-T_LIMIT = 2500 # num of time steps
+T_LIMIT = 6000 # num of time steps
 
 success = False
 

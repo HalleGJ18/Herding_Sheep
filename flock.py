@@ -56,7 +56,7 @@ class Flock:
         # check if p is valid when obstacles added
         if self.env.check_all_obstacles(p) == False:
             p = self.random_start_pos(xMin, yMin, xMax, yMax)
-            print("reroll start pos")
+            # print("reroll start pos")
         return p
 
     def calc_distances_sheep(self):

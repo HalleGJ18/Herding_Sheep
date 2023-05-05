@@ -178,7 +178,7 @@ class Sheepdog(Agent):
         if norm(movement) > 0:
             # print("movement change")
             # self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
-            self.velocity = movement #+ 0.5*self.velocity 
+            self.velocity = movement #+ 1*self.velocity 
 
         # print(self.velocity)
 

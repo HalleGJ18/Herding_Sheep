@@ -8,6 +8,9 @@ import pandas as pd
 import math
 
 import os
+import sys
+
+num = sys.argv[1]
 
 # SHEEP_CSV = "sheep_data3.csv"
 # DOG_CSV = "dog_data3.csv"
@@ -23,7 +26,7 @@ import os
 # dir = "fit/mud/3dog_100vr"
 
 dir = "output"
-num = "095"
+# num = "005"
 
 
 # dir = "examples"

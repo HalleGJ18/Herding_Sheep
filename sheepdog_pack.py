@@ -44,7 +44,7 @@ class Pack:
         # check if p is valid when obstacles added
         if self.env.check_all_obstacles(p) == False:
             p = self.random_start_pos(xMin, yMin, xMax, yMax)
-            print("reroll start pos")
+            # print("reroll start pos")
         return p
 
     # generate sheepdogs
@@ -123,6 +123,7 @@ class Pack:
             if self.env.is_obstacle_reducing_vision(dog.pos):
                 # print("fog")
                 dog.vision_range = dog.default_vision_range * self.env.vision_reduction_factor
+                # dog.vision_range = self.env.reduced_vision
             else:
                 dog.vision_range = dog.default_vision_range
 
