@@ -160,7 +160,7 @@ class Sheepdog(Agent):
             
             
         """avoid impassable obstacles"""
-        movement += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 100)
+        # movement += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 100)
         
         if norm(movement) > 0:
             # print("movement change")

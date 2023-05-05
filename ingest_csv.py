@@ -17,7 +17,7 @@ import os
 
 # dir = "ct/none/3dog_300vr"
 dir = "output"
-num = "003"
+num = "006"
 
 DATA_CSV_NAME = dir+"/results/data"+num+".csv"
 ENV_CSV_NAME = dir+"/results/env_data"+num+".csv"

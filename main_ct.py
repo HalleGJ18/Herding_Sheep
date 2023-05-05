@@ -94,7 +94,11 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
     for dog in pack.sheepdogs:
         
         sheep_in_range = flock.get_sheep_in_area(dog.pos, dog.vision_range) #TODO: update to use n closest sheep
+        before = len(sheep_in_range)
         sheep_in_range = [a for a in sheep_in_range if env.is_obstacle_blocking_vision(dog.pos, a.pos) == False]
+        after = len(sheep_in_range)
+        # if before != after:
+        #     print(f"before: {before}, after: {after}")
         # sheep_in_range = flock.calc_n_closest_sheep(dog.pos, n_sheep) #20
         # print([i.id for i in sheep_in_range])
         # print(len(sheep_in_range))

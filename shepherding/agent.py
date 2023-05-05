@@ -120,6 +120,12 @@ class Agent:
         # av_am = self.env.check_valid_position(self.pos, self.velocity)
         # if av_am[0] != 0.0 or av_am[1] != 0.0:
         #     print(f"id: {self.id}, avoid amount: {av_am}")
+        
+        avoid = self.env.avoid_impassable_obstacles(self.pos, self.velocity) # ! tweaking this
+        if norm(avoid) > 0:
+            self.velocity += (avoid*1)
+            
+        self.calc_velocity()
 
         self.velocity += self.env.check_valid_position(self.pos, self.velocity)
     
