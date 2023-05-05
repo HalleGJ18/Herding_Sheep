@@ -1,10 +1,11 @@
 import numpy as np
 from numpy import random
+from numpy.linalg import norm
 import math
 
-from sheepdog import Sheepdog
-from flock import Flock
-from environment import Environment
+from sheepdog_ct import Sheepdog
+from shepherding.flock import Flock
+from shepherding.environment import Environment
 
 class Pack:
 
@@ -43,7 +44,7 @@ class Pack:
         # check if p is valid when obstacles added
         if self.env.check_all_obstacles(p) == False:
             p = self.random_start_pos(xMin, yMin, xMax, yMax)
-            print("reroll start pos")
+            # print("reroll start pos")
         return p
 
     # generate sheepdogs
@@ -53,7 +54,8 @@ class Pack:
         dogs_posY = []
         for d in range(n):
             dogs.append(Sheepdog(d, e))
-            dogs[d].set_pos(self.random_start_pos(13,175,27,180))
+            # dogs[d].set_pos(self.random_start_pos(13,175,27,180))
+            dogs[d].set_pos(self.random_start_pos(50,10,200,15))
             dogs[d].set_target(self.target)
             dogs_posX.append(dogs[d].pos[0])
             dogs_posY.append(dogs[d].pos[1])
@@ -63,13 +65,19 @@ class Pack:
         self.sheepdogs_positionsX = np.array(dogs_posX)
         self.sheepdogs_positionsY = np.array(dogs_posY)
 
+    def set_vision_range(self, vr):
+        dog:Sheepdog
+        for dog in self.sheepdogs:
+            dog.vision_range = vr
+            dog.default_vision_range = vr
+
     def calc_distances_dogs(self):
         for dog in self.sheepdogs:
             for other in self.sheepdogs:
                 if dog.id == other.id:
                     self.dists[dog.id][other.id] = 0  # zero distance from self, remember to account for this later
                 else:
-                    self.dists[dog.id][other.id] = np.linalg.norm(other.pos - dog.pos)
+                    self.dists[dog.id][other.id] = norm(other.pos - dog.pos)
 
     # calculate average position
     def calc_sheepdogs_avg_pos(self):
@@ -97,8 +105,9 @@ class Pack:
         for dog in self.sheepdogs:
             dog.set_flock_personal_space(d)
             dog.stop_dist = self.flock_personal_space * 3
-            dog.maintain_dist = self.flock_personal_space * (n ** (2/3)) 
-            #dog.maintain_dist = self.flock_personal_space * math.sqrt(n)
+            # dog.maintain_dist = self.flock_personal_space * (n ** (2/3)) 
+            dog.maintain_dist = self.flock_personal_space * math.sqrt(n)
+            # print(dog.maintain_dist)
             dog.collect_dist = self.flock_personal_space 
     
     def apply_obstacle_effects(self):

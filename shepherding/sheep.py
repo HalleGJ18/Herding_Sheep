@@ -1,26 +1,29 @@
 import tkinter as tk
 import numpy as np
+from numpy.linalg import norm
 from numpy import random
 import math
 
-from agent import Agent
+from shepherding.agent import Agent
 
 class Sheep(Agent):
 
     personal_space = 2 #2
 
     dog_in_range = False
+    seen_dogs = 0
+    total_dogs = 1
 
     velocity = np.array([0.1, 0.1])
 
-    threat_range = 45
+    threat_range = 65 #45
 
     max_speed = 1 #1
     
     n_closest = 100
     
-    default_vision_range = 20
-    vision_range = 20
+    default_vision_range = 40 #20
+    vision_range = 40
     
     too_close = False
     
@@ -81,9 +84,10 @@ class Sheep(Agent):
             too_close = 0
             if dist <= self.personal_space:
                 d = self.pos - s.pos
-                d = d/np.linalg.norm(d)
+                d = d/norm(d)
                 total_separation += d
                 too_close += 1
+            
             if too_close > 0:
                 self.too_close = True
             else:
@@ -95,25 +99,25 @@ class Sheep(Agent):
 
             # cohesion
             # steer towards average position
-            total_cohesion += s.pos
+            total_cohesion += (s.pos - self.pos)
 
         if too_close > 0:
             sep_vector = (total_separation/too_close)
         else:
             sep_vector = total_separation
         
-        if np.linalg.norm(sep_vector) != 0:
-            sep_vector = sep_vector/np.linalg.norm(sep_vector)
+        if norm(sep_vector) != 0:
+            sep_vector = sep_vector/norm(sep_vector)
 
 
         align_vector = (total_alignment/len(nearby)) - self.velocity
-        if np.linalg.norm(align_vector) != 0:
-            align_vector = align_vector/np.linalg.norm(align_vector)
+        if norm(align_vector) != 0:
+            align_vector = align_vector/norm(align_vector)
 
 
-        cohes_vector = (total_cohesion/len(nearby)) - self.pos
-        if np.linalg.norm(cohes_vector) != 0:
-            cohes_vector = cohes_vector/np.linalg.norm(cohes_vector)
+        cohes_vector = (total_cohesion/len(nearby)) # - self.pos
+        if norm(cohes_vector) != 0:
+            cohes_vector = cohes_vector/norm(cohes_vector)
 
         # print(self.id, sep_vector, align_vector, cohes_vector)
 
@@ -132,11 +136,11 @@ class Sheep(Agent):
         if self.dog_in_range:
 
             # get unit vector away from dog avg pos
-            # away = self.dog_in_range_avg / np.linalg.norm(self.dog_in_range_avg) # TODO: scale this by dogs_in_range/n_dogs
+            # away = self.dog_in_range_avg / norm(self.dog_in_range_avg) # TODO: scale this by dogs_in_range/n_dogs
             away = self.pos - self.dog_in_range_avg
-            away = away/np.linalg.norm(away)
+            away = away/norm(away)
             # print(f"away: {away}")
-            velocity_changes += (away*dog_push_weight)
+            velocity_changes += (away*dog_push_weight) #*(self.seen_dogs/self.total_dogs)
 
             # print("dog near")
             # print(away*dog_push_weight)
@@ -164,11 +168,14 @@ class Sheep(Agent):
             else:
                 # print("sep: {}".format(separation*sep_weight))
                 velocity_changes = velocity_changes + (sep_weight*separation)
+                
+        else:
+            self.too_close = False
 
         # self.calc_velocity()      # what is this doing here?
         
         """avoid impassable obstacles"""
-        velocity_changes += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 20)
+        #velocity_changes += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
 
         noise = self.rand_velocity()
 
@@ -182,7 +189,7 @@ class Sheep(Agent):
                 if rand_chance <= 0.05: # random chance of slight movement
                     # print("rand move, {}".format(self.id))
                     # print(noise)
-                    self.velocity = noise
+                    self.velocity = noise #+ (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
                 else:
                     self.velocity = np.array([0.0, 0.0])
         # elif (self.dog_in_range == True) and (len(nearby_sheep) > 0):

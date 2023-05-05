@@ -1,8 +1,10 @@
 import tkinter as tk
 import numpy as np
+from numpy.linalg import norm
 from numpy import random
 import math
-from environment import Environment 
+
+from shepherding.environment import Environment 
 
 # basic agent class
 class Agent:
@@ -18,7 +20,7 @@ class Agent:
     next_velocity = np.array([10.0,10.0])
     
     # speed = magnitude of velocity
-    speed = np.linalg.norm(velocity)
+    speed = norm(velocity)
 
     #
     default_max_speed = 1
@@ -60,8 +62,8 @@ class Agent:
         before = len(nearby_agents)
         nearby_agents = [a for a in nearby_agents if self.env.is_obstacle_blocking_vision(self.pos, a.pos) == False]
         after = len(nearby_agents)
-        if before != after:
-            print(f"before: {before}, after: {after}")
+        # if before != after:
+        #     print(f"before: {before}, after: {after}")
         # check nearby agents
         # nearby_ids = [i.id for i in nearby_agents]
         # print("self.id: {}, nearby: {}".format(self.id, nearby_ids))
@@ -84,7 +86,7 @@ class Agent:
         y = random.randint(0,lim) - half + random.rand()
         # print("x: {}, y: {}".format(x,y))
         v = np.array([x,y])
-        v = v / np.linalg.norm(v)
+        v = v / norm(v)
         return v
 
     def calc_acceleration(self):
@@ -94,12 +96,12 @@ class Agent:
         # v + a
         # keep new v under max spd
         self.velocity = np.add(self.velocity, self.acceleration)  # why does this line make everything work???
-        self.speed = np.linalg.norm(self.velocity)
+        self.speed = norm(self.velocity)
         # if self.speed > self.max_speed:
             # print("yup")
         if self.speed != 0: # > max_speed, cap it
             self.velocity = self.velocity / self.speed * self.max_speed
-            self.speed = np.linalg.norm(self.velocity)
+            self.speed = norm(self.velocity)
             # self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
             # self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
 
@@ -119,6 +121,17 @@ class Agent:
         # av_am = self.env.check_valid_position(self.pos, self.velocity)
         # if av_am[0] != 0.0 or av_am[1] != 0.0:
         #     print(f"id: {self.id}, avoid amount: {av_am}")
+        
+        avoid = self.env.avoid_impassable_obstacles(self.pos, self.velocity) # ! tweaking this
+        if norm(avoid) > 0:
+            self.velocity += (avoid*1)
+            # if type(self).__name__ == "Sheepdog":
+            #     print(f"pos: {self.pos}, avoid: {avoid}, vel: {self.velocity}")
+        
+        self.calc_velocity()
+        
+        # if type(self).__name__ == "Sheepdog":
+        #     print(f"unit vel: {self.velocity}")
 
         self.velocity += self.env.check_valid_position(self.pos, self.velocity)
     

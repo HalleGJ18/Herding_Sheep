@@ -1,26 +1,29 @@
 import numpy as np
 from numpy import random
 import math
-from obstacle import Obstacle
+from shepherding.obstacle import Obstacle
 
 class Environment:
 
     height : int = 0
     width : int = 0
     
-    target = np.array([25.0, 25.0])
+    target = np.array([125.0, 25.0])
     target_range = 10
+    target_endzone = 25 #25
 
     obstacles = []
     
-    speed_reduction_factor = 0.75
-    vision_reduction_factor = 0.75
+    speed_reduction_factor = 0.4
+    vision_reduction_factor = 0.5
+    
+    reduced_vision = 20
     
 
     bound_inset = 5 #! scale with env size
     edge_avoid_factor = 3 #! scale with env size
 
-    def __init__(self, h:int, w:int):
+    def __init__(self, h:int, w:int, layout):
         self.height = h
         self.width = w
 
@@ -31,12 +34,46 @@ class Environment:
 
         # self.init_obstacles()
 
+        if layout == "h":
+            # hedge
+            self.init_obstacles_hedge()
+        elif layout == "f":
+            # fog
+            self.init_obstacles_fog()
+        elif layout == "m":
+            self.init_obstacles_mud()
+            
+        self.print_obstacles()
+
     def init_obstacles(self):
         self.obstacles.append(Obstacle(0, 2, [100,150], 100, 30))
         self.obstacles.append(Obstacle(1, 0, [100,500], 75, 100))
         self.obstacles.append(Obstacle(2, 1, [500,100], 50, 50))
         self.obstacles.append(Obstacle(3, 1, [300,300], 100, 50))
 
+    def init_obstacles_hedge(self):
+        # self.obstacles.append(Obstacle(0, 2, [60,165], 5, 5))
+        self.obstacles.append(Obstacle(1, 2, [100,110], 5, 5))
+        self.obstacles.append(Obstacle(2, 2, [170,150], 2, 30))
+        # self.obstacles.append(Obstacle(3, 2, [140,150], 20, 10))
+        self.obstacles.append(Obstacle(4, 2, [120,140], 2, 50))
+        self.obstacles.append(Obstacle(5, 2, [45,80], 20, 2))
+        self.obstacles.append(Obstacle(6, 2, [125,50], 2, 10))
+        
+    def init_obstacles_fog(self):
+        self.obstacles.append(Obstacle(1, 0, [50,100], 50, 30))
+        self.obstacles.append(Obstacle(2, 0, [170,150], 30, 50))
+        self.obstacles.append(Obstacle(3, 0, [10,20], 15, 30))
+        self.obstacles.append(Obstacle(4, 0, [200,20], 30, 30))
+            
+    def init_obstacles_mud(self):
+        self.obstacles.append(Obstacle(2, 1, [200,100], 50, 30))
+        self.obstacles.append(Obstacle(3, 1, [20,50], 60, 50))
+        self.obstacles.append(Obstacle(4, 1, [90,120], 40, 15))
+        self.obstacles.append(Obstacle(5, 1, [20,175], 45, 20))
+        self.obstacles.append(Obstacle(6, 1, [135,190], 25, 40))
+            
+    def print_obstacles(self):
         for o in self.obstacles:
             print(o.to_string())
 
@@ -50,13 +87,29 @@ class Environment:
 
             if p[0] < self.xMin:
                 avoid_amount[0] += self.edge_avoid_factor
+                # if v[1] >= 0:
+                #     avoid_amount[1] += 1
+                # else:
+                #     avoid_amount[1] -= 1
             elif p[0] > self.xMax:
                 avoid_amount[0] -= self.edge_avoid_factor
+                # if v[1] >= 0:
+                #     avoid_amount[1] += 1
+                # else:
+                #     avoid_amount[1] -= 1
 
             if p[1] < self.yMin:
                 avoid_amount[1] += self.edge_avoid_factor
+                # if v[0] >= 0:
+                #     avoid_amount[0] += 1
+                # else:
+                #     avoid_amount[0] -= 1
             elif p[1] > self.yMax:
                 avoid_amount[1] -= self.edge_avoid_factor
+                # if v[0] >= 0:
+                #     avoid_amount[0] += 1
+                # else:
+                #     avoid_amount[0] -= 1
 
         # check obstacles
 
@@ -72,8 +125,9 @@ class Environment:
         if len(self.obstacles) > 0:
             for o in self.obstacles:
                 if o.is_inside(p):
-                    ok = False
-                    break
+                    if o.passable == False:
+                        ok = False
+                        break
         return ok
 
     def avoid_impassable_obstacles(self, p, v):
@@ -153,6 +207,14 @@ class Environment:
                 if obstacle.block_vision:
                     if obstacle.line_rect_intersect([pos1,pos2]):
                         return True
+                # if two agent in same fog, can see
+                # if one in fog but other not, cant see
+                # if neither in, but fog in between
+                if obstacle.reduce_vision:
+                    if obstacle.is_inside(pos1) != obstacle.is_inside(pos2):
+                        return True
+                    elif ((obstacle.is_inside(pos1) == False) and ((obstacle.is_inside(pos2) == False))) and obstacle.line_rect_intersect([pos1,pos2]):
+                        return True
         return False
     
     def is_obstacle_reducing_movement(self, p):
@@ -172,3 +234,17 @@ class Environment:
                     if obstacle.is_inside(p):
                         return True
         return False
+    
+    def in_endzone(self, p):
+        x_inside = False
+        y_inside = False
+        # check x in range
+        if (p[0] >= self.target[0]-self.target_endzone) and (p[0] <= self.target[0]+self.target_endzone):
+            x_inside = True
+        # check y in range
+        if (p[1] >= self.target[1]-self.target_endzone) and (p[1] <= self.target[1]+self.target_endzone):
+            y_inside = True
+        if x_inside and y_inside:
+            return True
+        else:
+            return False

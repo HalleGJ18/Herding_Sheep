@@ -13,9 +13,9 @@ class Obstacle:
     height = 5
 
     # nearby boundary
-    near_range = 25
+    near_range = 3
     
-    avoid_strength = 2
+    avoid_strength = 1
 
     # 0 = Fog; 1 = Mud; 2 = Hedge
     type = 0
@@ -28,6 +28,11 @@ class Obstacle:
     colour = "grey"
     
     def __init__(self, id, t, p, w, h):
+        # id is obs id, manually increment
+        # t is obs type (0,1,2)
+        # p is bottom left corner
+        # w is width
+        # h is height
         self.id = id
         self.type = t
         self.pos = np.array(p)
@@ -68,7 +73,7 @@ class Obstacle:
         return patches.Rectangle((self.pos[0], self.pos[1]), self.width, self.height, linewidth=1, color=self.colour)
 
     def is_inside(self, p):
-        if (p[0]>=self.pos[0] and p[0]<=self.pos[0]+self.width) and (p[1]>=self.pos[1] and p[1]<=self.pos[1]+self.height):
+        if (p[0]>=self.pos[0]-3 and p[0]<=self.pos[0]+self.width+3) and (p[1]>=self.pos[1]-3 and p[1]<=self.pos[1]+self.height+3):
             return True
         else:
             return False
@@ -93,9 +98,9 @@ class Obstacle:
         x1, y1 = line[0]
         x2, y2 = line[1]
         corner = self.pos
-        x_min, y_min = corner
-        width = self.width 
-        height = self.height
+        x_min, y_min = corner -1
+        width = self.width + 1
+        height = self.height + 1
         
 
         # Calculate the values of p and q for the line
@@ -143,7 +148,7 @@ class Obstacle:
 
     def avoid(self, p, v):
         """if agent is near obstacle, checks if is on collision course
-            if on collision course, calculate the turn the agent needs to make inversely proportional to distance from obstacle
+            if on collision course, calculate the turn the agent needs to make 
 
         Args:
             p (list[float]): pos of agent
@@ -168,43 +173,51 @@ class Obstacle:
             # ! should this ALSO be inversely proportional to the angle the agent is??
             # ! if an agent is close, but barely going to collide, does it really need to turn so sharply?
 
-            if p[0]>=self.pos[0]-self.near_range: # to right of x min
+            if p[0]>=self.pos[0]-self.near_range and p[0] <= self.pos[0]: # to right of x min
                 # print("approach x min")
                 collide_xmin, y_pred = calc_collision_in_x(p, v, self.pos[0], self.pos[1], self.pos[1]+self.height)
                 
                 # if will collide, scale steering 
                 if collide_xmin == True:
-                    x_diff = self.pos[0]-p[0]
-                    turn[0] -= x_diff   
+                    # x_diff = self.pos[0]-p[0]
+                    # turn[0] -= x_diff   
+
+                    turn += reflect_vector(v, [-1.0, 0.0])
+                    # print(turn)
+                    
             
-            elif p[0]<=self.pos[0]+self.width+self.near_range: # to left of x max
+            elif p[0]<=self.pos[0]+self.width+self.near_range and p[0] > self.pos[0]+self.width: # to left of x max
                 # print("approach x max")
                 collide_xmax, y_pred = calc_collision_in_x(p, v, self.pos[0]+self.width, self.pos[1], self.pos[1]+self.height)
                 
                 # if will collide, scale steering 
                 if collide_xmax == True:
-                    x_diff = p[0]-(self.pos[0]+self.width)
-                    turn[0] += x_diff
+                    # x_diff = p[0]-(self.pos[0]+self.width)
+                    # turn[0] += x_diff
+                    turn += reflect_vector(v, [1.0, 0.0])
+                    # print(turn)
 
-
-            if p[1]>=self.pos[1]-self.near_range: # above y min
+            if p[1]>=self.pos[1]-self.near_range and p[1] <= self.pos[1]: # above y min
                 # print("approach y min")
                 collide_ymin, x_pred = calc_collision_in_y(p, v, self.pos[1], self.pos[0], self.pos[0]+self.width)
                 
                 if collide_ymin == True:
-                    y_diff = self.pos[1]-p[1]
-                    turn[1] -= y_diff
-                    
+                    # y_diff = self.pos[1]-p[1]
+                    # turn[1] -= y_diff
+                    turn += reflect_vector(v, [0.0, -1.0])
+                    # print(turn)
             
-            elif p[1]<=self.pos[1]+self.height+self.near_range: # below y max
+            elif p[1]<=self.pos[1]+self.height+self.near_range and p[1] > self.pos[1]+self.height: # below y max
                 # print("approach y max")
                 collide_ymax, x_pred = calc_collision_in_y(p, v, self.pos[1]+self.height, self.pos[0], self.pos[0]+self.width)
                 
                 if collide_ymax == True:
-                    y_diff = p[1]-(self.pos[1]+self.height)
-                    turn[1] += y_diff
+                    # y_diff = p[1]-(self.pos[1]+self.height)
+                    # turn[1] += y_diff
+                    turn += reflect_vector(v, [0.0, 1.0])
+                    # print(turn)
             
-            # steer_away = steer_away / np.linalg.norm(steer_away)
+            # steer_away = steer_away / norm(steer_away)
         turn *= self.avoid_strength
         return turn
 
@@ -253,3 +266,9 @@ def calc_collision_in_y(pos, vel, y, xmin, xmax):
         return True, x_predict
 
     return False, x_predict
+
+# helper func to reflect a vector
+def reflect_vector(vector, normal):
+    dot_product = 2 * (vector[0] * normal[0] + vector[1] * normal[1])
+    reflected_vector = [vector[0] - dot_product * normal[0], vector[1] - dot_product * normal[1]]
+    return reflected_vector

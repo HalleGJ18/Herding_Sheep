@@ -1,9 +1,10 @@
 import math
 import numpy as np
+from numpy.linalg import norm
 from numpy import random
 
-from sheep import Sheep
-from environment import Environment
+from shepherding.sheep import Sheep
+from shepherding.environment import Environment
 
 class Flock:
 
@@ -16,7 +17,7 @@ class Flock:
     dog_push_weight = 1
     
     default_personal_space = 2
-    default_threat_range = 45 #65
+    default_threat_range = 65 #45 #65
     default_max_speed = 1
     
     success = False
@@ -34,7 +35,10 @@ class Flock:
         sheep_posY = []
         for s in range(self.num_of_sheep):
             sheep.append(Sheep(s, self.env))
-            sheep[s].set_pos(self.random_start_pos(75, 75, self.env.width-50, self.env.height-50))
+            # sheep[s].set_pos(self.random_start_pos(75, 75, self.env.width-50, self.env.height-50))
+            # sheep[s].set_pos(self.random_start_pos(75, 75, 175, 175))
+            sheep[s].set_pos(self.random_start_pos(50, 50, 200, 200))
+            # sheep[s].set_pos(self.random_start_pos(25, 25, 225, 225))
             sheep_posX.append(sheep[s].pos[0])
             sheep_posY.append(sheep[s].pos[1])
             sheep[s].velocity = sheep[s].rand_velocity()
@@ -52,7 +56,7 @@ class Flock:
         # check if p is valid when obstacles added
         if self.env.check_all_obstacles(p) == False:
             p = self.random_start_pos(xMin, yMin, xMax, yMax)
-            print("reroll start pos")
+            # print("reroll start pos")
         return p
 
     def calc_distances_sheep(self):
@@ -63,7 +67,7 @@ class Flock:
                 if sheep.id == other.id:
                     self.dists[sheep.id][other.id] = 0  # zero distance from self, remember to account for this later
                 else:
-                    self.dists[sheep.id][other.id] = np.linalg.norm(other.pos - sheep.pos)
+                    self.dists[sheep.id][other.id] = norm(other.pos - sheep.pos)
         # print(self.dists)
 
     def calc_distances_sheepdogs(self):
@@ -86,6 +90,23 @@ class Flock:
         if len(sorted_by_dist) > n:
             sorted_by_dist = sorted_by_dist[0:n]
         return sorted_by_dist
+    
+    # calc sheep furthest from given point
+    def calc_n_furthest_sheep(self, p, n, id=None):
+        # p is pos of target
+        # n is the number of sheep wanted
+        # id is given if a sheep is looking for other sheep, to remove itself from list
+        sorted_by_dist = sorted(self.flock, key= lambda sheep: 1/math.dist(sheep.pos, p))
+        if id != None:
+            sorted_by_dist = [i for i in sorted_by_dist if i.id != id]
+        # check not blocked by obstacle
+        # print(f"before removing can't see: {len(sorted_by_dist)}")
+        if len(self.env.obstacles) > 0:
+            sorted_by_dist = [j for j in sorted_by_dist if self.env.is_obstacle_blocking_vision(p,j.pos) == False]
+            # print(f"after removing can't see: {len(sorted_by_dist)}")
+        if len(sorted_by_dist) > n:
+            sorted_by_dist = sorted_by_dist[0:n]
+        return sorted_by_dist
 
     # calc sheep within given radius
     def get_sheep_in_area(self, p, r):
@@ -93,7 +114,7 @@ class Flock:
         # r is radius
         found_sheep = []
         for s in self.flock:
-            if np.linalg.norm(s.pos - p) <= r:
+            if norm(s.pos - p) <= r:
                 found_sheep.append(s)
         return np.array(found_sheep)
 
@@ -119,6 +140,20 @@ class Flock:
                     furthest_sheep = s
                     d = math.dist(flock_centre, s.pos)
         return furthest_sheep, d
+    
+    # calc furthest sheep from target
+    def furthest_sheep_from_target(self, sheep):
+        furthest_sheep = None
+        d = 0
+        for s in sheep:
+            if furthest_sheep == None:
+                furthest_sheep = s
+                d = math.dist(self.env.target, s.pos)
+            else:
+                if math.dist(self.env.target, s.pos) > d:
+                    furthest_sheep = s
+                    d = math.dist(self.env.target, s.pos)
+        return furthest_sheep
 
     # calc centre of mass for an array of sheep
     def calc_sheep_centre(self, sheep):
@@ -174,13 +209,25 @@ class Flock:
         density:float = len(x_positions)/area
         return density
     
+    # check all sheep in flock in endzone
+    def check_endzone(self):
+        in_endzone = True
+        for sheep in self.flock:
+            if self.env.in_endzone(sheep.pos) == False:
+                in_endzone = False
+                return False
+        return True
+    
     # check for success
     def check_success(self):
         # if gcm within 10 of target
-        gcm = self.calc_flock_centre()
-        if (gcm[0] >= self.env.target[0]-self.env.target_range) and (gcm[0] <= self.env.target[0]+self.env.target_range):
-            if (gcm[1] >= self.env.target[1]-self.env.target_range) and (gcm[1] <= self.env.target[1]+self.env.target_range):
-                self.success = True   
+        # ! and all sheep within 25 of target, or 10?
+        # gcm = self.calc_flock_centre()
+        # if (gcm[0] >= self.env.target[0]-self.env.target_range) and (gcm[0] <= self.env.target[0]+self.env.target_range):
+        #     if (gcm[1] >= self.env.target[1]-self.env.target_range) and (gcm[1] <= self.env.target[1]+self.env.target_range):
+                # check all sheep in endzone
+        if self.check_endzone():
+            self.success = True   
 
     def calc_flocking(self):        
         # loop through flock
