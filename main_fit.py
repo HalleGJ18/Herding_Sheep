@@ -50,10 +50,6 @@ print(f"set vr: {pack.sheepdogs[0].vision_range}")
 sheep_data.loc[0] = [np.copy(flock.flock_positionsX), np.copy(flock.flock_positionsY)]
 dog_data.loc[0] = [np.copy(pack.sheepdogs_positionsX), np.copy(pack.sheepdogs_positionsY)]
 
-# print("dog start pos:")
-# print(pack.sheepdogs[0].pos)
-# print(pack.sheepdogs[1].pos)
-
 # dog-sheep dist matrix
 dog_sheep_dists = np.zeros([n_dogs, n_sheep])
 
@@ -89,8 +85,6 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
             dog_sheep_dists[d.id][s.id] = math.dist(d.pos, s.pos)
 
     """update pack with flock info"""
-    # pack.set_flock_pos()
-    # pack.set_flock_centre(flock.calc_flock_centre(flock.))
     dog:Sheepdog
     for dog in pack.sheepdogs:
         
@@ -101,8 +95,6 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
         after = len(sheep_in_range)
         # if before != after:
         #     print(f"before: {before}, after: {after}")
-        # print([i.id for i in sheep_in_range])
-        # print(len(sheep_in_range))
         if len(sheep_in_range) > 0:
             dog.set_seen_sheep_centre(flock.calc_sheep_centre(sheep_in_range))
             dog.sheep_in_range = True
@@ -110,13 +102,11 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
             
             # find furthest sheep
             furthest_sheep = flock.furthest_sheep_from_target(sheep_in_range)
-            # print(f"furthest: {dist}")
             dog.set_furthest_sheep(furthest_sheep)
         else:
             dog.sheep_in_range = False
             dog.v_close = False
             dog.set_furthest_sheep(None)
-        # print("sheep in range: {}".format(dog.sheep_in_range))
 
 
     """update flock with pack info"""
@@ -168,14 +158,9 @@ for t in range(1, T_LIMIT+1): # does this need to be +1?
 # print("dog data:")
 # print(dog_data)
 
-print(f"rows: {len(sheep_data.index)} (inc 0)")
-
-# print(type(flock.flock_positionsX))
-# print(type(pack.sheepdogs_positionsX))
+print(f"finish at time t: {len(sheep_data.index)-1}")
 
 # ! directory name
-# folder = "kubo_3dogs_vr250_south"
-# folder = "test_sheep_20vr_1dog_250vr"
 folder = sys.argv[3]
 
 try:
@@ -203,11 +188,8 @@ while num_exists:
 print(result_csv_name)
 
 # ! output to csv
-# result_csv_name = "data.csv"
 result = pd.merge(sheep_data, dog_data, left_index=True, right_index=True)
 result.to_csv(result_csv_name, encoding='utf-8', sep="|")
-# sheep_data.to_csv("sheep_data.csv", encoding='utf-8', sep="|")
-# dog_data.to_csv("dog_data.csv", encoding='utf-8', sep="|")
 
 # ! output env data: dimensions, target, obstacles, success
 env_csv_name = folder+"/results/env_data"+str(i).zfill(3)+".csv"
@@ -229,8 +211,8 @@ if len(env.obstacles) > 0:
     
 
 # generate animated plot
-time = 0
-
+# time = 0
+# 
 # fig = plt.Figure(figsize=(6, 6), dpi=150)
 # ax = fig.add_subplot()
 # ax.set_xlim([0, ENV_WIDTH])

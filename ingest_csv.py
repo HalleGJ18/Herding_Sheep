@@ -12,55 +12,7 @@ import sys
 
 num = sys.argv[1]
 
-# SHEEP_CSV = "sheep_data3.csv"
-# DOG_CSV = "dog_data3.csv"
-
-# sheep_data = pd.read_csv(SHEEP_CSV, sep="|", index_col=0)
-# dog_data = pd.read_csv(DOG_CSV, sep="|", index_col=0)
-
-# dir = "fit/hedge/3dog_100vr"
-
-# dir = "fit/sheep_20vr_3dog_100vr"
-# dir = "fit/hedge/3dog_100vr"
-
-# dir = "fit/mud/3dog_100vr"
-
 dir = "output"
-# num = "005"
-
-
-# dir = "examples"
-
-# dir = "fit/sheep_20vr_2dog_200vr"
-# num = "005"
-
-# 3dog_50vr
-# 10 is ok
-# 11 is ok
-
-
-"""fog example"""
-# dir = "examples"
-# num = "020" # FIT
-
-"""empty env example"""
-# dir = "fit/none/1dog_200vr" # FIT
-# num = "001"
-
-# num = "101" # CT
-# num = "201" # CT, 3 dog empty
-
-
-# dir = "fit/sheep_20vr_2dog_150vr" # shows instability in model
-# num = "002"
-
-"""mud example"""
-# num = "001" # FIT
-# num = "501" # CT
-
-"""hedge example"""
-# dir = "fit/hedge/3dog_100vr"
-# num = "001"
 
 print(dir, num)
 
@@ -94,7 +46,6 @@ window.configure(background="grey")
 # ENV_HEIGHT = 250 # 150 # 750
 ENV_HEIGHT = int(env_data.loc[0]['height'])
 ENV_WIDTH = int(env_data.loc[0]['width'])
-# target = np.array([25.0, 25.0])
 
 target = [float(env_data.loc[0]['target_x']), float(env_data.loc[0]['target_y'])]
 target_range = float(env_data.loc[0]['target_range'])
