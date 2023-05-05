@@ -1,6 +1,6 @@
 import tkinter as tk
 import numpy as np
-from flock import Flock
+from shepherding.flock import Flock
 
 # init window and canvas
 window = tk.Tk()

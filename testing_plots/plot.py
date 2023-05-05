@@ -1,6 +1,6 @@
 import tkinter as tk
 import numpy as np
-from flock import Flock
+from shepherding.flock import Flock
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg

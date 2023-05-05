@@ -16,8 +16,8 @@ import os
 # dog_data = pd.read_csv(DOG_CSV, sep="|", index_col=0)
 
 # dir = "ct/none/3dog_300vr"
-dir = "test_mud"
-num = "001"
+dir = "output"
+num = "003"
 
 DATA_CSV_NAME = dir+"/results/data"+num+".csv"
 ENV_CSV_NAME = dir+"/results/env_data"+num+".csv"
