@@ -3,9 +3,9 @@ from numpy import random
 from numpy.linalg import norm
 import math
 
-from sheepdog import Sheepdog
-from flock import Flock
-from environment import Environment
+from sheepdog_fit import Sheepdog
+from shepherding.flock import Flock
+from shepherding.environment import Environment
 
 class Pack:
 

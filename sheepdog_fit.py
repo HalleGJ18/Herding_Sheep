@@ -3,7 +3,7 @@ from numpy import random
 from numpy.linalg import norm
 import math
 
-from agent import Agent
+from shepherding.agent import Agent
 
 class Sheepdog(Agent):
 

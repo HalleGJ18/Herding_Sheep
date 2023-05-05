@@ -4,7 +4,7 @@ from numpy.linalg import norm
 from numpy import random
 import math
 
-from agent import Agent
+from shepherding.agent import Agent
 
 class Sheep(Agent):
 

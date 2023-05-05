@@ -11,10 +11,11 @@ import math
 import os
 import sys
 
-from flock import Flock
-from environment import Environment
-from sheepdog import Sheepdog
-from sheepdog_pack import Pack
+from shepherding.flock import Flock
+from shepherding.environment import Environment
+
+from sheepdog_fit import Sheepdog
+from sheepdog_pack_fit import Pack
 
 # init window
 window = tk.Tk()
@@ -61,7 +62,7 @@ pack.set_stop_dist(flock.default_personal_space, n_sheep)
 flock_rad = flock.default_personal_space * (n_sheep ** (2/3))
 # print(flock_rad)
 
-T_LIMIT = 6000 # num of time steps
+T_LIMIT = 5000 # num of time steps
 
 success = False
 

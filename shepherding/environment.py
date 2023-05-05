@@ -1,7 +1,7 @@
 import numpy as np
 from numpy import random
 import math
-from obstacle import Obstacle
+from shepherding.obstacle import Obstacle
 
 class Environment:
 

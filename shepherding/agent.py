@@ -3,7 +3,8 @@ import numpy as np
 from numpy.linalg import norm
 from numpy import random
 import math
-from environment import Environment 
+
+from shepherding.environment import Environment 
 
 # basic agent class
 class Agent:

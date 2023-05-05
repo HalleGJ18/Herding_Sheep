@@ -3,8 +3,8 @@ import numpy as np
 from numpy.linalg import norm
 from numpy import random
 
-from sheep import Sheep
-from environment import Environment
+from shepherding.sheep import Sheep
+from shepherding.environment import Environment
 
 class Flock:
 
