@@ -99,7 +99,7 @@ class Sheep(Agent):
 
             # cohesion
             # steer towards average position
-            total_cohesion += s.pos
+            total_cohesion += (s.pos - self.pos)
 
         if too_close > 0:
             sep_vector = (total_separation/too_close)
@@ -115,7 +115,7 @@ class Sheep(Agent):
             align_vector = align_vector/norm(align_vector)
 
 
-        cohes_vector = (total_cohesion/len(nearby)) - self.pos
+        cohes_vector = (total_cohesion/len(nearby)) # - self.pos
         if norm(cohes_vector) != 0:
             cohes_vector = cohes_vector/norm(cohes_vector)
 
@@ -175,7 +175,7 @@ class Sheep(Agent):
         # self.calc_velocity()      # what is this doing here?
         
         """avoid impassable obstacles"""
-        velocity_changes += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
+        #velocity_changes += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
 
         noise = self.rand_velocity()
 
@@ -189,7 +189,7 @@ class Sheep(Agent):
                 if rand_chance <= 0.05: # random chance of slight movement
                     # print("rand move, {}".format(self.id))
                     # print(noise)
-                    self.velocity = noise + (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
+                    self.velocity = noise #+ (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
                 else:
                     self.velocity = np.array([0.0, 0.0])
         # elif (self.dog_in_range == True) and (len(nearby_sheep) > 0):

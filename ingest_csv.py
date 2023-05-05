@@ -22,8 +22,11 @@ import os
 
 # dir = "fit/mud/3dog_100vr"
 
+dir = "output"
+num = "094"
 
-dir = "examples"
+
+# dir = "examples"
 
 # dir = "fit/sheep_20vr_2dog_200vr"
 # num = "005"
@@ -35,7 +38,7 @@ dir = "examples"
 
 """fog example"""
 # dir = "examples"
-num = "020" # FIT
+# num = "020" # FIT
 
 """empty env example"""
 # dir = "fit/none/1dog_200vr" # FIT
@@ -56,6 +59,7 @@ num = "020" # FIT
 # dir = "fit/hedge/3dog_100vr"
 # num = "001"
 
+print(dir, num)
 
 DATA_CSV_NAME = dir+"/results/data"+num+".csv"
 ENV_CSV_NAME = dir+"/results/env_data"+num+".csv"

@@ -171,14 +171,14 @@ class Sheepdog(Agent):
             
             
         """avoid impassable obstacles"""
-        movement += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
+        #movement += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
         
         # print(f"movement: {movement}")
         
         if norm(movement) > 0:
             # print("movement change")
             # self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
-            self.velocity = movement
+            self.velocity = movement #+ 0.5*self.velocity 
 
         # print(self.velocity)
 

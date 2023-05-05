@@ -29,3 +29,8 @@ surface_normal = [0, -1]  # Assuming the surface normal is along the x-axis
 
 reflected_vector = reflect_vector(original_vector, surface_normal)
 print(reflected_vector)  # Output: [3, -4]
+
+v=[-1, -1]
+n=[1,0]
+reflected_vector = reflect_vector(v, n)
+print(reflected_vector)
