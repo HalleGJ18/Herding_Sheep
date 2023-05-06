@@ -88,7 +88,7 @@ def dog_dist_travelled(x_pos, y_pos):
     total_dist = 0
     for i in range(1, len(x_pos)):
         d = math.dist([x_pos[1], y_pos[i]], [x_pos[i-1], y_pos[i-1]])
-        total_dist += 1
+        total_dist += d
     return total_dist
 
 
@@ -99,7 +99,7 @@ print(f"metrics: {directory}")
 
 # make metrics dir
 try:
-   os.makedirs(directory+"/metrics")
+   os.makedirs(os.path.join(directory, "metrics"))
 except FileExistsError:
    # directory already exists
    pass

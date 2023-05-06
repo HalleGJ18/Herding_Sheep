@@ -18,10 +18,10 @@ from sheepdog_ct import Sheepdog
 from sheepdog_pack_ct import Pack
 
 # init window
-window = tk.Tk()
-window.title("Herding Sheep")
-window.geometry("1600x950+160+20")
-window.configure(background="grey")
+# window = tk.Tk()
+# window.title("Herding Sheep")
+# window.geometry("1600x950+160+20")
+# window.configure(background="grey")
 
 # define data structure
 # index is time t
@@ -169,7 +169,7 @@ except FileExistsError:
    pass
 
 try:
-   os.makedirs(folder+"/results")
+   os.makedirs(os.path.join(folder, "results"))
 except FileExistsError:
    # directory already exists
    pass
@@ -178,7 +178,7 @@ i = 1
 num_exists = True
 while num_exists:
     n = str(i).zfill(3)
-    result_csv_name = folder+"/results/data"+n+".csv"
+    result_csv_name = os.path.join(folder, "results", "data"+n+".csv")
     if os.path.exists(result_csv_name):
         i += 1
     else:
@@ -192,13 +192,13 @@ result = pd.merge(sheep_data, dog_data, left_index=True, right_index=True)
 result.to_csv(result_csv_name, encoding='utf-8', sep="|")
 
 # ! output env data: dimensions, target, obstacles, success
-env_csv_name = folder+"/results/env_data"+str(i).zfill(3)+".csv"
+env_csv_name = os.path.join(folder, "results", "env_data"+str(i).zfill(3)+".csv")
 env_data = pd.DataFrame(columns=['width', 'height', 'target_x', 'target_y', 'target_range', 'endzone', 'success'])
 env_data.loc[0] = [env.width, env.height, env.target[0], env.target[1], env.target_range, env.target_endzone, success]
 env_data.to_csv(env_csv_name, encoding='utf-8')
 
 
-obstacle_csv_name = folder+"/results/obstacle_data"+str(i).zfill(3)+".csv"
+obstacle_csv_name = os.path.join(folder, "results", "obstacle_data"+str(i).zfill(3)+".csv")
 if len(env.obstacles) > 0:
     obstacle_data = pd.DataFrame(columns=['x', 'y', 'width', 'height', 'colour'])
     index = 0

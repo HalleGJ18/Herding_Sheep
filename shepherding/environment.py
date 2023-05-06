@@ -52,16 +52,15 @@ class Environment:
         self.obstacles.append(Obstacle(3, 1, [300,300], 100, 50))
 
     def init_obstacles_hedge(self):
-        # self.obstacles.append(Obstacle(1, 2, [100,110], 5, 5))
-        # self.obstacles.append(Obstacle(2, 2, [170,150], 2, 30))
-        # self.obstacles.append(Obstacle(4, 2, [120,140], 2, 50))
-        # self.obstacles.append(Obstacle(5, 2, [45,80], 20, 2))
-        # self.obstacles.append(Obstacle(6, 2, [125,50], 2, 10))
+        self.obstacles.append(Obstacle(2, 2, [170,150], 2, 30))
+        self.obstacles.append(Obstacle(4, 2, [120,140], 2, 50))
+        self.obstacles.append(Obstacle(5, 2, [45,80], 20, 2))
+        self.obstacles.append(Obstacle(6, 2, [125,50], 2, 10))
         
-        self.obstacles.append(Obstacle(1, 2, [55,130], 2, 40))
-        self.obstacles.append(Obstacle(2, 2, [160,100], 30, 2))
-        self.obstacles.append(Obstacle(3, 2, [120,110], 2, 50))
-        self.obstacles.append(Obstacle(4, 2, [45,80], 25, 2))
+        # self.obstacles.append(Obstacle(1, 2, [55,130], 2, 40))
+        # self.obstacles.append(Obstacle(2, 2, [160,100], 30, 2))
+        # self.obstacles.append(Obstacle(3, 2, [120,110], 2, 50))
+        # self.obstacles.append(Obstacle(4, 2, [45,80], 25, 2))
         
         
     def init_obstacles_fog(self):

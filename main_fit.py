@@ -18,10 +18,10 @@ from sheepdog_fit import Sheepdog
 from sheepdog_pack_fit import Pack
 
 # init window
-window = tk.Tk()
-window.title("Herding Sheep")
-window.geometry("1600x950+160+20")
-window.configure(background="grey")
+# window = tk.Tk()
+# window.title("Herding Sheep")
+# window.geometry("1600x950+160+20")
+# window.configure(background="grey")
 
 # define data structure
 # index is time t
@@ -170,7 +170,7 @@ except FileExistsError:
    pass
 
 try:
-   os.makedirs(folder+"/results")
+   os.makedirs(os.path.join(folder, "results"))
 except FileExistsError:
    # directory already exists
    pass
