@@ -14,7 +14,7 @@ class Environment:
 
     obstacles = []
     
-    speed_reduction_factor = 0.4
+    speed_reduction_factor = 0.5
     vision_reduction_factor = 0.5
     
     reduced_vision = 20
@@ -52,26 +52,39 @@ class Environment:
         self.obstacles.append(Obstacle(3, 1, [300,300], 100, 50))
 
     def init_obstacles_hedge(self):
-        # self.obstacles.append(Obstacle(0, 2, [60,165], 5, 5))
-        self.obstacles.append(Obstacle(1, 2, [100,110], 5, 5))
-        self.obstacles.append(Obstacle(2, 2, [170,150], 2, 30))
-        # self.obstacles.append(Obstacle(3, 2, [140,150], 20, 10))
-        self.obstacles.append(Obstacle(4, 2, [120,140], 2, 50))
-        self.obstacles.append(Obstacle(5, 2, [45,80], 20, 2))
-        self.obstacles.append(Obstacle(6, 2, [125,50], 2, 10))
+        # self.obstacles.append(Obstacle(1, 2, [100,110], 5, 5))
+        # self.obstacles.append(Obstacle(2, 2, [170,150], 2, 30))
+        # self.obstacles.append(Obstacle(4, 2, [120,140], 2, 50))
+        # self.obstacles.append(Obstacle(5, 2, [45,80], 20, 2))
+        # self.obstacles.append(Obstacle(6, 2, [125,50], 2, 10))
+        
+        self.obstacles.append(Obstacle(1, 2, [55,130], 2, 40))
+        self.obstacles.append(Obstacle(2, 2, [160,100], 30, 2))
+        self.obstacles.append(Obstacle(3, 2, [120,110], 2, 50))
+        self.obstacles.append(Obstacle(4, 2, [45,80], 25, 2))
+        
         
     def init_obstacles_fog(self):
-        self.obstacles.append(Obstacle(1, 0, [50,100], 50, 30))
-        self.obstacles.append(Obstacle(2, 0, [170,150], 30, 50))
-        self.obstacles.append(Obstacle(3, 0, [10,20], 15, 30))
-        self.obstacles.append(Obstacle(4, 0, [200,20], 30, 30))
+        # self.obstacles.append(Obstacle(1, 0, [50,100], 50, 30))
+        # self.obstacles.append(Obstacle(2, 0, [170,150], 30, 50))
+        # self.obstacles.append(Obstacle(3, 0, [40,20], 15, 30))
+        # self.obstacles.append(Obstacle(4, 0, [200,20], 30, 30))
+        # self.obstacles.append(Obstacle(5, 0, [20,180], 40, 30))
+        
+        self.obstacles.append(Obstacle(1, 0, [200,100], 50, 30))
+        self.obstacles.append(Obstacle(2, 0, [40,40], 40, 30))
+        self.obstacles.append(Obstacle(3, 0, [90,120], 40, 15))
+        self.obstacles.append(Obstacle(4, 0, [20,175], 45, 20))
+        self.obstacles.append(Obstacle(5, 0, [135,190], 25, 40))
+        self.obstacles.append(Obstacle(6, 0, [180,0], 20, 30))
             
     def init_obstacles_mud(self):
-        self.obstacles.append(Obstacle(2, 1, [200,100], 50, 30))
-        self.obstacles.append(Obstacle(3, 1, [20,50], 60, 50))
-        self.obstacles.append(Obstacle(4, 1, [90,120], 40, 15))
-        self.obstacles.append(Obstacle(5, 1, [20,175], 45, 20))
-        self.obstacles.append(Obstacle(6, 1, [135,190], 25, 40))
+        self.obstacles.append(Obstacle(1, 1, [200,100], 50, 30))
+        self.obstacles.append(Obstacle(2, 1, [40,40], 40, 30))
+        self.obstacles.append(Obstacle(3, 1, [90,120], 40, 15))
+        self.obstacles.append(Obstacle(4, 1, [20,175], 45, 20))
+        self.obstacles.append(Obstacle(5, 1, [135,190], 25, 40))
+        self.obstacles.append(Obstacle(6, 1, [180,0], 20, 30))
             
     def print_obstacles(self):
         for o in self.obstacles:
@@ -210,11 +223,11 @@ class Environment:
                 # if two agent in same fog, can see
                 # if one in fog but other not, cant see
                 # if neither in, but fog in between
-                if obstacle.reduce_vision:
-                    if obstacle.is_inside(pos1) != obstacle.is_inside(pos2):
-                        return True
-                    elif ((obstacle.is_inside(pos1) == False) and ((obstacle.is_inside(pos2) == False))) and obstacle.line_rect_intersect([pos1,pos2]):
-                        return True
+                # if obstacle.reduce_vision:
+                #     if obstacle.is_inside(pos1) != obstacle.is_inside(pos2):
+                #         return True
+                #     elif ((obstacle.is_inside(pos1) == False) and ((obstacle.is_inside(pos2) == False))) and obstacle.line_rect_intersect([pos1,pos2]):
+                #         return True
         return False
     
     def is_obstacle_reducing_movement(self, p):

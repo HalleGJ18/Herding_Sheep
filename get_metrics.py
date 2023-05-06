@@ -115,9 +115,12 @@ file_num = 1
 file_exists = True
 while file_exists:
     n =  str(file_num).zfill(3)
-    DATA_CSV = directory+"/results/data"+n+".csv"
-    ENV_CSV = directory+"/results/env_data"+n+".csv"
-    OBS_CSV = directory+"/results/obstacle_data"+n+".csv"
+    DATA_CSV = os.path.join(directory, "results", "data"+n+".csv ")
+    # DATA_CSV = directory+"/results/data"+n+".csv"
+    # ENV_CSV = directory+"/results/env_data"+n+".csv"
+    ENV_CSV = os.path.join(directory, "results", "env_data"+n+".csv")
+    # OBS_CSV = directory+"/results/obstacle_data"+n+".csv"
+    OBS_CSV = os.path.join(directory, "results", "obstacle_data"+n+".csv")
     
     # read files
     if os.path.exists(DATA_CSV):
@@ -167,7 +170,9 @@ while file_exists:
         # output metrics
         m = {'flock_gcm':gcm_list, 'avg_sheep_dist_from_gcm':avg_from_gcm_list, 'furthest_sheep_from_gcm':furthest_from_gcm_list}
         df = pd.DataFrame(data=m)
-        df.to_csv(directory+"/metrics/metrics"+n+".csv", encoding='utf-8')
+        metrics_out_path = os.path.join(directory, "metrics", "metrics"+n+".csv")
+        # df.to_csv(directory+"/metrics/metrics"+n+".csv", encoding='utf-8')
+        df.to_csv(metrics_out_path, encoding='utf-8')
         
         file_num += 1
         
@@ -185,7 +190,9 @@ sr, tc, fc = success_rate(test_outcomes)
 
 summary = pd.DataFrame(columns=['success_rate', "success_avg_time", 'success_count', 'fail_count', 'total_runs'])
 summary.loc[0] = [sr, average_time(success_times), tc, fc, file_num-1]
-summary.to_csv(directory+"/metrics_summary.csv", encoding='utf-8', index=False)
+summary_out_path = os.path.join(directory, "metrics_summary.csv")
+# summary.to_csv(directory+"/metrics_summary.csv", encoding='utf-8', index=False)
+summary.to_csv(summary_out_path, encoding='utf-8', index=False)
 
 
 

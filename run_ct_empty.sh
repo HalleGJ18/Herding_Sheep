@@ -6,8 +6,8 @@ control_c() {
 }
 
 trap control_c SIGINT
-# h f empty
-for e in  m 
+# h m f
+for e in empty 
 do
     # loop through num of dogs
     for i in {1..5}

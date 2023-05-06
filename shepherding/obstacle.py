@@ -179,9 +179,6 @@ class Obstacle:
                 
                 # if will collide, scale steering 
                 if collide_xmin == True:
-                    # x_diff = self.pos[0]-p[0]
-                    # turn[0] -= x_diff   
-
                     turn += reflect_vector(v, [-1.0, 0.0])
                     # print(turn)
                     
@@ -192,8 +189,6 @@ class Obstacle:
                 
                 # if will collide, scale steering 
                 if collide_xmax == True:
-                    # x_diff = p[0]-(self.pos[0]+self.width)
-                    # turn[0] += x_diff
                     turn += reflect_vector(v, [1.0, 0.0])
                     # print(turn)
 
@@ -202,8 +197,6 @@ class Obstacle:
                 collide_ymin, x_pred = calc_collision_in_y(p, v, self.pos[1], self.pos[0], self.pos[0]+self.width)
                 
                 if collide_ymin == True:
-                    # y_diff = self.pos[1]-p[1]
-                    # turn[1] -= y_diff
                     turn += reflect_vector(v, [0.0, -1.0])
                     # print(turn)
             
@@ -212,12 +205,9 @@ class Obstacle:
                 collide_ymax, x_pred = calc_collision_in_y(p, v, self.pos[1]+self.height, self.pos[0], self.pos[0]+self.width)
                 
                 if collide_ymax == True:
-                    # y_diff = p[1]-(self.pos[1]+self.height)
-                    # turn[1] += y_diff
                     turn += reflect_vector(v, [0.0, 1.0])
                     # print(turn)
             
-            # steer_away = steer_away / norm(steer_away)
         turn *= self.avoid_strength
         return turn
 

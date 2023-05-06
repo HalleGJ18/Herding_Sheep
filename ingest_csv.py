@@ -16,9 +16,13 @@ dir = "output"
 
 print(dir, num)
 
-DATA_CSV_NAME = dir+"/results/data"+num+".csv"
-ENV_CSV_NAME = dir+"/results/env_data"+num+".csv"
-OBS_CSV_NAME = dir+"/results/obstacle_data"+num+".csv"
+# DATA_CSV_NAME = dir+"/results/data"+num+".csv"
+# ENV_CSV_NAME = dir+"/results/env_data"+num+".csv"
+# OBS_CSV_NAME = dir+"/results/obstacle_data"+num+".csv"
+
+DATA_CSV_NAME = os.path.join(dir, "results", "data"+num+".csv ")
+ENV_CSV_NAME = os.path.join(dir, "results", "env_data"+num+".csv")
+OBS_CSV_NAME = os.path.join(dir, "results", "obstacle_data"+num+".csv")
 
 data = pd.read_csv(DATA_CSV_NAME, sep="|", index_col=0)
 env_data = pd.read_csv(ENV_CSV_NAME, sep=",", index_col=0)

@@ -7,18 +7,6 @@ control_c() {
 
 trap control_c SIGINT
 
-# finish 3dog 50vr
-for k in {1..10}
-do
-    # echo $i
-    # echo $(($j*50))
-    # vr=$(($j*50))
-    folder="fit/empty/3dog/50vr"
-    echo $folder
-    python main_fit.py 3 50 $folder 75 empty
-done
-python get_metrics.py $folder
-
 # finish rest of 3dog
 for j in 75 100 125 150 175 200 250 300 350
     do
@@ -28,9 +16,9 @@ for j in 75 100 125 150 175 200 250 300 350
             # echo $i
             # echo $(($j*50))
             # vr=$(($j*50))
-            folder="fit/empty/${i}dog/${j}vr"
+            folder="fit/empty/3dog/${j}vr"
             echo $folder
-            python main_fit.py $i $j $folder 75 empty
+            python main_fit.py 3 $j $folder 75 empty
         done
         python get_metrics.py $folder
     done
