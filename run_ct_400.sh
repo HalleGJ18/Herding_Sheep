@@ -12,14 +12,14 @@ trap control_c SIGINT
 # loop through num of dogs
 for i in 1 2 3 4 5
 do
-    for k in {1..20}
+    for k in {1..15}
         do
             # echo $i
             # echo $(($j*50))
             # vr=$(($j*50))
-            folder="ct/empty/${i}dog/400vr"
+            folder="ct/m/${i}dog/400vr"
             echo $folder
-            python main_ct.py $i 400 $folder 75 empty
+            python main_ct.py $i 400 $folder 75 m
         done
         python get_metrics.py $folder
 done

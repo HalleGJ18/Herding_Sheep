@@ -60,7 +60,8 @@ class Agent:
         nearby_agents = agents[nearby]          # check this!!!!!
         # check if blocked by obstacle
         before = len(nearby_agents)
-        nearby_agents = [a for a in nearby_agents if self.env.is_obstacle_blocking_vision(self.pos, a.pos) == False]
+        if self.env.vision_obstructions:
+            nearby_agents = [a for a in nearby_agents if self.env.is_obstacle_blocking_vision(self.pos, a.pos) == False]
         after = len(nearby_agents)
         # if before != after:
         #     print(f"before: {before}, after: {after}")
@@ -73,10 +74,9 @@ class Agent:
     def can_see(self, pos, range):
         # include env checks
         if math.dist(self.pos, pos) <= range:
-            if self.env.is_obstacle_blocking_vision(self.pos, pos) == False:
+            if not self.env.is_obstacle_blocking_vision(self.pos, pos):
                 return True
-        else:
-            return False
+        return False
 
     def rand_velocity(self):
         # lim = self.max_speed

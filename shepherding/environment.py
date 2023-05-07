@@ -13,9 +13,10 @@ class Environment:
     target_endzone = 25 #25
 
     obstacles = []
+    vision_obstructions = False
     
     speed_reduction_factor = 0.5
-    vision_reduction_factor = 0.5
+    vision_reduction_factor = 0.2
     
     reduced_vision = 20
     
@@ -52,10 +53,14 @@ class Environment:
         self.obstacles.append(Obstacle(3, 1, [300,300], 100, 50))
 
     def init_obstacles_hedge(self):
-        self.obstacles.append(Obstacle(2, 2, [170,150], 2, 30))
-        self.obstacles.append(Obstacle(4, 2, [120,140], 2, 50))
+        self.vision_obstructions = True
+        
+        self.obstacles.append(Obstacle(1, 2, [35,180], 15, 2))
+        self.obstacles.append(Obstacle(2, 2, [180,160], 2, 30))
+        self.obstacles.append(Obstacle(3, 2, [175,90], 15, 2))
+        self.obstacles.append(Obstacle(4, 2, [100,145], 2, 45))
         self.obstacles.append(Obstacle(5, 2, [45,80], 20, 2))
-        self.obstacles.append(Obstacle(6, 2, [125,50], 2, 10))
+        self.obstacles.append(Obstacle(6, 2, [125,50], 2, 15))
         
         # self.obstacles.append(Obstacle(1, 2, [55,130], 2, 40))
         # self.obstacles.append(Obstacle(2, 2, [160,100], 30, 2))
@@ -64,6 +69,8 @@ class Environment:
         
         
     def init_obstacles_fog(self):
+        self.vision_obstructions = True
+        
         # self.obstacles.append(Obstacle(1, 0, [50,100], 50, 30))
         # self.obstacles.append(Obstacle(2, 0, [170,150], 30, 50))
         # self.obstacles.append(Obstacle(3, 0, [40,20], 15, 30))
@@ -214,19 +221,18 @@ class Environment:
     
     def is_obstacle_blocking_vision(self, pos1, pos2):
         obstacle: Obstacle
-        if len(self.obstacles) > 0:
-            for obstacle in self.obstacles:
-                if obstacle.block_vision:
-                    if obstacle.line_rect_intersect([pos1,pos2]):
-                        return True
+        if self.vision_obstructions:
+            if len(self.obstacles) > 0:
+                for obstacle in self.obstacles:
+                    if obstacle.block_vision:
+                        if obstacle.line_rect_intersect([pos1,pos2]):
+                            return True
                 # if two agent in same fog, can see
-                # if one in fog but other not, cant see
-                # if neither in, but fog in between
-                # if obstacle.reduce_vision:
-                #     if obstacle.is_inside(pos1) != obstacle.is_inside(pos2):
-                #         return True
-                #     elif ((obstacle.is_inside(pos1) == False) and ((obstacle.is_inside(pos2) == False))) and obstacle.line_rect_intersect([pos1,pos2]):
-                #         return True
+                # if one in but other not, can see
+                # if neither in but fog in between, cant see
+                if obstacle.reduce_vision:
+                    if ((obstacle.is_inside(pos1) == False) and ((obstacle.is_inside(pos2) == False))) and obstacle.line_rect_intersect([pos1,pos2]):
+                        return True
         return False
     
     def is_obstacle_reducing_movement(self, p):

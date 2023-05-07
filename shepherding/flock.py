@@ -177,11 +177,11 @@ class Flock:
                 # print("fog")
                 sheep.vision_range = sheep.default_vision_range * self.env.vision_reduction_factor
                 sheep.threat_range = self.default_threat_range * self.env.vision_reduction_factor
-                sheep.personal_space = self.default_personal_space * self.env.vision_reduction_factor
+                # sheep.personal_space = self.default_personal_space * self.env.vision_reduction_factor
             else:
                 sheep.vision_range = sheep.default_vision_range
                 sheep.threat_range = self.default_threat_range 
-                sheep.personal_space = self.default_personal_space 
+                # sheep.personal_space = self.default_personal_space 
 
     # calc flock density
     def calc_flock_density(self): # -> float

@@ -48,6 +48,12 @@ for method in methods:
                                     data = pd.read_csv(summary)
                                     row.append(data["success_rate"].iloc[0])
                                     row2.append(data["success_avg_time"].iloc[0])
+                                else:
+                                    row.append(" ")
+                                    row2.append(" ")
+                            else:
+                                row.append(" ")
+                                row2.append(" ")
                                 
                                 
                         tables[table_name].append(row)

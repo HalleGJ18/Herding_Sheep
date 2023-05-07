@@ -184,7 +184,7 @@ while num_exists:
     else:
         break
 
-print(result_csv_name)
+print(f"results: {result_csv_name}")
 
 # ! output to csv
 # result_csv_name = "data.csv"

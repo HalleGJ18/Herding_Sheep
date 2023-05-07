@@ -98,9 +98,9 @@ class Obstacle:
         x1, y1 = line[0]
         x2, y2 = line[1]
         corner = self.pos
-        x_min, y_min = corner -1
-        width = self.width + 1
-        height = self.height + 1
+        x_min, y_min = corner -0.5
+        width = self.width + 0.5
+        height = self.height + 0.5
         
 
         # Calculate the values of p and q for the line

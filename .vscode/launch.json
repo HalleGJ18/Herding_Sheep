@@ -5,6 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: main_ct.py h",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main_ct.py",
+            "args": ["1", "400", "output", "75", "h"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",

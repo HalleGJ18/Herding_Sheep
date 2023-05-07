@@ -186,7 +186,7 @@ while num_exists:
     else:
         break
 
-print(result_csv_name)
+print(f"results: {result_csv_name}")
 
 # ! output to csv
 result = pd.merge(sheep_data, dog_data, left_index=True, right_index=True)

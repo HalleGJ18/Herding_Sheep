@@ -120,6 +120,7 @@ class Sheepdog(Agent):
     def apply_herding(self, dogs, dog_dists):
         movement = np.array([0.0, 0.0])
 
+        noise = self.rand_velocity()
         
 
         """if dog within 3 x personal space of a sheep, stop"""
@@ -166,6 +167,8 @@ class Sheepdog(Agent):
             # print("movement change")
             # self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
             self.velocity = 0.5*self.velocity + movement
+            # self.velocity = 0.5*self.velocity + movement #+ 0.3*noise
+            # print("n")
 
         # print(self.velocity)
 
