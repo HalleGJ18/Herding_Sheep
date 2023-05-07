@@ -27,7 +27,9 @@ for method in methods:
                 tables[table_name] = []
                 tables[table_name2] = []
                 tables[table_name].append([" "])
+                tables[table_name][0] += dog_vrs
                 tables[table_name2].append([" "])
+                tables[table_name2][0] += dog_vrs
                 # dog folder
                 for n_dog in n_dogs:
                     dog_folder = os.path.join(env_folder, n_dog)
@@ -38,9 +40,9 @@ for method in methods:
                         for vr in dog_vrs:
                             vr_folder = os.path.join(dog_folder, vr)
                             if os.path.exists(vr_folder):
-                                if vr not in tables[table_name][0]:
-                                    tables[table_name][0].append(vr)
-                                    tables[table_name2][0].append(vr)
+                                # if vr not in tables[table_name][0]:
+                                #     tables[table_name][0].append(vr)
+                                #     tables[table_name2][0].append(vr)
                                 summary = os.path.join(vr_folder, "metrics_summary.csv")
                                 if os.path.exists(summary):
                                     # print(summary)

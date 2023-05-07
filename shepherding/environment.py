@@ -55,12 +55,18 @@ class Environment:
     def init_obstacles_hedge(self):
         self.vision_obstructions = True
         
-        self.obstacles.append(Obstacle(1, 2, [35,180], 15, 2))
-        self.obstacles.append(Obstacle(2, 2, [180,160], 2, 30))
-        self.obstacles.append(Obstacle(3, 2, [175,90], 15, 2))
-        self.obstacles.append(Obstacle(4, 2, [100,145], 2, 45))
-        self.obstacles.append(Obstacle(5, 2, [45,80], 20, 2))
-        self.obstacles.append(Obstacle(6, 2, [125,50], 2, 15))
+        self.obstacles.append(Obstacle(1, 2, [124,170], 2, 20))
+        self.obstacles.append(Obstacle(2, 2, [50,124], 15, 2))
+        self.obstacles.append(Obstacle(3, 2, [185,124], 15, 2))
+        self.obstacles.append(Obstacle(4, 2, [124,60], 2, 20))
+        self.obstacles.append(Obstacle(5, 2, [124,120], 2, 10))
+        
+        # self.obstacles.append(Obstacle(1, 2, [35,180], 15, 2))
+        # self.obstacles.append(Obstacle(2, 2, [190,160], 2, 20))
+        # self.obstacles.append(Obstacle(3, 2, [170,90], 15, 2))
+        # self.obstacles.append(Obstacle(4, 2, [125,145], 2, 35))
+        # self.obstacles.append(Obstacle(5, 2, [45,80], 20, 2))
+        # self.obstacles.append(Obstacle(6, 2, [125,50], 2, 10))
         
         # self.obstacles.append(Obstacle(1, 2, [55,130], 2, 40))
         # self.obstacles.append(Obstacle(2, 2, [160,100], 30, 2))

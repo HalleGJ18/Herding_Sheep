@@ -124,6 +124,8 @@ class Agent:
         
         avoid = self.env.avoid_impassable_obstacles(self.pos, self.velocity) # ! tweaking this
         if norm(avoid) > 0:
+            if type(self).__name__ == "Sheepdog":
+                print(f"p: {self.pos},v: {self.velocity}, av: {avoid}")
             self.velocity += (avoid*1)
             # if type(self).__name__ == "Sheepdog":
             #     print(f"pos: {self.pos}, avoid: {avoid}, vel: {self.velocity}")
