@@ -16,7 +16,7 @@ class Environment:
     vision_obstructions = False
     
     speed_reduction_factor = 0.5
-    vision_reduction_factor = 0.2
+    vision_reduction_factor = 0.175
     
     reduced_vision = 20
     
@@ -59,29 +59,10 @@ class Environment:
         self.obstacles.append(Obstacle(2, 2, [50,124], 15, 2))
         self.obstacles.append(Obstacle(3, 2, [185,124], 15, 2))
         self.obstacles.append(Obstacle(4, 2, [124,60], 2, 20))
-        self.obstacles.append(Obstacle(5, 2, [124,120], 2, 10))
-        
-        # self.obstacles.append(Obstacle(1, 2, [35,180], 15, 2))
-        # self.obstacles.append(Obstacle(2, 2, [190,160], 2, 20))
-        # self.obstacles.append(Obstacle(3, 2, [170,90], 15, 2))
-        # self.obstacles.append(Obstacle(4, 2, [125,145], 2, 35))
-        # self.obstacles.append(Obstacle(5, 2, [45,80], 20, 2))
-        # self.obstacles.append(Obstacle(6, 2, [125,50], 2, 10))
-        
-        # self.obstacles.append(Obstacle(1, 2, [55,130], 2, 40))
-        # self.obstacles.append(Obstacle(2, 2, [160,100], 30, 2))
-        # self.obstacles.append(Obstacle(3, 2, [120,110], 2, 50))
-        # self.obstacles.append(Obstacle(4, 2, [45,80], 25, 2))
-        
+        self.obstacles.append(Obstacle(5, 2, [124,120], 2, 10))   
         
     def init_obstacles_fog(self):
         self.vision_obstructions = True
-        
-        # self.obstacles.append(Obstacle(1, 0, [50,100], 50, 30))
-        # self.obstacles.append(Obstacle(2, 0, [170,150], 30, 50))
-        # self.obstacles.append(Obstacle(3, 0, [40,20], 15, 30))
-        # self.obstacles.append(Obstacle(4, 0, [200,20], 30, 30))
-        # self.obstacles.append(Obstacle(5, 0, [20,180], 40, 30))
         
         self.obstacles.append(Obstacle(1, 0, [200,100], 50, 30))
         self.obstacles.append(Obstacle(2, 0, [40,40], 40, 30))
