@@ -31,7 +31,6 @@ class Agent:
     vision_range = 2
 
     # drawing vars
-    shape_radius = 5
     fill_colour = "black"
 
     def __init__(self, id:int, e:Environment):
@@ -46,9 +45,6 @@ class Agent:
     def get_pos(self): # -> np.array
         return self.pos
 
-    # def draw_agent(self, pos, rad):
-    #     self.drawing = self.canvas.create_oval(pos[0]-rad,pos[1]-rad,pos[0]+rad,pos[1]+rad, fill=self.fill_colour)
-
     def find_nearby(self, agents, dists): # dists : np.array[[]]
         # read in distance matrix and array of agents
         # use agent ID to pull correct row from dist matrix
@@ -59,15 +55,8 @@ class Agent:
         # match indexes to IDs of other agents
         nearby_agents = agents[nearby]          # check this!!!!!
         # check if blocked by obstacle
-        before = len(nearby_agents)
         if self.env.vision_obstructions:
-            nearby_agents = [a for a in nearby_agents if self.env.is_obstacle_blocking_vision(self.pos, a.pos) == False]
-        after = len(nearby_agents)
-        # if before != after:
-        #     print(f"before: {before}, after: {after}")
-        # check nearby agents
-        # nearby_ids = [i.id for i in nearby_agents]
-        # print("self.id: {}, nearby: {}".format(self.id, nearby_ids))
+            nearby_agents = np.array([a for a in nearby_agents if self.env.is_obstacle_blocking_vision(self.pos, a.pos) == False])
         # return array of nearby agents
         return nearby_agents
 
@@ -84,65 +73,36 @@ class Agent:
         half = 1
         x = random.randint(0,lim) - half + random.rand()
         y = random.randint(0,lim) - half + random.rand()
-        # print("x: {}, y: {}".format(x,y))
         v = np.array([x,y])
         v = v / norm(v)
         return v
-
-    def calc_acceleration(self):
-        pass
 
     def calc_velocity(self):
         # v + a
         # keep new v under max spd
         self.velocity = np.add(self.velocity, self.acceleration)  # why does this line make everything work???
         self.speed = norm(self.velocity)
-        # if self.speed > self.max_speed:
-            # print("yup")
         if self.speed != 0: # > max_speed, cap it
             self.velocity = self.velocity / self.speed * self.max_speed
             self.speed = norm(self.velocity)
-            # self.velocity[0] = (self.velocity[0] / self.speed) * self.max_speed
-            # self.velocity[1] = (self.velocity[1] / self.speed) * self.max_speed
 
-        # print(self.velocity)
-
-    def normalise_velocity(self):
-        pass
 
     def update_velocity(self):
         self.velocity = self.next_velocity.copy()
         
     def update_agent(self):
-        # self.calc_acceleration()
         self.calc_velocity()
-
-        # check if next pos is valid
-        # av_am = self.env.check_valid_position(self.pos, self.velocity)
-        # if av_am[0] != 0.0 or av_am[1] != 0.0:
-        #     print(f"id: {self.id}, avoid amount: {av_am}")
         
         avoid = self.env.avoid_impassable_obstacles(self.pos, self.velocity) # ! tweaking this
         if norm(avoid) > 0:
-            # if type(self).__name__ == "Sheepdog":
-            #     print(f"p: {self.pos},v: {self.velocity}, av: {avoid}")
             self.velocity += (avoid*1)
-            # if type(self).__name__ == "Sheepdog":
-            #     print(f"pos: {self.pos}, avoid: {avoid}, vel: {self.velocity}")
         
         self.calc_velocity()
-        
-        # if type(self).__name__ == "Sheepdog":
-        #     print(f"unit vel: {self.velocity}")
 
         self.velocity += self.env.check_valid_position(self.pos, self.velocity)
-    
-        # print(self.id, self.velocity)
 
         # update pos
         self.pos = self.pos + self.velocity
-
-        # print(self.pos)
 
 
 

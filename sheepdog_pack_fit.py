@@ -9,19 +9,8 @@ from shepherding.environment import Environment
 
 class Pack:
 
-    # target = np.array([25.0, 25.0])
-    # target = np.array([600.0, 600.0])
-
-    # dogs_average position = []
-
-    # driving or collecting
-    # 0 = driving
-    # 1 = collecting
-    phase = 0 
-
     # dists between dog and other dogs
     # dists between dogs and sheep
-
 
     def __init__(self, n:int, e:Environment):
         self.num_of_sheepdogs = n
@@ -44,7 +33,6 @@ class Pack:
         # check if p is valid when obstacles added
         if self.env.check_all_obstacles(p) == False:
             p = self.random_start_pos(xMin, yMin, xMax, yMax)
-            # print("reroll start pos")
         return p
 
     # generate sheepdogs
@@ -86,11 +74,6 @@ class Pack:
         avg_y = np.average(self.sheepdogs_positionsY)
         return np.array(avg_x, avg_y)
 
-    # set x and y pos of all sheep in flock
-    def set_flock_pos(self, x_pos, y_pos):
-        self.flock_x = x_pos
-        self.flock_y = y_pos
-
     # store flock centre of mass
     def set_flock_centre(self, p):
         self.flock_centre = p
@@ -123,20 +106,8 @@ class Pack:
             if self.env.is_obstacle_reducing_vision(dog.pos):
                 # print("fog")
                 dog.vision_range = dog.default_vision_range * self.env.vision_reduction_factor
-                # dog.vision_range = self.env.reduced_vision
             else:
                 dog.vision_range = dog.default_vision_range
-
-    def drive(self):
-        # position dogs such that flock is directly between them and target
-        # push forwards
-        pass
-
-    def collect(self):
-        # identify far sheep
-        # push them towards centre of flock
-        # until flock density is satisfactory
-        pass
 
     def calc_herding(self):
         # loop through all dogs

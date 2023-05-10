@@ -6,6 +6,7 @@ import matplotlib.patches as patches
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import math
+import statistics
 import os
 import sys
 
@@ -49,6 +50,14 @@ def average_time(times):
     else:
         return "DNF"
 
+# range of completion times
+def time_range(times):
+    if len(times) > 0:
+        range = max(times) - min(times)
+    else:
+        range = None
+    return range
+    
 
 # avg dist travelled by dog
 def avg_dog_dist_travelled(dists):

@@ -1,6 +1,5 @@
 import numpy as np
 from numpy import random
-from numpy import arcsin, arccos, arctan, sin, cos, tan, pi
 import math
 # from math import sin, cos, tan, pi
 from matplotlib import patches

@@ -93,35 +93,16 @@ class Environment:
 
             if p[0] < self.xMin:
                 avoid_amount[0] += self.edge_avoid_factor
-                # if v[1] >= 0:
-                #     avoid_amount[1] += 1
-                # else:
-                #     avoid_amount[1] -= 1
+                
             elif p[0] > self.xMax:
                 avoid_amount[0] -= self.edge_avoid_factor
-                # if v[1] >= 0:
-                #     avoid_amount[1] += 1
-                # else:
-                #     avoid_amount[1] -= 1
+            
 
             if p[1] < self.yMin:
                 avoid_amount[1] += self.edge_avoid_factor
-                # if v[0] >= 0:
-                #     avoid_amount[0] += 1
-                # else:
-                #     avoid_amount[0] -= 1
+                
             elif p[1] > self.yMax:
                 avoid_amount[1] -= self.edge_avoid_factor
-                # if v[0] >= 0:
-                #     avoid_amount[0] += 1
-                # else:
-                #     avoid_amount[0] -= 1
-
-        # check obstacles
-
-        
-        # if avoid_amount[0] != 0 or avoid_amount[1] != 0:
-        #     print(avoid_amount)
 
         # return avoid amount
         return avoid_amount
@@ -142,9 +123,7 @@ class Environment:
             o:Obstacle
             for o in self.obstacles:
                 if o.passable == False:
-                    # print(f"avoid: {o.id}, {o.colour}")
                     turn += o.avoid(p,v) # will be [0,0] if not nearby
-        # print(f"turn: {turn}")
         return turn
                         
     def line_rect_intersect(self, line, rect):

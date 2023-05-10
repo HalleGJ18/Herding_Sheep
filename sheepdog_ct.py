@@ -58,29 +58,20 @@ class Sheepdog(Agent):
     def set_flock_personal_space(self, d):
         self.flock_personal_space = d
 
-    def calc_movement_to_drive_point(self):  #TODO: check the numbers this returns are what we want
-        # v = self.sheep_centre - self.target
+    def calc_movement_to_drive_point(self):  
         v = self.target - self.sheep_centre
         v = v/norm(v)
         p = self.sheep_centre - (v * self.maintain_dist)
-        # print("v: {}".format(v))
         move = p - self.pos
-        # move = move/norm(move)
-        # print("move towards push point")
-        # print(f"d move: {move}")
         return move
 
 
-    def move_away_from_other_dogs(self, nearby_dogs): #TODO: check this returns sane numbers
+    def move_away_from_other_dogs(self, nearby_dogs): 
         v = np.array([0.0, 0.0])
         for dog in nearby_dogs:
             dir = (self.pos - dog.pos)
             v += (dir/(norm(dir)**3))
-        # v = v / len(nearby_dogs)
         v = v / len(nearby_dogs)
-        # if norm(v) != 0:
-        #     v = v / norm(v)
-        # print(v)
         return v
          
     # calc sheep within given radius
@@ -126,10 +117,8 @@ class Sheepdog(Agent):
         """if dog within 3 x personal space of a sheep, stop"""
         if self.v_close:
             self.velocity = np.array([0.0,0.0])
-            # self.max_speed = 0.3*self.flock_personal_space
         
         else:
-            # self.max_speed = self.default_max_speed
 
             """keep away from other dogs"""
             nearby_dogs = self.find_nearby(dogs, dog_dists)
@@ -145,15 +134,11 @@ class Sheepdog(Agent):
                 if self.furthest_sheep_too_far:
                     # push in furthest sheep
                     to_push = self.collect_furthest_sheep()
-                    # print("collect")
-                    # print(f"collect: {to_push}")
                 
                 # else drive
                 else:      
                     # move to make avg pos closer to push point
                     to_push = self.calc_movement_to_drive_point()
-                    # print("drive")
-                    # print(f"drive: {to_push}")
                 
                 
                 # put it all together
@@ -164,12 +149,5 @@ class Sheepdog(Agent):
         # movement += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 100)
         
         if norm(movement) > 0:
-            # print("movement change")
-            # self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
-            # self.velocity = 0.5*self.velocity + movement
-            self.velocity = 0.5*self.velocity + movement #+ 0.3*noise
-            # print("n")
-
-        # print(self.velocity)
-
+            self.velocity = 0.5*self.velocity + movement 
 

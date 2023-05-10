@@ -13,14 +13,23 @@ dog_vrs = ["50vr", "75vr", "100vr", "125vr", "150vr", "175vr","200vr", "250vr", 
 
 tables = dict()
 
+try:
+    root = sys.argv[1]
+except:
+    root = ""
+
 # tables_times = dict()
 
 # method folder
 for method in methods:
-    if os.path.exists(method):
+    if len(root) > 0:
+        folder = os.path.join(root, method)
+    else:
+        folder = method
+    if os.path.exists(folder):
         # env folder
         for env in envs:
-            env_folder = os.path.join(method, env)
+            env_folder = os.path.join(folder, env)
             if os.path.exists(env_folder):
                 table_name = method+"_"+env+"_rate"
                 table_name2 = method+"_"+env+"_time"
@@ -45,7 +54,7 @@ for method in methods:
                                 #     tables[table_name2][0].append(vr)
                                 summary = os.path.join(vr_folder, "metrics_summary.csv")
                                 if os.path.exists(summary):
-                                    # print(summary)
+                                    print(summary)
                                     #* read csv
                                     data = pd.read_csv(summary)
                                     row.append(data["success_rate"].iloc[0])
@@ -69,6 +78,8 @@ for method in methods:
 
 # for line in tables["fit_empty"]:
 #     print(line)
-      
-pyexcel.save_book_as(bookdict=tables, dest_file_name="metrics_summary.xlsx")
+if len(root) > 0:
+    pyexcel.save_book_as(bookdict=tables, dest_file_name="metrics_summary_"+root+".xlsx")
+else:
+    pyexcel.save_book_as(bookdict=tables, dest_file_name="metrics_summary.xlsx")
 # pyexcel.save_book_as(bookdict=tables_times, dest_file_name="success_times_summary.xlsx")

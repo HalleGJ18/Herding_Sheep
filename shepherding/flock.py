@@ -56,7 +56,6 @@ class Flock:
         # check if p is valid when obstacles added
         if self.env.check_all_obstacles(p) == False:
             p = self.random_start_pos(xMin, yMin, xMax, yMax)
-            # print("reroll start pos")
         return p
 
     def calc_distances_sheep(self):
@@ -70,10 +69,6 @@ class Flock:
                     self.dists[sheep.id][other.id] = norm(other.pos - sheep.pos)
         # print(self.dists)
 
-    def calc_distances_sheepdogs(self):
-        # create matrix of distances from sheepdogs
-        pass
-
     # calc sheep closest to a given point
     def calc_n_closest_sheep(self, p, n, id=None):
         # p is pos of target
@@ -83,10 +78,8 @@ class Flock:
         if id != None:
             sorted_by_dist = [i for i in sorted_by_dist if i.id != id]
         # check not blocked by obstacle
-        # print(f"before removing can't see: {len(sorted_by_dist)}")
         if len(self.env.obstacles) > 0:
             sorted_by_dist = [j for j in sorted_by_dist if self.env.is_obstacle_blocking_vision(p,j.pos) == False]
-            # print(f"after removing can't see: {len(sorted_by_dist)}")
         if len(sorted_by_dist) > n:
             sorted_by_dist = sorted_by_dist[0:n]
         return sorted_by_dist
@@ -100,10 +93,8 @@ class Flock:
         if id != None:
             sorted_by_dist = [i for i in sorted_by_dist if i.id != id]
         # check not blocked by obstacle
-        # print(f"before removing can't see: {len(sorted_by_dist)}")
         if len(self.env.obstacles) > 0:
             sorted_by_dist = [j for j in sorted_by_dist if self.env.is_obstacle_blocking_vision(p,j.pos) == False]
-            # print(f"after removing can't see: {len(sorted_by_dist)}")
         if len(sorted_by_dist) > n:
             sorted_by_dist = sorted_by_dist[0:n]
         return sorted_by_dist
@@ -243,12 +234,7 @@ class Flock:
             # update pos
             sheep.update_agent()
 
-            # if sheep.speed != 0:
-            #     print(sheep.speed)
-
             # log position change
             np.put(self.flock_positionsX, sheep.id, sheep.pos[0])
             np.put(self.flock_positionsY, sheep.id, sheep.pos[1])
-            # self.flock_positionsX[sheep.id] = sheep.pos[0]
-            # self.flock_positionsY[sheep.id] = sheep.pos[1]
             

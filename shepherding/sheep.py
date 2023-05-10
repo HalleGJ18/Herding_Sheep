@@ -27,45 +27,6 @@ class Sheep(Agent):
     
     too_close = False
     
-    # def separation(self, sheep):
-    #     # don't get too close to other agents nearby
-    #     cumulative_vector = np.array([0.0,0.0])
-        
-    #     for a in sheep:
-    #         # find the average vector of the other agent to the current agent each multiplied by the inverse of the distance
-    #         dist = math.dist(self.pos, a.pos)
-    #         v = (1/dist)*(self.pos - a.pos)
-    #         cumulative_vector += v
-
-    #     sep_vector = cumulative_vector/len(sheep)
-        
-    #     return sep_vector
-        
-
-    # def alignment(self, sheep):
-    #     # match velocity
-    #     cumulative_vector = np.array([0.0,0.0])
-
-    #     for s in sheep:
-    #         cumulative_vector += s.velocity
-
-    #     # how far from avg velocity are we?
-    #     align_vector = (cumulative_vector/len(sheep)) - self.velocity
-        
-    #     return align_vector
-            
-
-    # def cohesion(self, sheep):
-    #     # steer towards average position
-
-    #     cumulative_vector = np.array([0.0,0.0])
-        
-    #     for s in sheep:
-    #         cumulative_vector += s.pos
-
-    #     cohes_vector = (cumulative_vector/len(sheep)) - self.pos
-
-    #     return cohes_vector
 
     def set_avg_dog_pos(self, p):
         self.dog_in_range_avg = p
@@ -166,39 +127,26 @@ class Sheep(Agent):
                 # velocity_changes = velocity_changes + sep_weight*separation + align_weight*alignment + cohes_weight*cohesion 
                 velocity_changes = velocity_changes + sep_weight*separation + cohes_weight*cohesion 
             else:
-                # print("sep: {}".format(separation*sep_weight))
                 velocity_changes = velocity_changes + (sep_weight*separation)
                 
         else:
             self.too_close = False
 
-        # self.calc_velocity()      # what is this doing here?
-        
-        """avoid impassable obstacles"""
-        #velocity_changes += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
 
         noise = self.rand_velocity()
 
         if (self.dog_in_range == False) : # and (len(nearby_sheep) == 0) 
             if self.too_close:
                 # seperation regardless of sheepdog vicinity
-                # velocity_changes = velocity_changes + (noise_weight * noise)
                 self.velocity = self.velocity*prev_vel_weight + velocity_changes
             else:
                 rand_chance = np.random.rand()
                 if rand_chance <= 0.05: # random chance of slight movement
-                    # print("rand move, {}".format(self.id))
-                    # print(noise)
-                    self.velocity = noise #+ (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
+                    self.velocity = noise
                 else:
                     self.velocity = np.array([0.0, 0.0])
-        # elif (self.dog_in_range == True) and (len(nearby_sheep) > 0):
-        #     self.velocity = velocity_changes
-            # print(velocity_changes)
         else:
             
             velocity_changes = velocity_changes + (noise_weight * noise)
             self.velocity = self.velocity*prev_vel_weight + velocity_changes
             # self.velocity += velocity_changes
-
-        # print("vel: {}".format(self.velocity))

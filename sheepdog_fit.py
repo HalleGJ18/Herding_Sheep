@@ -65,32 +65,22 @@ class Sheepdog(Agent):
     def set_flock_personal_space(self, d):
         self.flock_personal_space = d
 
-    def calc_movement_to_drive_point(self):  #TODO: check the numbers this returns are what we want
-        # v = self.sheep_centre - self.target
+    def calc_movement_to_drive_point(self): 
         v = self.target - self.sheep_centre
         v = v/norm(v)
         v = self.sheep_centre - (v * self.maintain_dist)
-        # print("v: {}".format(v))
         move = v - self.pos
         move = move/norm(move)
-        # print("move towards push point")
-        # print(f"d move: {move}")
         return move
 
 
-    def move_away_from_other_dogs(self, nearby_dogs): #TODO: check this returns sane numbers
+    def move_away_from_other_dogs(self, nearby_dogs):
         v = np.array([0.0, 0.0])
         for dog in nearby_dogs:
-            # print(f"self id: {self.id}, dog id: {dog.id}")
             d = math.dist(self.pos,dog.pos)
-            # if d <= self.personal_space: #! only care about other dogs being close if theyre very close
             dir  = (self.pos - dog.pos) # *(1/d)
             v += (dir/(norm(dir)**3)) #! weight inversely to dist between dogs 
-                # v += (self.pos - dog.pos) 
         v = v / len(nearby_dogs)
-        # if norm(v) != 0:
-        #     v = v / norm(v) # remove zero magnitude check?
-        # print(v)
         return v
          
     # calc sheep within given radius
@@ -105,7 +95,6 @@ class Sheepdog(Agent):
     # set furthest sheep
     def set_furthest_sheep(self, sheep):
         self.furthest_sheep = sheep
-        # self.furthest_sheep_too_far = bool
         
     # collect furthest sheep
     def collect_furthest_sheep(self):
@@ -119,10 +108,6 @@ class Sheepdog(Agent):
         # unit vector it?
         to_collect = to_collect/norm(to_collect)
         return to_collect
-    
-    # push furthest sheep towards target
-    def push_furthest_sheep(self):
-        pass
 
     # calc line from target to flock centre of mass
     # find point on line where all sheep are closer to target than it
@@ -146,40 +131,28 @@ class Sheepdog(Agent):
             """determine if drive or collect""" 
             
             # A: chase furthest sheep
-            # chase_sheep = self.furthest_sheep.pos - self.pos
             chase_sheep = self.pos - self.furthest_sheep.pos
             if norm(chase_sheep) != 0:
                 chase_sheep = chase_sheep/norm(chase_sheep)
             chase_sheep *= -1
                 
             # B: keep slightly away from furthest sheep
-            # away_from_sheep = self.pos - self.furthest_sheep.pos
             away_from_sheep = self.furthest_sheep.pos - self.pos
             if norm(away_from_sheep) != 0:
                 away_from_sheep = away_from_sheep/(norm(away_from_sheep)**3)
-            # away_from_sheep *= -1
                 
             # C: keep away from goal
             away_from_goal = self.pos - self.env.target
             if norm(away_from_goal) != 0:
                 away_from_goal = away_from_goal/norm(away_from_goal)
-            # away_from_goal *= -1  # ? dont know but its what the paper says
+            # away_from_goal *= -1  # ?
             
             # put it all together
             movement = movement + (chase_sheep*self.weight_a) + (away_from_sheep*self.weight_b) + (away_from_goal*self.weight_c)
             
             
-            
-        """avoid impassable obstacles"""
-        #movement += (self.env.avoid_impassable_obstacles(self.pos, self.velocity) * 200)
-        
-        # print(f"movement: {movement}")
         
         if norm(movement) > 0:
-            # print("movement change")
-            # self.velocity = 0.9*self.velocity + 2*movement #TODO: is this weighting what we want?
-            self.velocity = movement #+ 1*self.velocity 
-
-        # print(self.velocity)
+            self.velocity = movement 
 
 

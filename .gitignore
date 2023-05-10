@@ -2,3 +2,5 @@
 /fit
 /output
 *.xlsx
+*.csv
+*.dot

@@ -10,9 +10,9 @@ import math
 import os
 import sys
 
-num = sys.argv[1]
+num = sys.argv[2]
 
-dir = "output"
+dir = sys.argv[1]
 
 print(dir, num)
 
@@ -92,8 +92,8 @@ if len(obs_data) > 0:
     for index, row in obs_data.iterrows():
         rect = patches.Rectangle((row['x'], row['y']), row['width'], row['height'], linewidth=1, color=row['colour'])
         scat = ax.add_patch(rect)
-rect = patches.Rectangle((target[0]-target_range, target[1]-target_range), target_range*2, target_range*2, linewidth=1, edgecolor='b', facecolor='none')
-scat = ax.add_patch(rect)
+# rect = patches.Rectangle((target[0]-target_range, target[1]-target_range), target_range*2, target_range*2, linewidth=1, edgecolor='b', facecolor='none')
+# scat = ax.add_patch(rect)
 rect = patches.Rectangle((target[0]-target_endzone, target[1]-target_endzone), target_endzone*2, target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')	
 scat = ax.add_patch(rect)
 scat = ax.scatter(format(data.loc[0]["sheep_x_positions"]), format(data.loc[0]["sheep_y_positions"]), c='k', s=1)
@@ -117,8 +117,8 @@ def animate(time):
         for index, row in obs_data.iterrows():
             rect = patches.Rectangle((row['x'], row['y']), row['width'], row['height'], linewidth=1, color=row['colour'])
             scat = ax.add_patch(rect)
-    rect = patches.Rectangle((target[0]-target_range, target[1]-target_range), target_range*2, target_range*2, linewidth=1, edgecolor='b', facecolor='none')
-    scat = ax.add_patch(rect)
+    # rect = patches.Rectangle((target[0]-target_range, target[1]-target_range), target_range*2, target_range*2, linewidth=1, edgecolor='b', facecolor='none')
+    # scat = ax.add_patch(rect)
     rect = patches.Rectangle((target[0]-target_endzone, target[1]-target_endzone), target_endzone*2, target_endzone*2, linewidth=1, edgecolor='b', facecolor='none')
     scat = ax.add_patch(rect)	
     scat = ax.scatter(format(data.loc[time]["sheep_x_positions"]), format(data.loc[time]["sheep_y_positions"]), c='k', s=1)

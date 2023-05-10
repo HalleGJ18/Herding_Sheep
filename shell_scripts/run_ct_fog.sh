@@ -6,24 +6,29 @@ control_c() {
 }
 
 trap control_c SIGINT
-# h
-for e in f
+# h f empty
+for e in f 
 do
+    i=2
+    j=50
+    folder="ct/${e}/${i}dog/${j}vr"
+    python get_metrics.py $folder
+    
     # loop through num of dogs
-    for i in {1..5}
+    for i in {3..5}
     do
         # loop though vr of dogs
-        for j in 50 75 100 125 150 175 200 250 300 350 400
+        for j in 400 350 300 250 
         do
             # num of tests
-            for k in {1..15}
+            for k in {1..12}
             do
                 # echo $i
                 # echo $(($j*50))
                 # vr=$(($j*50))
-                folder="fit/${e}/${i}dog/${j}vr"
+                folder="ct/${e}/${i}dog/${j}vr"
                 echo $folder
-                python main_fit.py $i $j $folder 75 $e
+                time python main_ct.py $i $j $folder 75 $e
             done
             python get_metrics.py $folder
         done
