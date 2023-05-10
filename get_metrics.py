@@ -118,7 +118,6 @@ except FileExistsError:
 test_outcomes = []
 success_times = []
 
-
 # loop through files in dir
 file_num = 1
 file_exists = True
@@ -176,6 +175,9 @@ while file_exists:
             avg_from_gcm_list.append(avg_from_gcm)
             furthest_from_gcm_list.append(furthest_from_gcm)
         
+        avg = statistics.mean(avg_from_gcm_list)
+        print(avg)
+        
         # output metrics
         m = {'flock_gcm':gcm_list, 'avg_sheep_dist_from_gcm':avg_from_gcm_list, 'furthest_sheep_from_gcm':furthest_from_gcm_list}
         df = pd.DataFrame(data=m)
@@ -197,8 +199,8 @@ print(f"avg success time: {average_time(success_times)}")
 
 sr, tc, fc = success_rate(test_outcomes)
 
-summary = pd.DataFrame(columns=['success_rate', "success_avg_time", 'success_count', 'fail_count', 'total_runs'])
-summary.loc[0] = [sr, average_time(success_times), tc, fc, file_num-1]
+summary = pd.DataFrame(columns=['success_rate', "success_avg_time", 'success_count', 'fail_count', 'total_runs', 'avg_from_gcm'])
+summary.loc[0] = [sr, average_time(success_times), tc, fc, file_num-1, avg]
 summary_out_path = os.path.join(directory, "metrics_summary.csv")
 # summary.to_csv(directory+"/metrics_summary.csv", encoding='utf-8', index=False)
 summary.to_csv(summary_out_path, encoding='utf-8', index=False)

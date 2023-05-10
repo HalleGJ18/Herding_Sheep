@@ -33,18 +33,27 @@ for method in methods:
             if os.path.exists(env_folder):
                 table_name = method+"_"+env+"_rate"
                 table_name2 = method+"_"+env+"_time"
+                table_name3 = method+"_"+env+"_dist_from_gcm"
+                
                 tables[table_name] = []
                 tables[table_name2] = []
+                tables[table_name3] = []
+                
                 tables[table_name].append([" "])
                 tables[table_name][0] += dog_vrs
+                
                 tables[table_name2].append([" "])
                 tables[table_name2][0] += dog_vrs
+                
+                tables[table_name3].append([" "])
+                tables[table_name3][0] += dog_vrs
                 # dog folder
                 for n_dog in n_dogs:
                     dog_folder = os.path.join(env_folder, n_dog)
                     if os.path.exists(dog_folder):
                         row = [n_dog]
                         row2 = [n_dog]
+                        row3 = [n_dog]
                         # vr folder
                         for vr in dog_vrs:
                             vr_folder = os.path.join(dog_folder, vr)
@@ -59,16 +68,20 @@ for method in methods:
                                     data = pd.read_csv(summary)
                                     row.append(data["success_rate"].iloc[0])
                                     row2.append(data["success_avg_time"].iloc[0])
+                                    row3.append(data['avg_from_gcm'].iloc[0])
                                 else:
                                     row.append(" ")
                                     row2.append(" ")
+                                    row3.append(" ")
                             else:
                                 row.append(" ")
                                 row2.append(" ")
+                                row3.append(" ")
                                 
                                 
                         tables[table_name].append(row)
                         tables[table_name2].append(row2)
+                        tables[table_name3].append(row3)
                                 
                 
                             
